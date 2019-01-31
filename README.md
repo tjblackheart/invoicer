@@ -1,7 +1,7 @@
 # Invoicer
 
 A simple multiuser invoicing application using a RESTful backend written in Go and a vue.js frontend,
-because I did not find any solution that fits me. SQLITE is used as a database backend.
+because I did not find any solution that fitted me. SQLITE is used as a database backend.
 
 This is a work in progress, see [TODO](#todo) for things not working yet. Use at your own risk - although nothing should really break.
 
