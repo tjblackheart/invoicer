@@ -33,3 +33,7 @@ By default it is available at localhost:8000.
 * A dockerized version
 * Frontend bugs
 * Cleanup
+
+# License
+
+[GPLv3](LICENSE)
