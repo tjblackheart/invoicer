@@ -34,6 +34,6 @@ By default it is available at localhost:8000.
 * Frontend bugs
 * Cleanup
 
-# License
+## License
 
 [GPLv3](LICENSE)
