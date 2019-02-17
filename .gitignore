@@ -2,3 +2,4 @@ app/.env
 app/var
 app/ui/node_modules
 app/ui/dist
+env/prod.env
