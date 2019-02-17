@@ -1,6 +1,4 @@
-.env
-var/data.db
-vendor
-invoicer
-ui/node_modules
-ui/dist
+app/.env
+app/var
+app/ui/node_modules
+app/ui/dist
