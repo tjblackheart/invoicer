@@ -7,30 +7,18 @@ This is a work in progress, see [TODO](#todo) for things not working yet. Use at
 
 ## Install
 
-You'll need:
+Edit `env/prod.env` and add a secret. Check out `docker-compose.yml`, edit it to your liking and run `docker-compose up`.
 
-* a working Go-1.11 installation
-* make
-* yarn
+## Develop
 
-Build:
+Checkout the repo, `cd` into `app/` and run `cp .env.dist .env`. Edit this file to your liking - at least set the `APP_SECRET`, else the app won't run. When done, run `go run cmd/*` to start the dev backend with logging, and in another tab run `yarn --cwd=ui && yarn --cwd ui serve` to start the dev server.
 
-```
-git clone https://github.com/tjblackheart/invoicer
-cd invoicer
-cp .env.dist .env
-```
-
-If you want to use the .env file, edit it to your liking. At the bare minimum you'll have to add a signing secret.
-If not, export all these variables into your ENV.
-
-When done, type `make all` to build the binary, then run the app: `./invoicer`.
-By default it is available at localhost:8000.
+By default the frontend is reachable at `http://localhost:8000`.
 
 ## <a name="todo"></a> TODO
 
 * PDF creation
-* A dockerized version
+* --A dockerized version--
 * Frontend bugs
 * Cleanup
 
