@@ -7,7 +7,7 @@ This is a work in progress, see [TODO](#todo) for things not working yet. Use at
 
 ## Install
 
-Edit `env/prod.env` and add a secret. Check out `docker-compose.yml`, edit it to your liking and run `docker-compose up`.
+Copy `env/prod.env.dist` to `env/prod.env` and add the missing `APP_SECRET`. Check out `docker-compose.yml`, edit it to your liking and run `docker-compose up`.
 
 ## Develop
 
