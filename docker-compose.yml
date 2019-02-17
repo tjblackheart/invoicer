@@ -1,0 +1,11 @@
+version: "3"
+services:
+    invoicer:
+        build: .
+        image: tgn/invoicer:latest
+        ports:
+            - 8000:8000
+        volumes:
+            - ./app/var:/srv/var
+        env_file:
+            - ./env/prod.env
