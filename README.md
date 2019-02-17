@@ -18,7 +18,7 @@ By default the frontend is reachable at `http://localhost:8000`.
 ## <a name="todo"></a> TODO
 
 * PDF creation
-* --A dockerized version--
+* ~~A dockerized version~~
 * Frontend bugs
 * Cleanup
 
