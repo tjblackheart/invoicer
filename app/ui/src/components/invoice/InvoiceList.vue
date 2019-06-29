@@ -26,7 +26,7 @@
     <div class="table-container">
       <table
         v-if="invoices"
-        class="table is-fullwidth is-striped">
+        class="table is-fullwidth">
         <thead>
           <tr>
             <!--<th>ID</th>-->

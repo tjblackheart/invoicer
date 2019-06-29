@@ -3,7 +3,7 @@ import store from '@/modules/store'
 import router from '@/modules/router'
 
 const instance = axios.create({
-  baseURL: process.env.VUE_APP_ENDPOINT || 'http://localhost:8000',
+  baseURL: process.env.VUE_APP_ENDPOINT || 'http://localhost:3000',
   timeout: 3000,
   headers: { 'Content-Type': 'application/json' },
 })

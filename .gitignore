@@ -1,6 +1,5 @@
-app/.env
-app/var/*
+app/var
 !app/var/.gitkeep
 app/ui/node_modules
 app/ui/dist
-env/prod.env
+app/.env

@@ -12,10 +12,6 @@ export default {
     LoginView,
   },
 
-  data () {
-    return {}
-  },
-
   computed: {
     layout () {
       return this.$store.getters.layout

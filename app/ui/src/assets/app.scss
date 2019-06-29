@@ -3,11 +3,15 @@
 
 $primary: #22A7F0;
 $family-primary: "IBM Plex Sans", sans-serif;
-$control-radius: 2px;
 $input-focus-box-shadow-size: 0;
+$tablet: 768px;
+$radius-small: 2px;
+$radius: $radius-small;
+$radius-large: 4px;
 
 html,body {
   height: 100%;
+  background: #f9f9f9;
 }
 
 .fade-enter,

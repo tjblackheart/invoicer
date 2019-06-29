@@ -4,8 +4,8 @@ services:
         build: .
         image: tgn/invoicer:latest
         ports:
-            - 8000:8000
+            - 3000:3000
         volumes:
             - ./app/var:/srv/var
         env_file:
-            - ./env/prod.env
+            - ./app/.env

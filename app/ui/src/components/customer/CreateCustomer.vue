@@ -147,7 +147,7 @@
             Contacts
           </h3>
 
-          <table class="table is-fullwidth is-striped">
+          <table class="table is-fullwidth">
             <tbody>
               <tr
                 v-for="(c, index) in customer.contacts"

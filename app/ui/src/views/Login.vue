@@ -3,7 +3,7 @@
     <div class="hero-body">
       <div class="container has-text-centered">
         <div class="columns is-centered">
-          <div class="column is-one-quarter">
+          <div class="column is-mobile is-half is-one-quarter-desktop">
             <transition
               name="fade"
               mode="out-in">

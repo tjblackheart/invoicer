@@ -2,7 +2,7 @@ FROM alpine:edge as go
 WORKDIR /srv
 COPY app .
 RUN apk add --update go gcc g++ git ca-certificates &&\
-    go build -o invoicer -ldflags "-X main.Version=0.1.0 -X main.Build=1" cmd/*
+    go build -o /srv/bin/invoicer cmd/web/*
 
 ##
 
@@ -14,9 +14,8 @@ RUN apk add --update yarn && yarn && yarn build
 ##
 
 FROM alpine
-
 WORKDIR /srv
-COPY --from=go /srv/invoicer .
+COPY --from=go /srv/bin/invoicer .
 COPY --from=node /srv/dist ./ui/dist
 
 VOLUME /srv/var

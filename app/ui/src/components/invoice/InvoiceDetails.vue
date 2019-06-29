@@ -101,7 +101,7 @@
         <hr>
 
         <div class="table-container">
-          <table class="table is-fullwidth is-striped">
+          <table class="table is-fullwidth">
             <thead>
               <tr>
                 <th>Pos</th>
