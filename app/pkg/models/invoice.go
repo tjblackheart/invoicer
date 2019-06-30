@@ -4,8 +4,6 @@ import (
 	"errors"
 	"strconv"
 	"time"
-
-	"github.com/jinzhu/gorm"
 )
 
 // const MULTIPLIER = 1000
@@ -44,7 +42,7 @@ type PaidPayload struct {
 }
 
 // FindInvoice returns a single invoice
-func FindInvoice(uuid string, id string, db *gorm.DB) (*Invoice, error) {
+func FindInvoice(uuid string, id string) (*Invoice, error) {
 	var invoice Invoice
 
 	if db.
@@ -60,7 +58,7 @@ func FindInvoice(uuid string, id string, db *gorm.DB) (*Invoice, error) {
 }
 
 // InvoiceGetAll finds all invoices for a user
-func InvoiceGetAll(uuid string, db *gorm.DB) (*[]Invoice, error) {
+func InvoiceGetAll(uuid string) (*[]Invoice, error) {
 	invoices := []Invoice{}
 
 	if err := db.
@@ -75,14 +73,9 @@ func InvoiceGetAll(uuid string, db *gorm.DB) (*[]Invoice, error) {
 	return &invoices, nil
 }
 
-// Migrate migrates db tables
-func (i *Invoice) Migrate(db *gorm.DB) {
-	db.AutoMigrate(&Invoice{}, &InvoiceItem{})
-}
-
 // Create creates a new invoice
-func (i *Invoice) Create(uuid string, db *gorm.DB) error {
-	u, err := FindUser(uuid, db)
+func (i *Invoice) Create(uuid string) error {
+	u, err := FindUser(uuid)
 	if err != nil {
 		return err
 	}
@@ -112,14 +105,14 @@ func (i *Invoice) Create(uuid string, db *gorm.DB) error {
 }
 
 // InvoiceSetPaid sets payment flag
-func InvoiceSetPaid(uuid string, payload *PaidPayload, db *gorm.DB) error {
+func InvoiceSetPaid(uuid string, payload *PaidPayload) error {
 	paymentDate, err := time.Parse("2006-01-02", payload.PaymentDate)
 	if err != nil {
 		return err
 	}
 
 	id := strconv.Itoa(payload.ID)
-	invoice, err := FindInvoice(uuid, id, db)
+	invoice, err := FindInvoice(uuid, id)
 	if err != nil {
 		return err
 	}

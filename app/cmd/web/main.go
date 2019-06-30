@@ -67,14 +67,10 @@ func main() {
 	app.openDB()
 	defer app.db.Close()
 
+	models.Init(app.db)
 	app.models.users = &models.User{}
-	app.models.users.Migrate(app.db)
-
 	app.models.customers = &models.Customer{}
-	app.models.customers.Migrate(app.db)
-
 	app.models.invoices = &models.Invoice{}
-	app.models.invoices.Migrate(app.db)
 
 	app.info.Printf("Ready. Listening at %s, Production mode: %v\n", app.config.host, app.config.production)
 	app.err.Fatal(srv.ListenAndServe())

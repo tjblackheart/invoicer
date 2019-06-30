@@ -3,8 +3,6 @@ package models
 import (
 	"errors"
 	"strings"
-
-	"github.com/jinzhu/gorm"
 )
 
 // Customer represents a customer
@@ -40,13 +38,8 @@ type Contact struct {
 	CustomerID uint   `json:"-"`
 }
 
-// Migrate migrates db tables
-func (c *Customer) Migrate(db *gorm.DB) {
-	db.AutoMigrate(&Customer{}, &Address{}, &Contact{})
-}
-
 // CustomerGetAll returns a slice of all available customers
-func CustomerGetAll(uuid string, db *gorm.DB) (*[]Customer, error) {
+func CustomerGetAll(uuid string) (*[]Customer, error) {
 	var customers []Customer
 
 	err := db.
@@ -64,7 +57,7 @@ func CustomerGetAll(uuid string, db *gorm.DB) (*[]Customer, error) {
 }
 
 // CustomerGet fetches a single customer
-func CustomerGet(uuid string, id string, db *gorm.DB) (*Customer, error) {
+func CustomerGet(uuid string, id string) (*Customer, error) {
 	var customer Customer
 
 	if db.
@@ -80,8 +73,8 @@ func CustomerGet(uuid string, id string, db *gorm.DB) (*Customer, error) {
 }
 
 // CustomerCreate creates a new customer
-func CustomerCreate(uuid string, c *Customer, db *gorm.DB) (*Customer, error) {
-	u, err := FindUser(uuid, db)
+func CustomerCreate(uuid string, c *Customer) (*Customer, error) {
+	u, err := FindUser(uuid)
 	if err != nil {
 		return nil, err
 	}
@@ -107,7 +100,7 @@ func CustomerCreate(uuid string, c *Customer, db *gorm.DB) (*Customer, error) {
 }
 
 // CustomerDelete removes a customer and it's relations
-func CustomerDelete(uuid string, id string, db *gorm.DB) error {
+func CustomerDelete(uuid string, id string) error {
 	var c Customer
 
 	if db.
@@ -123,7 +116,7 @@ func CustomerDelete(uuid string, id string, db *gorm.DB) error {
 }
 
 // Update patches an existing customer
-func (c *Customer) Update(patch *Customer, db *gorm.DB) error {
+func (c *Customer) Update(patch *Customer) error {
 	if err := patch.validate(); err != nil {
 		return err
 	}

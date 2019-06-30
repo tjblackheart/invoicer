@@ -25,7 +25,7 @@ func (app *application) login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	u, err := models.Authenticate(c, app.db)
+	u, err := models.Authenticate(c)
 	if err != nil {
 		if err == models.ErrInvalidCredentials {
 			http.Error(w, "Invalid credentials!", http.StatusForbidden)
@@ -53,7 +53,7 @@ func (app *application) createUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := u.Create(app.db)
+	err := u.Create()
 
 	if err != nil {
 		if err == models.ErrUnique {
@@ -77,7 +77,7 @@ func (app *application) getUser(w http.ResponseWriter, r *http.Request) {
 	u := &models.User{}
 	vars := mux.Vars(r)
 
-	u, err := models.FindUser(vars["uuid"], app.db)
+	u, err := models.FindUser(vars["uuid"])
 	if err != nil {
 		if err == models.ErrUserNotFound {
 			http.Error(w, "No such user.", http.StatusNotFound)
@@ -95,7 +95,7 @@ func (app *application) getUser(w http.ResponseWriter, r *http.Request) {
 func (app *application) updateUser(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
-	u, err := models.FindUser(vars["uuid"], app.db)
+	u, err := models.FindUser(vars["uuid"])
 	if err != nil {
 		if err == models.ErrUserNotFound {
 			http.Error(w, "No such user.", http.StatusNotFound)
@@ -113,7 +113,7 @@ func (app *application) updateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if u, err = u.Update(patch, app.db); err != nil {
+	if u, err = u.Update(patch); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -133,7 +133,7 @@ func (app *application) getInvoice(w http.ResponseWriter, r *http.Request) {
 	}
 
 	vars := mux.Vars(r)
-	invoice, err := models.FindInvoice(uuid, vars["id"], app.db)
+	invoice, err := models.FindInvoice(uuid, vars["id"])
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -149,7 +149,7 @@ func (app *application) getInvoices(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	invoices, err := models.InvoiceGetAll(uuid, app.db)
+	invoices, err := models.InvoiceGetAll(uuid)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -173,7 +173,7 @@ func (app *application) createInvoice(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = invoice.Create(uuid, app.db)
+	err = invoice.Create(uuid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -196,12 +196,12 @@ func (app *application) setPaid(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err = models.InvoiceSetPaid(uuid, &payload, app.db); err != nil {
+	if err = models.InvoiceSetPaid(uuid, &payload); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	invoices, err := models.InvoiceGetAll(uuid, app.db)
+	invoices, err := models.InvoiceGetAll(uuid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -221,7 +221,7 @@ func (app *application) getCustomer(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	customer, err := models.CustomerGet(uuid, vars["id"], app.db)
+	customer, err := models.CustomerGet(uuid, vars["id"])
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -237,7 +237,7 @@ func (app *application) getCustomers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	customers, err := models.CustomerGetAll(uuid, app.db)
+	customers, err := models.CustomerGetAll(uuid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -261,7 +261,7 @@ func (app *application) createCustomer(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	customer, err = models.CustomerCreate(uuid, customer, app.db)
+	customer, err = models.CustomerCreate(uuid, customer)
 	if err != nil {
 		if err == models.ErrUnique {
 			http.Error(w, "The customer already exists.", http.StatusBadRequest)
@@ -286,7 +286,7 @@ func (app *application) updateCustomer(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	customer, err := models.CustomerGet(uuid, id, app.db)
+	customer, err := models.CustomerGet(uuid, id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -298,7 +298,7 @@ func (app *application) updateCustomer(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = customer.Update(&patch, app.db)
+	err = customer.Update(&patch)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -317,7 +317,7 @@ func (app *application) removeCustomer(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 
-	if err := models.CustomerDelete(uuid, id, app.db); err != nil {
+	if err := models.CustomerDelete(uuid, id); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}

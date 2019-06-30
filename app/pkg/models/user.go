@@ -6,7 +6,6 @@ import (
 
 	"golang.org/x/crypto/bcrypt"
 
-	"github.com/jinzhu/gorm"
 	uuid "github.com/nu7hatch/gouuid"
 )
 
@@ -49,7 +48,7 @@ type Credentials struct {
 }
 
 // FindUser finds a user by UUID
-func FindUser(uuid string, db *gorm.DB) (*User, error) {
+func FindUser(uuid string) (*User, error) {
 	var u User
 
 	if db.Preload("Settings").Where("uuid = ?", uuid).First(&u).RecordNotFound() {
@@ -60,7 +59,7 @@ func FindUser(uuid string, db *gorm.DB) (*User, error) {
 }
 
 // Authenticate performs a login attempt
-func Authenticate(c *Credentials, db *gorm.DB) (*User, error) {
+func Authenticate(c *Credentials) (*User, error) {
 	user := &User{}
 
 	if db.Preload("Settings").Where("email = ?", c.Email).First(&user).RecordNotFound() {
@@ -86,13 +85,8 @@ func (u *User) BeforeCreate() error {
 	return nil
 }
 
-// Migrate migrates tables
-func (u *User) Migrate(db *gorm.DB) {
-	db.AutoMigrate(&User{}, &Settings{})
-}
-
 // Create creates a user
-func (u *User) Create(db *gorm.DB) error {
+func (u *User) Create() error {
 	if _, err := u.validate(); err != nil {
 		return err
 	}
@@ -111,7 +105,7 @@ func (u *User) Create(db *gorm.DB) error {
 }
 
 // Update updates an existing user
-func (u *User) Update(patch *User, db *gorm.DB) (*User, error) {
+func (u *User) Update(patch *User) (*User, error) {
 	db.Model(&u).Updates(patch)
 
 	return u, nil
