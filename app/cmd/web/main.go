@@ -21,11 +21,6 @@ type application struct {
 	}
 	info, err *log.Logger
 	db        *gorm.DB
-	models    struct {
-		customers *models.Customer
-		invoices  *models.Invoice
-		users     *models.User
-	}
 }
 
 var app application
@@ -68,9 +63,6 @@ func main() {
 	defer app.db.Close()
 
 	models.Init(app.db)
-	app.models.users = &models.User{}
-	app.models.customers = &models.Customer{}
-	app.models.invoices = &models.Invoice{}
 
 	app.info.Printf("Ready. Listening at %s, Production mode: %v\n", app.config.host, app.config.production)
 	app.err.Fatal(srv.ListenAndServe())
