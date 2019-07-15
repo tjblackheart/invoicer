@@ -22,6 +22,7 @@ func (app *application) routes() *mux.Router {
 	api.HandleFunc("/invoice", app.getInvoices).Methods("GET")
 	api.HandleFunc("/invoice", app.createInvoice).Methods("POST")
 	api.HandleFunc("/invoice/payment", app.setPaid).Methods("POST")
+	api.HandleFunc("/invoice/pdf/{id:[0-9]+}", app.printInvoice).Methods("GET")
 
 	api.HandleFunc("/customer/{id:[0-9]+}", app.getCustomer).Methods("GET")
 	api.HandleFunc("/customer", app.getCustomers).Methods("GET")
@@ -32,11 +33,11 @@ func (app *application) routes() *mux.Router {
 	api.HandleFunc("/user/{uuid:[a-z0-9-]{36}}", app.getUser).Methods("GET")
 	api.HandleFunc("/user/{uuid:[a-z0-9-]{36}}", app.updateUser).Methods("PUT")
 
-	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("./ui/dist/assets/"))))
-
 	if app.config.production == false {
 		api.Use(app.corsMW)
 	}
+
+	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("./ui/dist/assets/"))))
 
 	return r
 }

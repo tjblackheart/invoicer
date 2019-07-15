@@ -73,6 +73,10 @@
                   Toggle payment
                 </a>
               </span>
+              <span>
+                &middot;
+                <a href @click.prevent="printInvoice(invoice.id)">PDF</a>
+              </span>
             </td>
           </tr>
           <tr v-if="invoices.length == 0">
@@ -179,6 +183,14 @@ export default {
       } finally {
         this.busy = false
       }
+    },
+
+    async printInvoice(id) {
+      this.busy = true
+      const path = await http.printInvoice(id)
+      this.busy = false
+
+      window.open(path, '_blank');
     },
 
     paymentModal (id) {

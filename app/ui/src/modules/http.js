@@ -68,6 +68,15 @@ export default {
     }
   },
 
+  async printInvoice (id) {
+    try {
+      const r = await instance.get(`/api/invoice/pdf/${id}`)
+      return r.path
+    } catch (e) {
+      this.handleError(e)
+    }
+  },
+
   async togglePayment (payload) {
     try {
       const r = await instance.post('/api/invoice/payment', payload)

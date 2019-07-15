@@ -6,6 +6,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/tjblackheart/invoicer/pkg/models"
+	"github.com/tjblackheart/invoicer/pkg/pdf"
 )
 
 // HTML
@@ -321,4 +322,30 @@ func (app *application) removeCustomer(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+}
+
+// PDF
+
+func (app *application) printInvoice(w http.ResponseWriter, r *http.Request) {
+	uuid, err := app.getUUID(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	vars := mux.Vars(r)
+	invoice, err := models.FindInvoice(uuid, vars["id"])
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// TODO
+	path, err := pdf.Generate(invoice)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(map[string]string{"path": path})
 }
