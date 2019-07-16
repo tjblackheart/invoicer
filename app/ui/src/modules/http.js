@@ -2,8 +2,10 @@ import axios from 'axios'
 import store from '@/modules/store'
 import router from '@/modules/router'
 
+const baseURL = process.env.VUE_APP_ENDPOINT || 'http://localhost:3000'
+
 const instance = axios.create({
-  baseURL: process.env.VUE_APP_ENDPOINT || 'http://localhost:3000',
+  baseURL: baseURL,
   timeout: 3000,
   headers: { 'Content-Type': 'application/json' },
 })
@@ -71,7 +73,7 @@ export default {
   async printInvoice (id) {
     try {
       const r = await instance.get(`/api/invoice/pdf/${id}`)
-      return r.path
+      return baseURL + `/file/${r.data.file}`
     } catch (e) {
       this.handleError(e)
     }

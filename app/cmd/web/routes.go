@@ -38,6 +38,7 @@ func (app *application) routes() *mux.Router {
 	}
 
 	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("./ui/dist/assets/"))))
+	r.PathPrefix("/file/").Handler(http.StripPrefix("/file/", http.FileServer(http.Dir("./out/"))))
 
 	return r
 }

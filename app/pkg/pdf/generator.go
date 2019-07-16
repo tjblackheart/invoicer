@@ -2,28 +2,31 @@ package pdf
 
 import (
 	"bytes"
-	"fmt"
 	"html/template"
+	"strings"
 
-	wkp "github.com/SebastiaanKlippert/go-wkhtmltopdf"
+	wk "github.com/SebastiaanKlippert/go-wkhtmltopdf"
 	"github.com/tjblackheart/invoicer/pkg/models"
 )
 
 // Generate prints an invoice to PDF and returns the filename
-func Generate(i *models.Invoice) (string, error) {
-	html, err := toHTML(i)
+func Generate(i *models.Invoice, u *models.User) (string, error) {
+	html, err := toHTML(i, u)
 	if err != nil {
-		fmt.Println(err)
 		return "", err
 	}
 
-	// TODO
-	fmt.Println(html)
+	filename := i.Number + ".pdf"
 
-	return "", nil
+	err = toPDF(html, filename)
+	if err != nil {
+		return "", err
+	}
+
+	return filename, nil
 }
 
-func toHTML(i *models.Invoice) (string, error) {
+func toHTML(i *models.Invoice, u *models.User) (string, error) {
 	name := "invoice"
 	data := map[string]string{
 		"Title": i.Number,
@@ -43,14 +46,30 @@ func toHTML(i *models.Invoice) (string, error) {
 	return buf.String(), nil
 }
 
-func toPDF(html string) (string, error) {
-	generator, err := wkp.NewPDFGenerator()
+func toPDF(html string, filename string) error {
+	gen, err := wk.NewPDFGenerator()
 	if err != nil {
-		return "", err
+		return err
 	}
 
-	// TODO
-	fmt.Println(generator)
+	gen.Grayscale.Set(true)
+	gen.Dpi.Set(600)
 
-	return "", nil
+	page := wk.NewPageReader(strings.NewReader(html))
+	page.FooterRight.Set("[page]")
+	page.FooterFontSize.Set(10)
+
+	gen.AddPage(page)
+
+	err = gen.Create()
+	if err != nil {
+		return err
+	}
+
+	err = gen.WriteFile("out/" + filename)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

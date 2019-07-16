@@ -334,18 +334,30 @@ func (app *application) printInvoice(w http.ResponseWriter, r *http.Request) {
 	}
 
 	vars := mux.Vars(r)
+
 	invoice, err := models.FindInvoice(uuid, vars["id"])
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
+	u, err := models.FindUser(uuid)
+	if err != nil {
+		if err == models.ErrUserNotFound {
+			http.Error(w, "No such user.", http.StatusNotFound)
+			return
+		}
+
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
 	// TODO
-	path, err := pdf.Generate(invoice)
+	file, err := pdf.Generate(invoice, u)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	json.NewEncoder(w).Encode(map[string]string{"path": path})
+	json.NewEncoder(w).Encode(map[string]string{"file": file})
 }
