@@ -19,6 +19,5 @@ COPY --from=go /srv/bin/invoicer .
 COPY --from=node /srv/dist ./ui/dist
 
 VOLUME /app/var
-VOLUME /app/out
 
 CMD ["./invoicer"]
