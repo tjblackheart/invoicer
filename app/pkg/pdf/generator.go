@@ -73,7 +73,7 @@ func toHTML(i *models.Invoice, u *models.User) (string, error) {
 }
 
 func toPDF(html string, filename string) error {
-	// use file that is already there
+	// use file if it's already there
 	if _, err := os.Stat("out/" + filename); err == nil {
 		return nil
 	}
