@@ -14,8 +14,8 @@
           :class="{'is-loading': busy}"
           :disabled="busy"
           class="button is-primary"
-          @click.prevent="printPdf">
-          Print to PDF
+          @click.prevent="printInvoice(invoice.id)">
+            Print to PDF
         </button>
       </div>
     </div>
@@ -268,9 +268,15 @@ export default {
       })
     },
 
-    printPdf () {
-      // TODO
-      this.showModal = true
+    async printInvoice (id) {
+      this.busy = true
+      const r = await http.printInvoice(id)
+      this.busy = false
+
+      let a = document.createElement('a')
+      a.href = `data:application/octet-stream;base64,${r.content}`
+      a.download = r.filename
+      a.click()
     },
   },
 

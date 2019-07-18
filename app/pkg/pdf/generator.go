@@ -1,8 +1,11 @@
 package pdf
 
 import (
+	"bufio"
 	"bytes"
+	"encoding/base64"
 	"html/template"
+	"os"
 	"strings"
 
 	wk "github.com/SebastiaanKlippert/go-wkhtmltopdf"
@@ -18,12 +21,35 @@ func Generate(i *models.Invoice, u *models.User) (string, error) {
 
 	filename := i.Number + ".pdf"
 
-	err = toPDF(html, filename)
-	if err != nil {
+	if err = toPDF(html, filename); err != nil {
 		return "", err
 	}
 
 	return filename, nil
+}
+
+// Base64 converts a file to a Base64 encoded string.
+func Base64(filename string) (string, error) {
+	file, err := os.Open("out/" + filename)
+	defer file.Close()
+
+	if err != nil {
+		return "", err
+	}
+
+	stat, err := file.Stat()
+	if err != nil {
+		return "", err
+	}
+
+	size := stat.Size()
+	buf := make([]byte, size)
+
+	r := bufio.NewReader(file)
+	r.Read(buf)
+	s := base64.StdEncoding.EncodeToString(buf)
+
+	return s, nil
 }
 
 func toHTML(i *models.Invoice, u *models.User) (string, error) {
@@ -47,13 +73,18 @@ func toHTML(i *models.Invoice, u *models.User) (string, error) {
 }
 
 func toPDF(html string, filename string) error {
+	// use file that is already there
+	if _, err := os.Stat("out/" + filename); err == nil {
+		return nil
+	}
+
 	gen, err := wk.NewPDFGenerator()
 	if err != nil {
 		return err
 	}
 
 	gen.Grayscale.Set(true)
-	gen.Dpi.Set(600)
+	gen.Dpi.Set(300)
 
 	page := wk.NewPageReader(strings.NewReader(html))
 	page.FooterRight.Set("[page]")
@@ -61,13 +92,11 @@ func toPDF(html string, filename string) error {
 
 	gen.AddPage(page)
 
-	err = gen.Create()
-	if err != nil {
+	if err = gen.Create(); err != nil {
 		return err
 	}
 
-	err = gen.WriteFile("out/" + filename)
-	if err != nil {
+	if err = gen.WriteFile("out/" + filename); err != nil {
 		return err
 	}
 

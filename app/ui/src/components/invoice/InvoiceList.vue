@@ -73,10 +73,7 @@
                   Toggle payment
                 </a>
               </span>
-              <span>
-                &middot;
-                <a href @click.prevent="printInvoice(invoice.id)">PDF</a>
-              </span>
+              <print-link :id="invoice.id" />
             </td>
           </tr>
           <tr v-if="invoices.length == 0">
@@ -125,11 +122,13 @@ import http from '@/modules/http'
 import dayjs from 'dayjs'
 import Message from '@/components/misc/Message'
 import Modal from '@/components/misc/Modal.vue'
+import PrintLink from './PrintLink.vue'
 
 export default {
   components: {
     Message,
     Modal,
+    PrintLink,
   },
 
   data () {
@@ -183,17 +182,6 @@ export default {
       } finally {
         this.busy = false
       }
-    },
-
-    async printInvoice(id) {
-      this.busy = true
-      const r = await http.printInvoice(id)
-      this.busy = false
-
-      let a = document.createElement("a");
-      a.href = "data:application/octet-stream;base64," + r.base64;
-      a.download = r.filename
-      a.click();
     },
 
     paymentModal (id) {
