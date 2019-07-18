@@ -1,8 +1,11 @@
 package main
 
 import (
+	"bufio"
+	"encoding/base64"
 	"encoding/json"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
 	"github.com/tjblackheart/invoicer/pkg/models"
@@ -360,4 +363,34 @@ func (app *application) printInvoice(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(map[string]string{"file": file})
+}
+
+func (app *application) getFile(w http.ResponseWriter, r *http.Request) {
+	_, err := app.getUUID(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	vars := mux.Vars(r)
+
+	//Check if file exists and open
+	file, err := os.Open("out/" + vars["filename"])
+	defer file.Close() //Close after function return
+	if err != nil {
+		//File not found, send 404
+		http.Error(w, "File not found.", 404)
+		return
+	}
+
+	stat, _ := file.Stat()
+	size := stat.Size()
+	buf := make([]byte, size)
+
+	fr := bufio.NewReader(file)
+	fr.Read(buf)
+
+	s := base64.StdEncoding.EncodeToString(buf)
+
+	json.NewEncoder(w).Encode(map[string]string{"filename": vars["filename"], "base64": s})
 }

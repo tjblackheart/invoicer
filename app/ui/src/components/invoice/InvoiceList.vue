@@ -187,10 +187,13 @@ export default {
 
     async printInvoice(id) {
       this.busy = true
-      const url = await http.printInvoice(id)
+      const r = await http.printInvoice(id)
       this.busy = false
 
-      window.open(url, '_blank');
+      let a = document.createElement("a");
+      a.href = "data:application/octet-stream;base64," + r.base64;
+      a.download = r.filename
+      a.click();
     },
 
     paymentModal (id) {

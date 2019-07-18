@@ -72,8 +72,9 @@ export default {
 
   async printInvoice (id) {
     try {
-      const r = await instance.get(`/api/invoice/pdf/${id}`)
-      return baseURL + `/file/${r.data.file}`
+      let r = await instance.get(`/api/invoice/pdf/${id}`)
+      r = await instance.get(`/files/${r.data.file}`)
+      return r.data
     } catch (e) {
       this.handleError(e)
     }

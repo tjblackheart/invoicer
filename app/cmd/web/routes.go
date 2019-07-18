@@ -37,8 +37,11 @@ func (app *application) routes() *mux.Router {
 		api.Use(app.corsMW)
 	}
 
+	dl := r.PathPrefix("/files/").Subrouter()
+	dl.Use(app.authMW)
+	dl.HandleFunc("/{filename}", app.getFile).Methods("GET")
+
 	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("./ui/dist/assets/"))))
-	r.PathPrefix("/file/").Handler(http.StripPrefix("/file/", http.FileServer(http.Dir("./out/"))))
 
 	return r
 }
