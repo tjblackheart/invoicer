@@ -14,11 +14,11 @@ RUN apk add --update yarn && yarn && yarn build
 ##
 
 FROM alpine
-WORKDIR /srv
+WORKDIR /app
 COPY --from=go /srv/bin/invoicer .
 COPY --from=node /srv/dist ./ui/dist
 
-VOLUME /srv/var
-VOLUME /srv/out
+VOLUME /app/var
+VOLUME /app/out
 
 CMD ["./invoicer"]

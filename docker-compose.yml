@@ -6,7 +6,7 @@ services:
         ports:
             - 3000:3000
         volumes:
-            - ./app/var:/srv/var
-            - ./app/out:/srv/out
+            - ./app/var:/app/var
+            - ./app/out:/app/out
         env_file:
             - ./app/.env

@@ -2,18 +2,20 @@ package models
 
 import (
 	"errors"
+	"fmt"
 	"strconv"
 	"time"
-)
 
-// const MULTIPLIER = 1000
+	"github.com/tjblackheart/invoicer/pkg/money"
+)
 
 // Invoice represents an invoice
 type Invoice struct {
 	BaseModel
 	Number      string        `json:"number,omitempty" gorm:"unique;not null"`
 	Date        time.Time     `json:"date,omitempty"`
-	TotalNet    float64       `json:"total_net" gorm:"not null;default:0"`
+	TotalNet    money.Money   `json:"total_net" gorm:"not null;default:0"`
+	TotalGross  money.Money   `json:"total_gross" gorm:"not null;default:0"`
 	Currency    string        `json:"currency" gorm:"not null;default:'EUR'"`
 	Items       []InvoiceItem `json:"items,omitempty" gorm:"foreignkey:InvoiceID"`
 	IsCancelled bool          `json:"is_cancelled" gorm:"not null;default:false"`
@@ -27,12 +29,12 @@ type Invoice struct {
 // InvoiceItem represents a single invoice item
 type InvoiceItem struct {
 	BaseModel
-	Description  string  `json:"description,omitempty"`
-	Amount       float64 `json:"amount,omitempty" gorm:"not null;default:0"`
-	Unit         string  `json:"unit,omitempty" gorm:"not null;default:'hrs'"`
-	PricePerUnit float64 `json:"price_per_unit,omitempty" gorm:"not null;default:0"`
-	VAT          uint    `json:"vat,omitempty" gorm:"not null;default:19"`
-	InvoiceID    uint    `json:"-"`
+	Description  string      `json:"description,omitempty"`
+	Amount       float64     `json:"amount" gorm:"not null;default:0"`
+	Unit         string      `json:"unit" gorm:"not null;default:'hrs'"`
+	PricePerUnit money.Money `json:"price_per_unit" gorm:"not null;default:0"`
+	VAT          float64     `json:"vat" gorm:"not null;default:19"`
+	InvoiceID    uint        `json:"-"`
 }
 
 // PaidPayload holds a json body for payment requests
@@ -87,8 +89,14 @@ func (i *Invoice) Create(uuid string) error {
 	}
 
 	for _, item := range i.Items {
-		i.TotalNet += item.Amount * item.PricePerUnit
+		net := item.PricePerUnit.Multiply(item.Amount)
+		i.TotalNet += net
+
+		tax := net.Multiply(item.VAT / 100)
+		i.TotalGross += net + tax
 	}
+
+	fmt.Println(i.Items)
 
 	if err := i.validate(); err != nil {
 		return err
