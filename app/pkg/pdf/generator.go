@@ -12,6 +12,11 @@ import (
 	"github.com/tjblackheart/invoicer/pkg/models"
 )
 
+type tplData struct {
+	Invoice *models.Invoice
+	User    *models.User
+}
+
 // Generate prints an invoice to PDF and returns the filename
 func Generate(i *models.Invoice, u *models.User) (string, error) {
 	html, err := toHTML(i, u)
@@ -54,18 +59,13 @@ func Base64(filename string) (string, error) {
 
 func toHTML(i *models.Invoice, u *models.User) (string, error) {
 	name := "invoice"
-	data := map[string]string{
-		"Title": i.Number,
-		// TODO
-	}
-
 	ts, err := template.New(name).ParseFiles("tpl/invoice.gohtml")
 	if err != nil {
 		return "", err
 	}
 
 	buf := new(bytes.Buffer)
-	if err = ts.ExecuteTemplate(buf, name, &data); err != nil {
+	if err = ts.ExecuteTemplate(buf, name, &tplData{i, u}); err != nil {
 		return "", err
 	}
 
@@ -74,9 +74,9 @@ func toHTML(i *models.Invoice, u *models.User) (string, error) {
 
 func toPDF(html string, filename string) error {
 	// use file that is already there
-	if _, err := os.Stat("out/" + filename); err == nil {
-		return nil
-	}
+	// if _, err := os.Stat("out/" + filename); err == nil {
+	// 	return nil
+	// }
 
 	gen, err := wk.NewPDFGenerator()
 	if err != nil {

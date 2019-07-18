@@ -13,6 +13,7 @@
         <print-link
           :id="invoice.id"
           :button="true"
+          text="Print to PDF"
         />
       </div>
     </div>
@@ -25,9 +26,9 @@
       <div class="box-content">
         <div class="columns is-mobile">
           <div class="column is-7">
-            <!-- <div class="logo">
-              TODO: logo
-            </div> -->
+            <div class="logo">
+              <!-- TODO: logo -->
+            </div>
 
             <div class="content">
               <p> <strong> {{ address.company }} </strong> </p>

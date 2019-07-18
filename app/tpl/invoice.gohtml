@@ -3,10 +3,41 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Invoice {{ .Title }}</title>
+    <title>{{ .Invoice.Number }}</title>
 </head>
 <body>
-    The body goes here.
+
+    <div>
+    [ right side ] <br>
+    {{ with .User.Settings }}
+    <b> {{ .Company }} </b> <br>
+    {{ .FirstName }} {{ .LastName }} <br>
+    {{ .Street }} {{ .Number }} <br>
+    {{ .City }}, {{ .Zip }} <br>
+    {{ .Country }} <br>
+    <br>
+    {{ .Phone }} <br>
+    {{ .Email }}
+    {{ end }}
+    </div>
+
+    <div>
+    [left side] <br>
+    {{ with .Invoice.Customer.Address }}
+        <b>{{ .Company }}</b> <br>
+        {{ .FirstName }} {{ .LastName }} <br>
+        {{ .Street }} {{ .Number }} <br>
+        {{ .City }}, {{ .Zip }} <br>
+        {{ .Country }} <br>
+    {{ end }}
+    </div>
+
+    <div>
+    Invoice: <b>{{ .Invoice.Number }}</b> <br>
+    Customer: <b> {{ .Invoice.Customer.Number }} </b> <br>
+    Date: <b> {{ .Invoice.Date.Format "02.01.2006" }} </b> <br>
+    </div>
+
 </body>
 </html>
 {{ end }}

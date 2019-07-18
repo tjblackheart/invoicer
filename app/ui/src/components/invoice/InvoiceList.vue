@@ -73,6 +73,7 @@
                   Toggle payment
                 </a>
               </span>
+              &middot;
               <print-link :id="invoice.id" />
             </td>
           </tr>

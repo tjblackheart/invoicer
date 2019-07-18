@@ -1,22 +1,22 @@
 <template>
   <span>
-      &middot;
-      <a
-        v-if="!busy"
-        href
-        :class="{ 'button is-primary': button, 'is-loading': button && busy }"
-        :disabled="busy"
-        @click.prevent="printInvoice">
-        {{ text }}
-      </a>
-      <font-awesome-icon
-        v-if="busy"
-        icon="circle-notch" spin
-      />
+    <a
+      v-if="!busy || button"
+      href
+      :class="{ 'button is-primary': button, 'is-loading': busy }"
+      :disabled="busy"
+      @click.prevent="printInvoice">
+      {{ text }}
+    </a>
+    <font-awesome-icon
+      v-if="busy && !button"
+      icon="circle-notch"
+      spin />
   </span>
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 import http from '@/modules/http'
 
 export default {
@@ -42,16 +42,25 @@ export default {
   },
 
   methods: {
-    async printInvoice () {
-      this.busy = true
-      const r = await http.printInvoice(this.id)
-      this.busy = false
+    ...mapMutations([ 'setMessage', 'clearMessage' ]),
 
-      let a = document.createElement('a')
-      a.href = `data:application/octet-stream;base64,${r.content}`
-      a.download = r.filename
-      a.click()
+    async printInvoice () {
+      this.clearMessage()
+      this.busy = true
+
+      try {
+        const r = await http.printInvoice(this.id)
+
+        let a = document.createElement('a')
+        a.href = `data:application/octet-stream;base64,${r.content}`
+        a.download = r.filename
+        a.click()
+      } catch (err) {
+        this.setMessage({ text: err, style: 'is-danger' })
+      } finally {
+        this.busy = false
+      }
     },
-  }
+  },
 }
 </script>
