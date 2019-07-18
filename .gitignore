@@ -1,4 +1,5 @@
 app/var/*
+!app/var/.gitkeep
 !app/var/out/
 app/var/out/*
 app/ui/node_modules
