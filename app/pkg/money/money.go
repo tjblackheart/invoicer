@@ -20,16 +20,16 @@ func (m Money) Float64() float64 {
 
 // Multiply safely multiplies a Money value by a float64, rounding to the nearest cent.
 func (m Money) Multiply(f float64) Money {
-	x := (float64(m) * f) + 0.5
+	f64 := (float64(m) * f) + 0.5
 
-	return Money(x)
+	return Money(f64)
 }
 
 // Format returns a formatted Money value
 func (m Money) Format() string {
-	x := float64(m)
+	f64 := float64(m)
 
-	return fmt.Sprintf("%.2f", x/100)
+	return fmt.Sprintf("%.2f", f64/100)
 }
 
 // MarshalJSON implements the marshalling interface
