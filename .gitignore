@@ -1,7 +1,8 @@
 app/var/*
 !app/var/.gitkeep
-app/out/*
-!app/out/.gitkeep
+!app/var/out/
+app/var/out/*
+!app/var/out/.gitkeep
 app/ui/node_modules
 app/ui/dist
 app/.env

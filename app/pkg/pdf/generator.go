@@ -35,7 +35,7 @@ func Generate(i *models.Invoice, u *models.User) (string, error) {
 
 // Base64 converts a file to a Base64 encoded string.
 func Base64(filename string) (string, error) {
-	file, err := os.Open("out/" + filename)
+	file, err := os.Open("var/out/" + filename)
 	defer file.Close()
 
 	if err != nil {
@@ -74,7 +74,7 @@ func toHTML(i *models.Invoice, u *models.User) (string, error) {
 
 func toPDF(html string, filename string) error {
 	// use file if it's already there
-	if _, err := os.Stat("out/" + filename); err == nil {
+	if _, err := os.Stat("var/out/" + filename); err == nil {
 		return nil
 	}
 
@@ -96,7 +96,7 @@ func toPDF(html string, filename string) error {
 		return err
 	}
 
-	if err = gen.WriteFile("out/" + filename); err != nil {
+	if err = gen.WriteFile("var/out/" + filename); err != nil {
 		return err
 	}
 

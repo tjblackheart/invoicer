@@ -46,6 +46,7 @@ func CustomerGetAll(uuid string) (*[]Customer, error) {
 		Preload("Address").
 		Preload("Contacts").
 		Where("uuid = ?", uuid).
+		Order("created_at DESC").
 		Find(&customers).
 		Error
 

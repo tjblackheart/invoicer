@@ -68,6 +68,7 @@ func InvoiceGetAll(uuid string) (*[]Invoice, error) {
 		Preload("Customer").
 		Preload("Customer.Address").
 		Where("uuid = ?", uuid).
+		Order("date DESC").
 		Find(&invoices).Error; err != nil {
 		return nil, err
 	}
