@@ -1,15 +1,18 @@
 <template>
-  <span v-if="!busy">
-    &middot;
-    <a
-      href
-      :class="css"
-      @click.prevent="printInvoice">
-      {{ text }}
-    </a>
-  </span>
-  <span v-else>
-    <font-awesome-icon icon="circle-notch" spin />
+  <span>
+      &middot;
+      <a
+        v-if="!busy"
+        href
+        :class="{ 'button is-primary': button, 'is-loading': button && busy }"
+        :disabled="busy"
+        @click.prevent="printInvoice">
+        {{ text }}
+      </a>
+      <font-awesome-icon
+        v-if="busy"
+        icon="circle-notch" spin
+      />
   </span>
 </template>
 
@@ -22,13 +25,13 @@ export default {
       type: String,
       required: true,
     },
-    css: {
-      type: String,
-      default: ''
-    },
     text: {
       type: String,
       default: 'PDF',
+    },
+    button: {
+      type: Boolean,
+      default: false,
     },
   },
 

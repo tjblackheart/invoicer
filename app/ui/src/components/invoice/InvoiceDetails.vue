@@ -10,13 +10,10 @@
         </h2>
       </div>
       <div class="is-pulled-right">
-        <button
-          :class="{'is-loading': busy}"
-          :disabled="busy"
-          class="button is-primary"
-          @click.prevent="printInvoice(invoice.id)">
-            Print to PDF
-        </button>
+        <print-link
+          :id="invoice.id"
+          :button="true"
+        />
       </div>
     </div>
 
@@ -28,9 +25,9 @@
       <div class="box-content">
         <div class="columns is-mobile">
           <div class="column is-7">
-            <div class="logo">
+            <!-- <div class="logo">
               TODO: logo
-            </div>
+            </div> -->
 
             <div class="content">
               <p> <strong> {{ address.company }} </strong> </p>
@@ -181,26 +178,19 @@
       </router-link>
     </div>
 
-    <modal
-      v-if="showModal"
-      @close="showModal = false">
-      <div slot="content">
-        <p> This is still a TODO. Sorry about that.</p>
-      </div>
-    </modal>
   </div>
 </template>
 
 <script>
 import { mapMutations } from 'vuex'
 import http from '@/modules/http'
-import Modal from '@/components/misc/Modal.vue'
 import Message from '@/components/misc/Message'
+import PrintLink from './PrintLink'
 
 export default {
   components: {
-    Modal,
     Message,
+    PrintLink,
   },
 
   data () {
@@ -220,7 +210,6 @@ export default {
         vat: 0,
         gross: 0,
       },
-      showModal: false,
       busy: false,
     }
   },
