@@ -59,7 +59,7 @@ func Base64(filename string) (string, error) {
 
 func toHTML(i *models.Invoice, u *models.User) (string, error) {
 	name := "invoice"
-	ts, err := template.New(name).ParseFiles("tpl/invoice.gohtml")
+	ts, err := template.New(name).ParseFiles("tpl/invoice.html")
 	if err != nil {
 		return "", err
 	}
