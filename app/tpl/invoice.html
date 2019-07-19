@@ -1,0 +1,78 @@
+{{ define "invoice" }}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ .Invoice.Number }}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+    <style type="text/css">
+        @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,700');
+        @page { size: 7in 9.25in; margin: 27mm 16mm 27mm 16mm; }
+        body { font-family: "IBM Plex Sans"; font-weight: 400; font-size: 16px; }
+        .user { color: #666666; margin-bottom: 100px; font-size: 13px; }
+        .address { margin-bottom: 100px; }
+        table.no-borders, table.no-borders tr, table.no-borders td  { border: none !important; }
+    </style>
+</head>
+<body>
+  <section class="section">
+    <div class="container">
+
+      <div class="user">
+        {{ with .User.Settings }}
+            <b> {{ .Company }} </b> &middot;
+            {{ .FirstName }} {{ .LastName }} &middot;
+            {{ .Street }} {{ .Number }} &middot;
+            {{ .City }}, {{ .Zip }} &middot;
+            {{ .Country }}
+        {{ end }}
+      </div>
+
+      <div class="address">
+        {{ with .Invoice.Customer.Address }}
+            <b>{{ .Company }}</b> <br>
+            {{ .FirstName }} {{ .LastName }} <br>
+            {{ .Street }} {{ .Number }} <br>
+            {{ .City }}, {{ .Zip }} <br>
+            {{ .Country }} <br>
+        {{ end }}
+      </div>
+
+      <hr>
+
+      <div class="columns">
+      <div class="column">
+        Invoice: <b>{{ .Invoice.Number }}</b> &middot;
+      </div>
+      <div class="column">
+        Customer: <b>{{ .Invoice.Customer.Number }}</b> &middot;
+      </div>
+      <div class="column">
+        Date: <b>{{ .Invoice.Date.Format "02.01.2006" }}</b>
+      </div>
+      </div>
+
+      <hr>
+
+      {{/* <table class="table is-fullwidth is-narrow no-borders">
+        <thead>
+          <tr>
+            <th class="has-text-centered"> <span class="heading"> Invoice </span> </th>
+            <th class="has-text-centered"> <span class="heading"> Customer </span> </th>
+            <th class="has-text-centered"> <span class="heading"> Date </span> </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="has-text-centered">  </td>
+            <td class="has-text-centered">  </td>
+            <td class="has-text-centered">  </td>
+          </tr>
+        </tbody>
+      </table> */}}
+
+    </div>
+  </section>
+</body>
+</html>
+{{ end }}
