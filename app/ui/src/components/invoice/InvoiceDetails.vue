@@ -13,8 +13,7 @@
         <print-link
           :id="invoice.id"
           :button="true"
-          text="Print to PDF"
-        />
+          text="Print to PDF" />
       </div>
     </div>
 
@@ -178,7 +177,6 @@
         Back
       </router-link>
     </div>
-
   </div>
 </template>
 
@@ -227,14 +225,28 @@ export default {
 
   created () {
     this.clearMessage()
+    this.loadData()
   },
 
   methods: {
     ...mapMutations([ 'setMessage', 'clearMessage' ]),
 
+    async loadData () {
+      try {
+        this.invoice = await http.fetchInvoice(this.$route.params.id)
+        this.user = await http.fetchUser(this.$store.getters.uuid)
+        this.address = this.invoice.customer.address
+        this.calculateTotals()
+      } catch (err) {
+        this.setMessage({
+          text: err.message,
+          style: 'is-danger',
+        })
+      }
+    },
+
     totalNet (item) {
-      const net = item.price_per_unit * item.amount
-      return net
+      return item.price_per_unit * item.amount
     },
 
     totalGross (item) {
@@ -268,25 +280,6 @@ export default {
       a.download = r.filename
       a.click()
     },
-  },
-
-  beforeRouteEnter (to, from, next) {
-    next(async vm => {
-      try {
-        const invoice = await http.fetchInvoice(to.params.id)
-        const user = await http.fetchUser(vm.$store.getters.uuid)
-
-        vm.invoice = invoice
-        vm.address = invoice.customer.address
-        vm.calculateTotals()
-        vm.user = user
-      } catch (error) {
-        this.setMessage({
-          text: error.message,
-          style: 'is-danger',
-        })
-      }
-    })
   },
 }
 </script>
