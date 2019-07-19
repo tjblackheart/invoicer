@@ -232,6 +232,9 @@ export default {
     ...mapMutations([ 'setMessage', 'clearMessage' ]),
 
     async loadData () {
+      this.busy = true
+      this.clearMessage()
+
       try {
         this.invoice = await http.fetchInvoice(this.$route.params.id)
         this.user = await http.fetchUser(this.$store.getters.uuid)
@@ -239,9 +242,11 @@ export default {
         this.calculateTotals()
       } catch (err) {
         this.setMessage({
-          text: err.message,
+          text: err,
           style: 'is-danger',
         })
+      } finally {
+        this.busy = false
       }
     },
 
@@ -272,13 +277,25 @@ export default {
 
     async printInvoice (id) {
       this.busy = true
-      const r = await http.printInvoice(id)
-      this.busy = false
+      this.clearMessage()
 
-      let a = document.createElement('a')
-      a.href = `data:application/octet-stream;base64,${r.content}`
-      a.download = r.filename
-      a.click()
+      try {
+        const r = await http.printInvoice(id)
+        this.busy = false
+
+        let a = document.createElement('a')
+        a.href = `data:application/octet-stream;base64,${r.content}`
+        a.download = r.filename
+        a.click()
+      } catch (err) {
+        this.setMessage({
+          text: err,
+          style: 'is-danger',
+        })
+      } finally {
+        this.busy = false
+      }
+
     },
   },
 }
