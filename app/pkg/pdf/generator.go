@@ -10,6 +10,7 @@ import (
 
 	wk "github.com/SebastiaanKlippert/go-wkhtmltopdf"
 	"github.com/tjblackheart/invoicer/pkg/models"
+	"github.com/tjblackheart/invoicer/pkg/money"
 )
 
 type tplData struct {
@@ -58,8 +59,27 @@ func Base64(filename string) (string, error) {
 }
 
 func toHTML(i *models.Invoice, u *models.User) (string, error) {
+	funcs := template.FuncMap{
+		"add": func(i int) int {
+			return i + 1
+		},
+		"itemNet": func(p money.Money, a float64) string {
+			return p.Multiply(a).Format()
+		},
+		"itemGross": func(perUnit money.Money, amount float64, vat float64) string {
+			tax := perUnit.Multiply(vat / 100)
+			single := perUnit + tax
+
+			return single.Multiply(amount).Format()
+		},
+		"tax": func(gross money.Money, net money.Money) string {
+			tax := gross - net
+			return tax.Format()
+		},
+	}
+
 	name := "invoice"
-	ts, err := template.New(name).ParseFiles("tpl/invoice.html")
+	ts, err := template.New(name).Funcs(funcs).ParseFiles("tpl/invoice-en.html")
 	if err != nil {
 		return "", err
 	}
@@ -87,7 +107,7 @@ func toPDF(html string, filename string) error {
 	gen.Dpi.Set(300)
 
 	page := wk.NewPageReader(strings.NewReader(html))
-	page.FooterRight.Set("[page]")
+	page.FooterRight.Set("[page]/[topage]")
 	page.FooterFontSize.Set(10)
 
 	gen.AddPage(page)

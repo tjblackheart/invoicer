@@ -8,9 +8,9 @@
       @click.prevent="printInvoice">
       {{ text }}
     </a>
-    <font-awesome-icon
+    <icon
       v-if="busy && !button"
-      icon="circle-notch"
+      name="circle-notch"
       spin />
   </span>
 </template>
@@ -19,7 +19,14 @@
 import { mapMutations } from 'vuex'
 import http from '@/modules/http'
 
+import Icon from 'vue-awesome/components/Icon'
+import 'vue-awesome/icons/circle-notch'
+
 export default {
+  components: {
+    Icon,
+  },
+
   props: {
     id: {
       type: String,

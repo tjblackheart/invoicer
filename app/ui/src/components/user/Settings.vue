@@ -457,10 +457,5 @@ export default {
 
   .is-pointer {
     cursor: pointer;
-
-    p {
-      color: #blue;
-      font-size: 14px;
-    }
   }
 </style>

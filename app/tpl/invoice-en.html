@@ -1,0 +1,125 @@
+{{ define "invoice" }}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ .Invoice.Number }}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+    <style type="text/css">
+        @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,700');
+        @page { size: 7in 9.25in; margin: 27mm 16mm 27mm 16mm; }
+        body { font-family: "IBM Plex Sans"; font-weight: 400; font-size: 16px; }
+        .user { color: #666666; font-size: 12px; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
+        .address { margin: 100px 0; }
+        table, tr, th, td { border: none !important; background: transparent !important; }
+        th { border-bottom: 2px solid #ddd !important; }
+        .items td { border-bottom: 1px solid #ddd !important; }
+        .items td.nb { border-bottom: none !important; }
+        .bb { border-bottom: 2px solid #ddd !important; }
+        .notification { margin-bottom: 60px !important; }
+        .mt { margin-top: 60px; }
+    </style>
+</head>
+<body>
+  <section class="section">
+    <div class="container">
+
+      <div class="user">
+        {{ with .User.Settings }}
+            <b> {{ .Company }} </b> &middot;
+            {{ .FirstName }} {{ .LastName }} &middot;
+            {{ .Street }} {{ .Number }} &middot;
+            {{ .City }}, {{ .Zip }} &middot;
+            {{ .Country }} &middot;
+            {{ .Email }} &middot;
+            {{ .Phone }}
+        {{ end }}
+      </div>
+
+      <div class="address">
+        {{ with .Invoice.Customer.Address }}
+            <b>{{ .Company }}</b> <br>
+            {{ .FirstName }} {{ .LastName }} <br>
+            {{ .Street }} {{ .Number }} <br>
+            {{ .City }}, {{ .Zip }} <br>
+            {{ .Country }} <br>
+        {{ end }}
+      </div>
+
+      <div class="notification">
+        <table class="table is-fullwidth nb">
+          <tbody>
+            <tr>
+              <td class="has-text-centered">
+                <span class="heading">Invoice</span>
+                <p> <b>{{ .Invoice.Number }}</b> </p>
+              </td>
+              <td class="has-text-centered">
+                <span class="heading">Date</span>
+                <p> <b>{{ .Invoice.Date.Format "02.01.2006" }} </b> </p>
+              </td>
+              <td class="has-text-centered">
+                <span class="heading">Customer</span>
+                <p> <b>{{ .Invoice.Customer.Number }}</b> </p>
+              </td>
+              <td class="has-text-centered">
+                <span class="heading">VAT-ID</span>
+                <p> <b>{{ .User.Settings.TaxNumber }}</b> </p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <table class="table is-fullwidth items">
+        <thead>
+          <tr>
+            <th> # </th>
+            <th> Description </th>
+            <th class="has-text-right"> Price </th>
+            <th class="has-text-right"> Qty </th>
+            <th class="has-text-right"> Net </th>
+            <th class="has-text-right"> VAT </th>
+            <th class="has-text-right"> Total </th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ $cur := .Invoice.Currency }}
+          {{ range $index, $item := .Invoice.Items }}
+          <tr>
+            <td> {{ add $index }} </td>
+            <td> {{ $item.Description }} </td>
+            <td class="has-text-right"> {{ $item.PricePerUnit.Format }} {{ $cur }} </td>
+            <td class="has-text-right"> {{ printf "%.2f" $item.Amount }}{{ .Unit }} </td>
+            <td class="has-text-right"> {{ itemNet $item.PricePerUnit $item.Amount }} {{ $cur }} </td>
+            <td class="has-text-right"> {{ printf "%.0f" $item.VAT }}% </td>
+            <td class="has-text-right">  {{ itemGross $item.PricePerUnit $item.Amount $item.VAT }} {{ $cur }} </td>
+          </tr>
+          {{ end }}
+          <tr>
+            <td colspan="5" class="nb"></td>
+            <td class="has-text-right nb"> <b>Net:</b> </td>
+            <td class="has-text-right nb"> <b>{{ .Invoice.TotalNet.Format }} {{ $cur }}</b> </td>
+          </tr>
+          <tr>
+            <td colspan="5"></td>
+            <td class="has-text-right"> <b>VAT:</b> </td>
+            <td class="has-text-right"> <b>{{ tax .Invoice.TotalGross .Invoice.TotalNet }} {{ $cur }}</b> </td>
+          </tr>
+          <tr class="bb">
+            <td colspan="5"></td>
+            <td class="has-text-right"> <b>Total</b>: </td>
+            <td class="has-text-right"><b> {{ .Invoice.TotalGross.Format }} {{ $cur }} </b></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="mt">
+        The delivery date corresponds to the performance date. Payable within 14 days. <b>Thank you for your order! </b>
+      </p>
+
+    </div>
+  </section>
+</body>
+</html>
+{{ end }}
