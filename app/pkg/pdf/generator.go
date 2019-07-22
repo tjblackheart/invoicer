@@ -94,9 +94,9 @@ func toHTML(i *models.Invoice, u *models.User) (string, error) {
 
 func toPDF(html string, filename string) error {
 	// use file if it's already there
-	if _, err := os.Stat("var/out/" + filename); err == nil {
-		return nil
-	}
+	// if _, err := os.Stat("var/out/" + filename); err == nil {
+	// 	return nil
+	// }
 
 	gen, err := wk.NewPDFGenerator()
 	if err != nil {

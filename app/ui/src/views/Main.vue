@@ -1,8 +1,7 @@
 <template>
   <div>
     <navigation />
-
-    <section class="section">
+    <section class="section body">
       <div class="container">
         <transition
           name="fade"
@@ -20,10 +19,6 @@ import Navigation from '@/components/misc/Navigation.vue'
 export default {
   components: {
     Navigation,
-  },
-
-  data () {
-    return {}
   },
 
   computed: {

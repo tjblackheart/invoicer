@@ -56,14 +56,12 @@ func (app *application) authMW(next http.Handler) http.Handler {
 
 func (app *application) corsMW(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		headers := w.Header()
-
-		headers.Add("Access-Control-Allow-Origin", "*")
-		headers.Add("Vary", "Origin")
-		headers.Add("Vary", "Access-Control-Request-Method")
-		headers.Add("Vary", "Access-Control-Request-Headers")
-		headers.Add("Access-Control-Allow-Headers", "Content-Type, Origin, Accept, Authorization")
-		headers.Add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		w.Header().Add("Access-Control-Allow-Origin", "*")
+		w.Header().Add("Vary", "Origin")
+		w.Header().Add("Vary", "Access-Control-Request-Method")
+		w.Header().Add("Vary", "Access-Control-Request-Headers")
+		w.Header().Add("Access-Control-Allow-Headers", "Content-Type, Origin, Accept, Authorization")
+		w.Header().Add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 
 		next.ServeHTTP(w, r)
 	})

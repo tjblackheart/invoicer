@@ -8,9 +8,16 @@ $tablet: 768px;
 $radius-small: 2px;
 $radius: $radius-small;
 $radius-large: 4px;
+$navbar-item-hover-background-color: transparent;
+$navbar-item-active-color: $primary;
+$input-disabled-border-color: $grey-lighter;
 
 html,body {
   height: 100%;
+  background: #f9f9f9;
+}
+
+section.body {
   background: #f9f9f9;
 }
 

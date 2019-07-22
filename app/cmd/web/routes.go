@@ -9,6 +9,7 @@ import (
 func (app *application) routes() *mux.Router {
 	r := mux.NewRouter()
 	r.Use(app.headersMW, app.loggingMW)
+
 	r.HandleFunc("/", app.index).Methods("GET")
 
 	auth := r.PathPrefix("/auth/").Subrouter()
@@ -32,10 +33,6 @@ func (app *application) routes() *mux.Router {
 
 	api.HandleFunc("/user/{uuid:[a-z0-9-]{36}}", app.getUser).Methods("GET")
 	api.HandleFunc("/user/{uuid:[a-z0-9-]{36}}", app.updateUser).Methods("PUT")
-
-	if app.config.production == false {
-		api.Use(app.corsMW)
-	}
 
 	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("./ui/dist/assets/"))))
 

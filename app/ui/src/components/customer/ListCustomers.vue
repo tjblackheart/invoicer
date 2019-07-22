@@ -47,10 +47,11 @@
             <td class="has-text-right">
               <router-link :to="{ name: 'customer_details', params: {id:customer.id} }">
                 Edit
-              </router-link> &middot;
+              </router-link>
+              <!-- &middot;
               <a @click.prevent="remove(customer.id)">
                 Remove
-              </a>
+              </a> -->
             </td>
           </tr>
           <tr v-if="customers.length == 0">
