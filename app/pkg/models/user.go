@@ -27,17 +27,20 @@ type Settings struct {
 	CustomerNumberPrefix string `json:"customer_number_prefix" gorm:"not null"`
 	NextInvoiceNumber    uint   `json:"next_invoice_number" gorm:"not null"`
 	NextCustomerNumber   uint   `json:"next_customer_number" gorm:"not null"`
-	TaxNumber            string `json:"tax_number"`
+	TaxNumber            string `json:"tax_number" gorm:"not null"`
 	Company              string `json:"company" gorm:"not null"`
 	FirstName            string `json:"first_name" gorm:"not null"`
 	LastName             string `json:"last_name" gorm:"not null"`
-	Street               string `json:"street" gorm:"not null"`
-	Number               string `json:"number" gorm:"not null"`
-	Zip                  string `json:"zip" gorm:"not null"`
-	City                 string `json:"city" gorm:"not null"`
-	Country              string `json:"country" gorm:"not null"`
+	Street               string `json:"street"`
+	Number               string `json:"number"`
+	Zip                  string `json:"zip"`
+	City                 string `json:"city"`
+	Country              string `json:"country"`
 	Email                string `json:"email"`
 	Phone                string `json:"phone"`
+	Bank                 string `json:"bank"`
+	IBAN                 string `json:"iban"`
+	BIC                  string `json:"bic"`
 	UserID               uint   `json:"user_id"`
 }
 

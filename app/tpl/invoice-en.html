@@ -9,7 +9,7 @@
         @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,700');
         @page { size: 7in 9.25in; margin: 27mm 16mm 27mm 16mm; }
         body { font-family: "IBM Plex Sans"; font-weight: 400; font-size: 16px; }
-        .user { color: #666666; font-size: 12px; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
+        .header { color: #666; font-size: 12px; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
         .address { margin: 60px 0; }
         table, tr, th, td { border: none !important; background: transparent !important; }
         th { border-bottom: 2px solid #ddd !important; }
@@ -23,7 +23,7 @@
   <section class="section">
     <div class="container">
 
-      <div class="user">
+      <div class="header">
         {{ with .User.Settings }}
             <b> {{ .Company }} </b> &middot;
             {{ .FirstName }} {{ .LastName }} &middot;

@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"encoding/base64"
+	"fmt"
 	"html/template"
 	"os"
 	"strings"
@@ -18,6 +19,10 @@ type tplData struct {
 	User    *models.User
 }
 
+type footer struct {
+	Left, Center, Right string
+}
+
 // Generate prints an invoice to PDF and returns the filename
 func Generate(i *models.Invoice, u *models.User) (string, error) {
 	html, err := toHTML(i, u)
@@ -26,8 +31,9 @@ func Generate(i *models.Invoice, u *models.User) (string, error) {
 	}
 
 	filename := i.Number + ".pdf"
+	footerData := generateFooter(&u.Settings)
 
-	if err = toPDF(html, filename); err != nil {
+	if err = toPDF(html, filename, footerData); err != nil {
 		return "", err
 	}
 
@@ -52,7 +58,10 @@ func Base64(filename string) (string, error) {
 	buf := make([]byte, size)
 
 	r := bufio.NewReader(file)
-	r.Read(buf)
+	if _, err = r.Read(buf); err != nil {
+		return "", err
+	}
+
 	s := base64.StdEncoding.EncodeToString(buf)
 
 	return s, nil
@@ -92,11 +101,11 @@ func toHTML(i *models.Invoice, u *models.User) (string, error) {
 	return buf.String(), nil
 }
 
-func toPDF(html string, filename string) error {
+func toPDF(html string, filename string, footerData footer) error {
 	// use file if it's already there
-	// if _, err := os.Stat("var/out/" + filename); err == nil {
-	// 	return nil
-	// }
+	if _, err := os.Stat("var/out/" + filename); err == nil {
+		return nil
+	}
 
 	gen, err := wk.NewPDFGenerator()
 	if err != nil {
@@ -107,8 +116,11 @@ func toPDF(html string, filename string) error {
 	gen.Dpi.Set(300)
 
 	page := wk.NewPageReader(strings.NewReader(html))
-	page.FooterRight.Set("[page]/[topage]")
-	page.FooterFontSize.Set(10)
+
+	page.FooterFontSize.Set(8)
+	page.FooterLeft.Set(footerData.Left)
+	page.FooterCenter.Set(footerData.Center)
+	page.FooterRight.Set(footerData.Right)
 
 	gen.AddPage(page)
 
@@ -121,4 +133,30 @@ func toPDF(html string, filename string) error {
 	}
 
 	return nil
+}
+
+func generateFooter(s *models.Settings) footer {
+	f := footer{}
+
+	f.Left = fmt.Sprintf(`
+        %s
+        %s %s
+        %s %s
+        %s, %s
+    `, s.Company, s.FirstName, s.LastName, s.Street, s.Number, s.City, s.Zip)
+
+	f.Center = fmt.Sprintf(`
+        Bank: %s
+        IBAN: %s
+        BIC: %s
+    `, s.Bank, s.IBAN, s.BIC)
+
+	f.Right = fmt.Sprintf(`
+		VAT ID: %s
+        %s
+        %s
+        Page [page]/[topage]
+    `, s.TaxNumber, s.Email, s.Phone)
+
+	return f
 }

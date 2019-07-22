@@ -45,6 +45,57 @@
       </div>
 
       <div
+        v-scroll-to="'#bank-settings'"
+        class="is-clearfix is-bordered is-pointer"
+        @click="bankSettings = !bankSettings">
+        <h3
+          id="bank-settings"
+          class="title is-5 is-pulled-left">
+          <icon name="university" /> &nbsp; Bank
+        </h3>
+        <p class="is-pulled-right">
+          <span v-if="bankSettings">
+            <icon name="caret-up" />
+          </span>
+          <span v-else>
+            <icon name="caret-down" />
+          </span>
+        </p>
+      </div>
+
+      <div
+        v-if="bankSettings"
+        class="fieldset">
+        <label class="label">
+            Bank
+          </label>
+        <div class="control">
+          <input
+            v-model="user.settings.bank"
+            type="text"
+            class="input">
+        </div>
+        <label class="label">
+            IBAN
+          </label>
+        <div class="control">
+          <input
+            v-model="user.settings.iban"
+            type="text"
+            class="input">
+        </div>
+        <label class="label">
+            BIC
+          </label>
+        <div class="control">
+          <input
+            v-model="user.settings.bic"
+            type="text"
+            class="input">
+        </div>
+      </div>
+
+      <div
         v-scroll-to="'#number-settings'"
         class="is-clearfix is-bordered is-pointer"
         @click="numberSettings = !numberSettings">
@@ -360,14 +411,15 @@
 import { mapMutations } from 'vuex'
 import http from '@/modules/http'
 import Message from '@/components/misc/Message.vue'
-import Icon from 'vue-awesome/components/Icon'
 
+import Icon from 'vue-awesome/components/Icon'
 import 'vue-awesome/icons/user-cog'
 import 'vue-awesome/icons/address-card'
 import 'vue-awesome/icons/cogs'
 import 'vue-awesome/icons/envelope'
 import 'vue-awesome/icons/caret-up'
 import 'vue-awesome/icons/caret-down'
+import 'vue-awesome/icons/university'
 
 export default {
   components: {
@@ -385,6 +437,7 @@ export default {
       companySettings: true,
       contactSettings: true,
       userSettings: true,
+      bankSettings: true,
     }
   },
 
@@ -421,6 +474,7 @@ export default {
         this.numberSettings = false
         this.companySettings = false
         this.contactSettings = false
+        this.bankSettings = false
       } catch (error) {
         this.setMessage({
           text: error.message,
