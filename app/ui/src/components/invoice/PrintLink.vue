@@ -29,7 +29,7 @@ export default {
 
   props: {
     id: {
-      type: String,
+      type: Number,
       required: true,
     },
     text: {
@@ -57,8 +57,8 @@ export default {
 
       try {
         const r = await http.printInvoice(this.id)
-
         let a = document.createElement('a')
+
         a.href = `data:application/octet-stream;base64,${r.content}`
         a.download = r.filename
         a.click()

@@ -15,6 +15,12 @@ func (app *application) index(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "./ui/dist/index.html")
 }
 
+// CORS preflight OPTIONS handler
+
+func (app *application) cors(w http.ResponseWriter, r *http.Request) {
+	return
+}
+
 // REST
 
 func (app *application) login(w http.ResponseWriter, r *http.Request) {

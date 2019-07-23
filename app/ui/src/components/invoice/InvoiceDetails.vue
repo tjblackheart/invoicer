@@ -195,6 +195,7 @@ export default {
   data () {
     return {
       invoice: {
+        id: 1,
         customer: {
           number: null,
         },
@@ -225,13 +226,13 @@ export default {
 
   created () {
     this.clearMessage()
-    this.loadData()
+    this.load()
   },
 
   methods: {
     ...mapMutations([ 'setMessage', 'clearMessage' ]),
 
-    async loadData () {
+    async load () {
       this.busy = true
       this.clearMessage()
 

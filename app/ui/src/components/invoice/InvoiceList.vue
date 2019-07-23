@@ -195,10 +195,6 @@ export default {
       this.showModal = false
       this.paymentError = null
     },
-
-    formatDate (date, local = false) {
-      return !local ? dayjs(date).format('YYYY-MM-DD') : dayjs(date).format('DD.MM.YYYY')
-    },
   },
 }
 </script>
