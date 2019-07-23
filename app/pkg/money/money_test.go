@@ -6,7 +6,7 @@ import (
 )
 
 func TestConvert(t *testing.T) {
-	m := Convert(2)
+	m := Convert(2.0)
 	tt := reflect.TypeOf(m)
 
 	if tt != reflect.TypeOf(m) {
@@ -32,7 +32,7 @@ func TestFloat64(t *testing.T) {
 }
 
 func TestMultiply(t *testing.T) {
-	m := Convert(2).Multiply(2)
+	m := Convert(2).Multiply(2.0)
 
 	if m != 400 {
 		t.Errorf("got: %d, want: %d.", m, 400)
