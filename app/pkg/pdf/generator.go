@@ -14,34 +14,33 @@ import (
 	"github.com/tjblackheart/invoicer/pkg/money"
 )
 
-type tplData struct {
+// Generator represents a generator instance
+type Generator struct {
 	Invoice *models.Invoice
 	User    *models.User
-}
-
-type footer struct {
-	Left, Center, Right string
+	footer  struct {
+		Left, Center, Right string
+	}
 }
 
 // Generate prints an invoice to PDF and returns the filename
-func Generate(i *models.Invoice, u *models.User) (string, error) {
-	html, err := toHTML(i, u)
+func (g *Generator) Generate() (string, error) {
+	html, err := g.toHTML()
 	if err != nil {
 		return "", err
 	}
 
-	filename := i.Number + ".pdf"
-	footerData := generateFooter(&u.Settings)
+	filename := g.Invoice.Number + ".pdf"
 
-	if err = toPDF(html, filename, footerData); err != nil {
+	if err = g.toPDF(html, filename); err != nil {
 		return "", err
 	}
 
 	return filename, nil
 }
 
-// ToBase64 converts a file to a Base64 encoded string.
-func ToBase64(filename string) (string, error) {
+// Base64 converts a file to a Base64 encoded string.
+func (g *Generator) Base64(filename string) (string, error) {
 	file, err := os.Open("var/out/" + filename)
 	defer file.Close()
 
@@ -67,21 +66,21 @@ func ToBase64(filename string) (string, error) {
 	return s, nil
 }
 
-func toHTML(i *models.Invoice, u *models.User) (string, error) {
+func (g *Generator) toHTML() (string, error) {
 	funcs := template.FuncMap{
 		"add": func(i int) int {
 			return i + 1
 		},
-		"itemNet": func(p money.Money, a float64) string {
-			return p.Multiply(a).Format()
+		"itemNet": func(net money.Money, amount float64) string {
+			return net.Multiply(amount).Format()
 		},
-		"itemGross": func(perUnit money.Money, amount float64, vat float64) string {
+		"itemGross": func(perUnit money.Money, amount, vat float64) string {
 			tax := perUnit.Multiply(vat / 100)
 			single := perUnit + tax
 
 			return single.Multiply(amount).Format()
 		},
-		"tax": func(gross money.Money, net money.Money) string {
+		"tax": func(gross, net money.Money) string {
 			tax := gross - net
 			return tax.Format()
 		},
@@ -94,14 +93,14 @@ func toHTML(i *models.Invoice, u *models.User) (string, error) {
 	}
 
 	buf := new(bytes.Buffer)
-	if err = ts.ExecuteTemplate(buf, name, &tplData{i, u}); err != nil {
+	if err = ts.ExecuteTemplate(buf, name, g); err != nil {
 		return "", err
 	}
 
 	return buf.String(), nil
 }
 
-func toPDF(html string, filename string, footerData footer) error {
+func (g *Generator) toPDF(html string, filename string) error {
 	// use file if it's already there
 	if _, err := os.Stat("var/out/" + filename); err == nil {
 		return nil
@@ -117,10 +116,11 @@ func toPDF(html string, filename string, footerData footer) error {
 
 	page := wk.NewPageReader(strings.NewReader(html))
 
+	g.generateFooter()
 	page.FooterFontSize.Set(8)
-	page.FooterLeft.Set(footerData.Left)
-	page.FooterCenter.Set(footerData.Center)
-	page.FooterRight.Set(footerData.Right)
+	page.FooterLeft.Set(g.footer.Left)
+	page.FooterCenter.Set(g.footer.Center)
+	page.FooterRight.Set(g.footer.Right)
 
 	gen.AddPage(page)
 
@@ -135,8 +135,9 @@ func toPDF(html string, filename string, footerData footer) error {
 	return nil
 }
 
-func generateFooter(s *models.Settings) footer {
-	f := footer{}
+func (g *Generator) generateFooter() {
+	s := g.User.Settings
+	f := &g.footer
 
 	f.Left = fmt.Sprintf(`
         %s
@@ -156,7 +157,5 @@ func generateFooter(s *models.Settings) footer {
         %s
         %s
         Page [page]/[topage]
-    `, s.TaxNumber, s.Email, s.Phone)
-
-	return f
+	`, s.TaxNumber, s.Email, s.Phone)
 }
