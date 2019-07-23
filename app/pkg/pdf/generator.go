@@ -71,16 +71,16 @@ func (g *Generator) toHTML() (string, error) {
 		"add": func(i int) int {
 			return i + 1
 		},
-		"itemNet": func(p money.Money, a float64) string {
-			return p.Multiply(a).Format()
+		"itemNet": func(net money.Money, amount float64) string {
+			return net.Multiply(amount).Format()
 		},
-		"itemGross": func(perUnit money.Money, amount float64, vat float64) string {
+		"itemGross": func(perUnit money.Money, amount, vat float64) string {
 			tax := perUnit.Multiply(vat / 100)
 			single := perUnit + tax
 
 			return single.Multiply(amount).Format()
 		},
-		"tax": func(gross money.Money, net money.Money) string {
+		"tax": func(gross, net money.Money) string {
 			tax := gross - net
 			return tax.Format()
 		},
