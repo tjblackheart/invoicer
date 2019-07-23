@@ -43,6 +43,9 @@ func (app *application) login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// remove from response
+	u.Password = ""
+
 	json.NewEncoder(w).Encode(map[string]interface{}{"token": ts, "user": u})
 }
 
@@ -68,7 +71,6 @@ func (app *application) createUser(w http.ResponseWriter, r *http.Request) {
 
 	// remove from response
 	u.Password = ""
-	u.RepeatPassword = ""
 
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(u)
