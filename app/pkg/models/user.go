@@ -98,6 +98,7 @@ func (u *User) Create() error {
 	if err != nil {
 		return err
 	}
+
 	u.Password = string(hash)
 
 	if err := db.Create(&u).Error; err != nil {

@@ -92,6 +92,7 @@ func (app *application) getUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	u.Password = ""
+
 	json.NewEncoder(w).Encode(u)
 }
 
@@ -187,14 +188,15 @@ func (app *application) createInvoice(w http.ResponseWriter, r *http.Request) {
 
 func (app *application) setPaid(w http.ResponseWriter, r *http.Request) {
 	uuid, err := app.getUUID(r)
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	payload := models.PaidPayload{}
-	err = json.NewDecoder(r.Body).Decode(&payload)
-	if err != nil {
+
+	if err = json.NewDecoder(r.Body).Decode(&payload); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -205,6 +207,7 @@ func (app *application) setPaid(w http.ResponseWriter, r *http.Request) {
 	}
 
 	invoices, err := models.InvoiceGetAll(uuid)
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -225,6 +228,7 @@ func (app *application) getCustomer(w http.ResponseWriter, r *http.Request) {
 	}
 
 	customer, err := models.CustomerGet(uuid, vars["id"])
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -235,12 +239,14 @@ func (app *application) getCustomer(w http.ResponseWriter, r *http.Request) {
 
 func (app *application) getCustomers(w http.ResponseWriter, r *http.Request) {
 	uuid, err := app.getUUID(r)
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	customers, err := models.CustomerGetAll(uuid)
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -251,20 +257,21 @@ func (app *application) getCustomers(w http.ResponseWriter, r *http.Request) {
 
 func (app *application) createCustomer(w http.ResponseWriter, r *http.Request) {
 	customer := &models.Customer{}
-	err := json.NewDecoder(r.Body).Decode(&customer)
 
-	if err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&customer); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	uuid, err := app.getUUID(r)
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	customer, err = models.CustomerCreate(uuid, customer)
+
 	if err != nil {
 		if err == models.ErrUnique {
 			http.Error(w, "The customer already exists.", http.StatusBadRequest)
@@ -290,19 +297,20 @@ func (app *application) updateCustomer(w http.ResponseWriter, r *http.Request) {
 	}
 
 	customer, err := models.CustomerGet(uuid, id)
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	var patch models.Customer
+
 	if err = json.NewDecoder(r.Body).Decode(&patch); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	err = customer.Update(&patch)
-	if err != nil {
+	if err = customer.Update(&patch); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -312,6 +320,7 @@ func (app *application) updateCustomer(w http.ResponseWriter, r *http.Request) {
 
 func (app *application) removeCustomer(w http.ResponseWriter, r *http.Request) {
 	uuid, err := app.getUUID(r)
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -330,20 +339,22 @@ func (app *application) removeCustomer(w http.ResponseWriter, r *http.Request) {
 
 func (app *application) printInvoice(w http.ResponseWriter, r *http.Request) {
 	uuid, err := app.getUUID(r)
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	vars := mux.Vars(r)
-
 	invoice, err := models.FindInvoice(uuid, vars["id"])
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	u, err := models.FindUser(uuid)
+
 	if err != nil {
 		if err == models.ErrUserNotFound {
 			http.Error(w, "No such user.", http.StatusNotFound)
@@ -355,16 +366,18 @@ func (app *application) printInvoice(w http.ResponseWriter, r *http.Request) {
 	}
 
 	filename, err := pdf.Generate(invoice, u)
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	s, err := pdf.Base64(filename)
+	b64, err := pdf.ToBase64(filename)
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	json.NewEncoder(w).Encode(map[string]string{"filename": filename, "content": s})
+	json.NewEncoder(w).Encode(map[string]string{"filename": filename, "content": b64})
 }

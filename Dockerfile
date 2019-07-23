@@ -23,7 +23,6 @@ RUN apk add --update wkhtmltopdf
 
 COPY --from=wkhtmltopdf /lib/libwkhtmltox.so.0.12.5 /usr/lib/wkhtmltox.so.0.12.5
 COPY --from=wkhtmltopdf /bin/wkhtmltopdf /bin/wkhtmltoimage /usr/bin/
-
 COPY --from=go /srv/tpl/ ./tpl/
 COPY --from=go /srv/bin/invoicer .
 COPY --from=node /srv/dist ./ui/dist

@@ -2,7 +2,7 @@ version: "3"
 services:
     invoicer:
         build: .
-        image: tgn/invoicer:latest
+        image: tjblackheart/invoicer:latest
         ports:
             - 3000:3000
         volumes:

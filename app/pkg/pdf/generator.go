@@ -40,8 +40,8 @@ func Generate(i *models.Invoice, u *models.User) (string, error) {
 	return filename, nil
 }
 
-// Base64 converts a file to a Base64 encoded string.
-func Base64(filename string) (string, error) {
+// ToBase64 converts a file to a Base64 encoded string.
+func ToBase64(filename string) (string, error) {
 	file, err := os.Open("var/out/" + filename)
 	defer file.Close()
 
