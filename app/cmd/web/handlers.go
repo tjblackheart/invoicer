@@ -352,7 +352,7 @@ func (app *application) printInvoice(w http.ResponseWriter, r *http.Request) {
 	}
 
 	vars := mux.Vars(r)
-	invoice, err := models.FindInvoice(uuid, vars["id"])
+	i, err := models.FindInvoice(uuid, vars["id"])
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -371,14 +371,15 @@ func (app *application) printInvoice(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	filename, err := pdf.Generate(invoice, u)
+	g := pdf.Generator{Invoice: i, User: u}
+	filename, err := g.Generate()
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	b64, err := pdf.ToBase64(filename)
+	b64, err := g.Base64(filename)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
