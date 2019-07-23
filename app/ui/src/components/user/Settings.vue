@@ -67,8 +67,8 @@
         v-if="bankSettings"
         class="fieldset">
         <label class="label">
-            Bank
-          </label>
+          Bank
+        </label>
         <div class="control">
           <input
             v-model="user.settings.bank"
@@ -76,8 +76,8 @@
             class="input">
         </div>
         <label class="label">
-            IBAN
-          </label>
+          IBAN
+        </label>
         <div class="control">
           <input
             v-model="user.settings.iban"
@@ -85,8 +85,8 @@
             class="input">
         </div>
         <label class="label">
-            BIC
-          </label>
+          BIC
+        </label>
         <div class="control">
           <input
             v-model="user.settings.bic"
