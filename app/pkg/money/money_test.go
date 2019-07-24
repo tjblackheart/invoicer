@@ -1,55 +1,77 @@
 package money
 
 import (
-	"reflect"
 	"testing"
 )
 
 func TestConvert(t *testing.T) {
-	m := Convert(2.0)
-	tt := reflect.TypeOf(m)
-
-	if tt != reflect.TypeOf(m) {
-		t.Errorf("got: %d, want: %d.", tt, reflect.TypeOf(m))
+	tests := []struct {
+		in  float64
+		out Money
+	}{
+		{2.0, Money(200)},
+		{1, Money(100)},
+		{3.1415, Money(314)},
+		{0, Money(0)},
 	}
 
-	if m != 200 {
-		t.Errorf("got: %d, want: %d.", m, 200)
+	for _, tt := range tests {
+		m := Convert(tt.in)
+		if m != tt.out {
+			t.Errorf("have: %#v, want: %#v", m, tt.out)
+		}
 	}
 }
 
 func TestFloat64(t *testing.T) {
-	m := Convert(2)
-	f64 := reflect.TypeOf(m.Float64()).String()
-
-	if f64 != "float64" {
-		t.Errorf("got: %s, want: %s.", f64, "float64")
+	tests := []struct {
+		in  Money
+		out float64
+	}{
+		{Money(200), 2.0},
+		{Money(1999), 19.99},
 	}
 
-	if m.Float64() != 2.0 {
-		t.Errorf("got: %.2f, want: %.2f.", m.Float64(), 2.0)
+	for _, tt := range tests {
+		f64 := tt.in.Float64()
+		if f64 != tt.out {
+			t.Errorf("have: %v (%T), want: %v (%T)", f64, f64, tt.out, tt.out)
+		}
 	}
 }
 
 func TestMultiply(t *testing.T) {
-	m := Convert(2).Multiply(2.0)
-
-	if m != 400 {
-		t.Errorf("got: %d, want: %d.", m, 400)
+	tests := []struct {
+		in   Money
+		mult float64
+		out  Money
+	}{
+		{Money(200), 2.0, Money(400)},
+		{Money(1000), .19, Money(190)},
 	}
 
-	m = Convert(1).Multiply(.19)
-
-	if m != 19 {
-		t.Errorf("got: %d, want: %d.", m, 19)
+	for _, tt := range tests {
+		m := tt.in.Multiply(tt.mult)
+		if m != tt.out {
+			t.Errorf("have %v (%T), want %v (%T)", m, m, tt.out, tt.out)
+		}
 	}
 }
 
 func TestFormat(t *testing.T) {
-	m := Convert(19.99).Format()
+	tests := []struct {
+		in  Money
+		out string
+	}{
+		{Money(200), "2.00"},
+		{Money(9999), "99.99"},
+	}
 
-	if m != "19.99" {
-		t.Errorf("got: %v (%T), want: %s (string).", m, m, "19.99")
+	for _, tt := range tests {
+		s := tt.in.Format()
+		if s != tt.out {
+			t.Errorf("have %v (%T), wnat %v (%T)", s, s, tt.out, tt.out)
+		}
 	}
 }
 
