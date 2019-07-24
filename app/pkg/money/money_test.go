@@ -9,16 +9,18 @@ func TestConvert(t *testing.T) {
 		in  float64
 		out Money
 	}{
-		{2.0, Money(200)},
-		{1, Money(100)},
-		{3.1415, Money(314)},
 		{0, Money(0)},
+		{1, Money(100)},
+		{2.0, Money(200)},
+		{3.1415, Money(314)},
+		{3.1498, Money(315)},
+		{-3.1498, Money(-315)},
 	}
 
 	for _, tt := range tests {
 		m := Convert(tt.in)
 		if m != tt.out {
-			t.Errorf("have: %#v, want: %#v", m, tt.out)
+			t.Errorf("have: %v (%T), want: %v (%T)", m, m, tt.out, tt.out)
 		}
 	}
 }
@@ -30,6 +32,7 @@ func TestFloat64(t *testing.T) {
 	}{
 		{Money(200), 2.0},
 		{Money(1999), 19.99},
+		{Money(-1999), -19.99},
 	}
 
 	for _, tt := range tests {
@@ -48,6 +51,8 @@ func TestMultiply(t *testing.T) {
 	}{
 		{Money(200), 2.0, Money(400)},
 		{Money(1000), .19, Money(190)},
+		{Money(1999), .21, Money(420)},
+		{Money(-1999), .19, Money(-380)},
 	}
 
 	for _, tt := range tests {
@@ -65,12 +70,13 @@ func TestFormat(t *testing.T) {
 	}{
 		{Money(200), "2.00"},
 		{Money(9999), "99.99"},
+		{Money(-1000), "-10.00"},
 	}
 
 	for _, tt := range tests {
 		s := tt.in.Format()
 		if s != tt.out {
-			t.Errorf("have %v (%T), wnat %v (%T)", s, s, tt.out, tt.out)
+			t.Errorf("have %v (%T), want %v (%T)", s, s, tt.out, tt.out)
 		}
 	}
 }

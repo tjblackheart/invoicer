@@ -2,6 +2,7 @@ package money
 
 import (
 	"fmt"
+	"math"
 	"strconv"
 )
 
@@ -10,6 +11,10 @@ type Money int64
 
 // Convert converts a float64 to Money
 func Convert(f64 float64) Money {
+	if math.Signbit(f64) {
+		return Money((f64 * 100) - 0.5)
+	}
+
 	return Money((f64 * 100) + 0.5)
 }
 
@@ -20,7 +25,13 @@ func (m Money) Float64() float64 {
 
 // Multiply safely multiplies a Money value by a float64, rounding to the nearest cent.
 func (m Money) Multiply(f float64) Money {
-	f64 := (float64(m) * f) + 0.5
+	f64 := (float64(m) * f)
+
+	if math.Signbit(f64) {
+		f64 -= 0.5
+	} else {
+		f64 += 0.5
+	}
 
 	return Money(f64)
 }
