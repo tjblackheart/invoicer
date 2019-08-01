@@ -3,7 +3,7 @@
     class="navbar has-shadow is-fixed-top"
     role="navigation"
     aria-label="main navigation">
-    <div class="container">
+    <div class="container is-fluid">
       <div class="navbar-brand">
         <div class="navbar-item">
           <b>Invoicer</b>

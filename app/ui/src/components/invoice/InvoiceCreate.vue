@@ -81,6 +81,17 @@
             </div>
           </div>
         </div>
+
+        <div class="column">
+          <div class="field">
+            <label class="label">
+              Date
+            </label>
+            <div class="control">
+              <input class="input" type="date" v-model="formattedDate">
+            </div>
+          </div>
+        </div>
       </div>
 
       <hr>
@@ -204,6 +215,7 @@
 <script>
 import { mapMutations } from 'vuex'
 import http from '@/modules/http'
+import dayjs from 'dayjs'
 import Modal from '@/components/misc/Modal'
 import ItemForm from '@/components/forms/CreateItem'
 import Message from '@/components/misc/Message'
@@ -225,6 +237,7 @@ export default {
         number: null,
         customer_id: null,
         currency: 'EUR',
+        date: dayjs().format('YYYY-MM-DDTHH:mm:ss.000ZZ'),
         items: [],
       },
       error: null,
@@ -245,6 +258,15 @@ export default {
     title () {
       return this.edit ? 'Edit item' : 'Add item'
     },
+
+    formattedDate: {
+      get () {
+        return dayjs(this.invoice.date).format('YYYY-MM-DD')
+      },
+      set (value) {
+        this.invoice.date = dayjs(value, 'YYYY-MM-DDTHH:mm:ss.000ZZ').format()
+      },
+    }
   },
 
   created () {
