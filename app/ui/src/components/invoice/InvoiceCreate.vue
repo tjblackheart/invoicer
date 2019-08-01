@@ -89,10 +89,9 @@
             </label>
             <div class="control">
               <input
-                class="input"
-                type="date"
                 v-model="formattedDate"
-              />
+                type="date"
+                class="input">
             </div>
           </div>
         </div>
@@ -270,7 +269,7 @@ export default {
       set (value) {
         this.invoice.date = dayjs(value, 'YYYY-MM-DDTHH:mm:ss.000ZZ').format()
       },
-    }
+    },
   },
 
   created () {
