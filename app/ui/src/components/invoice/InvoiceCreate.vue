@@ -88,7 +88,11 @@
               Date
             </label>
             <div class="control">
-              <input class="input" type="date" v-model="formattedDate">
+              <input
+                class="input"
+                type="date"
+                v-model="formattedDate"
+              />
             </div>
           </div>
         </div>
