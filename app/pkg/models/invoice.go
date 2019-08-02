@@ -2,7 +2,6 @@ package models
 
 import (
 	"errors"
-	"fmt"
 	"strconv"
 	"time"
 
@@ -23,6 +22,7 @@ type Invoice struct {
 	PaidAt      time.Time     `json:"paid_at"`
 	CustomerID  uint          `json:"customer_id" gorm:"not null"`
 	Customer    Customer      `json:"customer"`
+	DueDays     int           `json:"due_days" gorm:"default:10"`
 	UUID        string        `json:"-"`
 }
 
@@ -96,8 +96,6 @@ func (i *Invoice) Create(uuid string) error {
 		tax := net.Multiply(item.VAT / 100)
 		i.TotalGross += net + tax
 	}
-
-	fmt.Println(i.Items)
 
 	if err := i.validate(); err != nil {
 		return err

@@ -70,7 +70,8 @@
             <div>
               <p class="heading">
                 Invoice
-              </p> <p class="title is-6">
+              </p>
+              <p class="title is-6">
                 {{ invoice.number }}
               </p>
             </div>
@@ -79,7 +80,8 @@
             <div>
               <p class="heading">
                 Customer
-              </p> <p class="title is-6">
+              </p>
+              <p class="title is-6">
                 {{ invoice.customer.number }}
               </p>
             </div>
@@ -87,9 +89,30 @@
           <div class="level-item has-text-centered">
             <div>
               <p class="heading">
+                VAT-ID
+              </p>
+              <p class="title is-6">
+                {{ invoice.customer.tax_number || "-" }}
+              </p>
+            </div>
+          </div>
+          <div class="level-item has-text-centered">
+            <div>
+              <p class="heading">
                 Date
-              </p> <p class="title is-6">
+              </p>
+              <p class="title is-6">
                 {{ invoice.date|date }}
+              </p>
+            </div>
+          </div>
+          <div class="level-item has-text-centered">
+            <div>
+              <p class="heading">
+                Due
+              </p>
+              <p class="title is-6">
+                {{ invoice.due_days }} days
               </p>
             </div>
           </div>

@@ -32,6 +32,7 @@
             <!--<th>ID</th>-->
             <th>Number</th>
             <th>Date</th>
+            <th>Due</th>
             <th>Customer</th>
             <th>Items</th>
             <th>Total (Net)</th>
@@ -47,6 +48,10 @@
             :key="invoice.id">
             <td> {{ invoice.number }} </td>
             <td> {{ invoice.date|date }} </td>
+            <td
+              :title="`${invoice.due_days} days`">
+              {{ dueDate(invoice) }}
+            </td>
             <td>
               <router-link :to="{name: 'customer_details', params: {id:invoice.customer.id}}">
                 {{ invoice.customer.address.company }}
@@ -56,7 +61,7 @@
             <td> <strong>{{ invoice.total_net | money(invoice.currency) }} </strong> </td>
             <td>
               <span v-if="invoice.is_paid">
-                {{ formatDate(invoice.paid_at, true) }}
+                {{ invoice.paid_at|date }}
               </span>
               <span v-else>
                 -
@@ -194,6 +199,10 @@ export default {
       this.activeInvoiceId = null
       this.showModal = false
       this.paymentError = null
+    },
+
+    dueDate (invoice) {
+      return dayjs(invoice.date).add(invoice.due_days, 'days').format('DD.MM.YYYY')
     },
   },
 }

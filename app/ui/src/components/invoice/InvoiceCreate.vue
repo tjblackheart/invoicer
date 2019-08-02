@@ -95,6 +95,20 @@
             </div>
           </div>
         </div>
+
+        <div class="column">
+          <div class="field">
+            <label class="label">
+              Due days
+            </label>
+            <div class="control">
+              <input
+                v-model.number="invoice.due_days"
+                type="number"
+                class="input">
+            </div>
+          </div>
+        </div>
       </div>
 
       <hr>
@@ -242,6 +256,7 @@ export default {
         currency: 'EUR',
         date: dayjs().format('YYYY-MM-DDTHH:mm:ss.000ZZ'),
         items: [],
+        due_days: 10,
       },
       error: null,
       showItemModal: false,
