@@ -254,7 +254,7 @@ export default {
         number: null,
         customer_id: null,
         currency: 'EUR',
-        date: dayjs().format('YYYY-MM-DDTHH:mm:ss.000ZZ'),
+        date: dayjs().toJSON(),
         items: [],
         due_days: 10,
       },
@@ -282,7 +282,7 @@ export default {
         return dayjs(this.invoice.date).format('YYYY-MM-DD')
       },
       set (value) {
-        this.invoice.date = dayjs(value, 'YYYY-MM-DDTHH:mm:ss.000ZZ').format()
+        this.invoice.date = dayjs(value).toJSON()
       },
     },
   },
