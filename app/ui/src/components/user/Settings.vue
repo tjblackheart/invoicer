@@ -65,33 +65,40 @@
 
       <div
         v-if="bankSettings"
+        id="bank"
         class="fieldset">
-        <label class="label">
-          Bank
-        </label>
-        <div class="control">
-          <input
-            v-model="user.settings.bank"
-            type="text"
-            class="input">
+        <div class="field">
+          <label class="label">
+            Bank
+          </label>
+          <div class="control">
+            <input
+              v-model="user.settings.bank"
+              type="text"
+              class="input">
+          </div>
         </div>
-        <label class="label">
-          IBAN
-        </label>
-        <div class="control">
-          <input
-            v-model="user.settings.iban"
-            type="text"
-            class="input">
+        <div class="field">
+          <label class="label">
+            IBAN
+          </label>
+          <div class="control">
+            <input
+              v-model="user.settings.iban"
+              type="text"
+              class="input">
+          </div>
         </div>
-        <label class="label">
-          BIC
-        </label>
-        <div class="control">
-          <input
-            v-model="user.settings.bic"
-            type="text"
-            class="input">
+        <div class="field">
+          <label class="label">
+            BIC
+          </label>
+          <div class="control">
+            <input
+              v-model="user.settings.bic"
+              type="text"
+              class="input">
+          </div>
         </div>
       </div>
 
