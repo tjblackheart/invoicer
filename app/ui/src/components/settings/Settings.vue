@@ -20,12 +20,10 @@
       </div>
       <div class="column is-9">
         <keep-alive>
-          <form @submit.prevent="submit">
-            <component
-              v-model="user"
-              :is="activeView"
-            />
-          </form>
+          <component
+            v-model="user"
+            :is="activeView"
+          />
         </keep-alive>
       </div>
     </div>
