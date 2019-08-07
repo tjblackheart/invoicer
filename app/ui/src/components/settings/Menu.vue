@@ -7,7 +7,7 @@
       <li>
         <a
           href
-          :class="{ 'is-active': item.active }"
+          :class="{ 'is-active': item.active, 'has-text-danger': hasError(item.view) }"
           @click.prevent="$emit('select', item.view)">
           {{ item.title }}
         </a>
@@ -23,6 +23,16 @@ export default {
       type: Array,
       required: true,
     },
+    errors: {
+      type: Array,
+      default: () => [],
+    },
+  },
+
+  methods: {
+    hasError (view) {
+      return this.errors.some(e => e.key === view && e.errors)
+    }
   },
 }
 </script>

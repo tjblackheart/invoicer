@@ -30,13 +30,15 @@
       <div class="column is-3">
         <settings-menu
           :items="items"
+          :errors="errors"
           @select="toggle($event)" />
       </div>
       <div class="column is-9">
         <keep-alive>
           <component
             :is="activeView"
-            v-model="user" />
+            v-model="user"
+            @error="handleError($event)" />
         </keep-alive>
       </div>
     </div>
@@ -79,6 +81,7 @@ export default {
       ],
       dirty: false,
       busy: false,
+      errors: [],
     }
   },
 
@@ -130,13 +133,20 @@ export default {
     async submit () {
       try {
         this.clearMessage()
+        if (this.checkErrors()) {
+          this.setMessage({
+            text: 'There are errors in your data.',
+            style: 'is-danger',
+          })
+          return
+        }
+
         this.busy = true
 
         const user = await http.putUser(this.user)
         this.setUser(user)
-        this.setMessage({
-          text: 'Settings saved.',
-        })
+        this.setMessage({ text: 'Settings saved.' })
+
         this.dirty = false
         this.setDefaults()
       } catch (error) {
@@ -157,6 +167,21 @@ export default {
 
     setDefaults () {
       this.defaults = JSON.parse(JSON.stringify(this.user))
+    },
+
+    handleError (event) {
+      const { key, errors } = { ...event }
+      const err = this.errors.find(e => e.key === key)
+
+      if (!err) {
+        this.errors.push({ key, errors })
+      } else {
+        err.errors = errors
+      }
+    },
+
+    checkErrors () {
+      return this.errors.some(e => e.errors)
     },
   },
 

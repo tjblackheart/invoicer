@@ -11,9 +11,10 @@
         </label>
         <div class="control">
           <input
-            v-model="value.username"
+            v-model.trim="$v.value.username.$model"
             type="text"
-            class="input">
+            :class="['input', { 'is-danger': $v.value.username.$error }]"
+            @keyup="validate('username')">
         </div>
       </div>
 
@@ -23,9 +24,10 @@
         </label>
         <div class="control">
           <input
-            v-model="value.email"
+            v-model.trim="$v.value.email.$model"
             type="email"
-            class="input">
+            :class="['input', { 'is-danger': $v.value.email.$error }]"
+            @keyup="validate('email')">
         </div>
       </div>
     </div>
@@ -35,6 +37,8 @@
 <script>
 import Icon from 'vue-awesome/components/Icon'
 import 'vue-awesome/icons/user-cog'
+
+const { required, minLength, email } = require('vuelidate/lib/validators')
 
 export default {
   components: {
@@ -51,6 +55,20 @@ export default {
   watch: {
     value () {
       this.$emit('input', this.value)
+    },
+  },
+
+  methods: {
+    validate (field) {
+      this.$v.value[field].$touch()
+      this.$emit('error', { key: 'user', errors: this.$v.$anyError })
+    },
+  },
+
+  validations: {
+    value: {
+      username: { required, minLength: minLength(3) },
+      email: { required, email },
     },
   },
 }

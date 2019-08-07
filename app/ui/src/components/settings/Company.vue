@@ -13,9 +13,10 @@
         <div class="control">
           <div class="control">
             <input
-              v-model="value.settings.company"
+              v-model="$v.value.settings.company.$model"
               type="text"
-              class="input">
+              :class="['input', { 'is-danger': $v.value.settings.company.$error }]"
+              @keyup="validate('company')">
           </div>
         </div>
       </div>
@@ -29,9 +30,10 @@
             <div class="control">
               <div class="control">
                 <input
-                  v-model="value.settings.first_name"
+                  v-model="$v.value.settings.first_name.$model"
                   type="text"
-                  class="input">
+                  :class="['input', { 'is-danger': $v.value.settings.first_name.$error }]"
+                  @keyup="validate('company')">
               </div>
             </div>
           </div>
@@ -44,9 +46,10 @@
             <div class="control">
               <div class="control">
                 <input
-                  v-model="value.settings.last_name"
+                  v-model="$v.value.settings.last_name.$model"
                   type="text"
-                  class="input">
+                  :class="['input', { 'is-danger': $v.value.settings.last_name.$error }]"
+                  @keyup="validate('last_name')">
               </div>
             </div>
           </div>
@@ -62,9 +65,10 @@
             <div class="control">
               <div class="control">
                 <input
-                  v-model="value.settings.street"
+                  v-model="$v.value.settings.street.$model"
                   type="text"
-                  class="input">
+                  :class="['input', { 'is-danger': $v.value.settings.street.$error }]"
+                  @keyup="validate('street')">
               </div>
             </div>
           </div>
@@ -77,9 +81,10 @@
             <div class="control">
               <div class="control">
                 <input
-                  v-model="value.settings.number"
+                  v-model="$v.value.settings.number.$model"
                   type="text"
-                  class="input">
+                  :class="['input', { 'is-danger': $v.value.settings.number.$error }]"
+                  @keyup="validate('number')">
               </div>
             </div>
           </div>
@@ -95,9 +100,10 @@
             <div class="control">
               <div class="control">
                 <input
-                  v-model="value.settings.zip"
+                  v-model="$v.value.settings.zip.$model"
                   type="text"
-                  class="input">
+                  :class="['input', { 'is-danger': $v.value.settings.zip.$error }]"
+                  @keyup="validate('zip')">
               </div>
             </div>
           </div>
@@ -111,9 +117,10 @@
             <div class="control">
               <div class="control">
                 <input
-                  v-model="value.settings.city"
+                  v-model="$v.value.settings.city.$model"
                   type="text"
-                  class="input">
+                  :class="['input', { 'is-danger': $v.value.settings.city.$error }]"
+                  @keyup="validate('city')">
               </div>
             </div>
           </div>
@@ -127,9 +134,10 @@
         <div class="control">
           <div class="control">
             <input
-              v-model="value.settings.country"
+              v-model="$v.value.settings.country.$model"
               type="text"
-              class="input">
+              :class="['input', { 'is-danger': $v.value.settings.country.$error }]"
+              @keyup="validate('country')">
           </div>
         </div>
       </div>
@@ -140,6 +148,7 @@
 <script>
 import Icon from 'vue-awesome/components/Icon'
 import 'vue-awesome/icons/address-card'
+const { required } = require('vuelidate/lib/validators')
 
 export default {
   components: {
@@ -156,6 +165,28 @@ export default {
   watch: {
     value () {
       this.$emit('input', this.value)
+    },
+  },
+
+  methods: {
+    validate (field) {
+      this.$v.value.settings[field].$touch()
+      this.$emit('error', { key: 'company', errors: this.$v.$anyError })
+    },
+  },
+
+  validations: {
+    value: {
+      settings: {
+        company: { required },
+        first_name: { required },
+        last_name: { required },
+        street: { required },
+        number: { required },
+        zip: { required },
+        city: { required },
+        country: { required },
+      },
     },
   },
 }

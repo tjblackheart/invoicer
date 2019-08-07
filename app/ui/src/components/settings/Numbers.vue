@@ -14,9 +14,10 @@
         <div class="control">
           <div class="control">
             <input
-              v-model="value.settings.invoice_number_prefix"
+              v-model.trim="$v.value.settings.invoice_number_prefix.$model"
               type="text"
-              class="input">
+              :class="['input', { 'is-danger': $v.value.settings.invoice_number_prefix.$error }]"
+              @keyup="validate('invoice_number_prefix')">
           </div>
         </div>
       </div>
@@ -28,10 +29,11 @@
         <div class="control">
           <div class="control">
             <input
-              v-model.number="value.settings.next_invoice_number"
+              v-model.trim.number="$v.value.settings.next_invoice_number.$model"
               type="number"
               step="1"
-              class="input">
+              :class="['input', { 'is-danger': $v.value.settings.next_invoice_number.$error }]"
+              @keyup="validate('next_invoice_number')">
           </div>
         </div>
       </div>
@@ -43,9 +45,10 @@
         <div class="control">
           <div class="control">
             <input
-              v-model="value.settings.customer_number_prefix"
+              v-model.trim="$v.value.settings.customer_number_prefix.$model"
               type="text"
-              class="input">
+              :class="['input', { 'is-danger': $v.value.settings.customer_number_prefix.$error }]"
+              @keyup="validate('customer_number_prefix')">
           </div>
         </div>
       </div>
@@ -57,10 +60,11 @@
         <div class="control">
           <div class="control">
             <input
-              v-model.number="value.settings.next_customer_number"
+              v-model.trim.number="$v.value.settings.next_customer_number.$model"
               type="number"
               step="1"
-              class="input">
+              :class="['input', { 'is-danger': $v.value.settings.next_customer_number.$error }]"
+              @keyup="validate('next_customer_number')">
           </div>
         </div>
       </div>
@@ -72,9 +76,10 @@
         <div class="control">
           <div class="control">
             <input
-              v-model.number="value.settings.tax_number"
+              v-model.trim="$v.value.settings.tax_number.$model"
               type="text"
-              class="input">
+              :class="['input', { 'is-danger': $v.value.settings.tax_number.$error }]"
+              @keyup="validate('tax_number')">
           </div>
         </div>
       </div>
@@ -85,6 +90,7 @@
 <script>
 import Icon from 'vue-awesome/components/Icon'
 import 'vue-awesome/icons/cogs'
+const { required, numeric, alphaNum } = require('vuelidate/lib/validators')
 
 export default {
   components: {
@@ -101,6 +107,25 @@ export default {
   watch: {
     value () {
       this.$emit('input', this.value)
+    },
+  },
+
+  methods: {
+    validate (field) {
+      this.$v.value.settings[field].$touch()
+      this.$emit('error', { key: 'numbers', errors: this.$v.$anyError })
+    },
+  },
+
+  validations: {
+    value: {
+      settings: {
+        invoice_number_prefix: { required, alphaNum },
+        next_invoice_number: { required, numeric },
+        customer_number_prefix: { required, alphaNum },
+        next_customer_number: { required, numeric },
+        tax_number: { required },
+      },
     },
   },
 }
