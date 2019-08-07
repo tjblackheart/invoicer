@@ -14,7 +14,7 @@
 
       <div class="is-pulled-right">
         <button
-          class="button is-primary"
+          :class="['button is-primary', { 'is-loading': busy }]"
           :disabled="dirty === false"
           @click="submit()">
           Save changes
@@ -22,8 +22,9 @@
       </div>
     </div>
 
-    <message />
     <hr>
+
+    <message />
 
     <div class="columns">
       <div class="column is-3">
@@ -67,11 +68,8 @@ export default {
 
   data () {
     return {
-      user: {
-        username: '',
-        settings: {},
-      },
-
+      user: {},
+      defaults: {}, // clone of 'user'
       items: [
         { view: 'user', title: 'Profile', active: false },
         { view: 'banking', title: 'Banking', active: false },
@@ -79,21 +77,37 @@ export default {
         { view: 'company', title: 'Company', active: false },
         { view: 'contacts', title: 'Contacts', active: false },
       ],
-
       dirty: false,
+      busy: false,
     }
   },
 
   computed: {
     activeView () {
-      return this.items.find(i => i.active === true).view
+      const item = this.items.find(i => i.active === true)
+      return (item) ? item.view : this.items[0].view
+    },
+  },
+
+  watch: {
+    user: {
+      handler (user) {
+        if (JSON.stringify(user) !== JSON.stringify(this.defaults)) {
+          this.dirty = true
+        }
+      },
+      deep: true,
+    },
+
+    activeView () {
+      this.clearMessage()
     },
   },
 
   created () {
     this.clearMessage()
     this.load()
-    this.toggle(this.items[0].view)
+    this.toggle(this.activeView)
   },
 
   methods: {
@@ -104,6 +118,7 @@ export default {
 
       try {
         this.user = await http.fetchUser(this.$store.getters.uuid)
+        this.setDefaults()
       } catch (error) {
         this.setMessage({
           text: error.message,
@@ -113,20 +128,45 @@ export default {
     },
 
     async submit () {
-      // TODO
-      console.log('submit', this.user)
+      try {
+        this.clearMessage()
+        this.busy = true
+
+        const user = await http.putUser(this.user)
+        this.setUser(user)
+        this.setMessage({
+          text: 'Settings saved.',
+        })
+        this.dirty = false
+        this.setDefaults()
+      } catch (error) {
+        this.setMessage({
+          text: error.message,
+          style: 'is-danger',
+        })
+      } finally {
+        this.busy = false
+      }
     },
 
     toggle (view) {
-      const index = this.items.findIndex(i => i.view === view)
-      this.items.forEach(i => {
-        i.active = false
+      this.items.map(item => {
+        item.active = item.view === view || false
       })
-      this.items[index].active = true
+    },
+
+    setDefaults () {
+      this.defaults = JSON.parse(JSON.stringify(this.user))
     },
   },
 
   beforeRouteLeave (to, from, next) {
+    if (this.dirty) {
+      if (!confirm('There are unsaved changes. Really leave?')) {
+        return
+      }
+    }
+
     this.clearMessage()
     next()
   },

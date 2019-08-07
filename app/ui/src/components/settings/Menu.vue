@@ -3,8 +3,7 @@
     <ul
       v-for="(item, index) in items"
       :key="`${item.view}-${index}`"
-      class="menu-list"
-    >
+      class="menu-list">
       <li>
         <a
           href
@@ -27,4 +26,3 @@ export default {
   },
 }
 </script>
-
