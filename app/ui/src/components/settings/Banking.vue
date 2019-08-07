@@ -72,7 +72,7 @@ export default {
   methods: {
     validate (field) {
       this.$v.value.settings[field].$touch()
-      this.$emit('error', { key: 'banking', errors: this.$v.$anyError })
+      this.$emit('error', { view: 'banking', errors: this.$v.$anyError })
     },
   },
 

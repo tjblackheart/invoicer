@@ -31,8 +31,8 @@ export default {
 
   methods: {
     hasError (view) {
-      return this.errors.some(e => e.key === view && e.errors)
-    }
+      return this.errors.some(e => e.view === view && e.errors)
+    },
   },
 }
 </script>

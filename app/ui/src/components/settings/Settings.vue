@@ -120,6 +120,7 @@ export default {
       this.clearMessage()
 
       try {
+        console.log(this.$store.getters.uuid)
         this.user = await http.fetchUser(this.$store.getters.uuid)
         this.setDefaults()
       } catch (error) {
@@ -170,11 +171,11 @@ export default {
     },
 
     handleError (event) {
-      const { key, errors } = { ...event }
-      const err = this.errors.find(e => e.key === key)
+      const { view, errors } = { ...event }
+      const err = this.errors.find(e => e.view === view)
 
       if (!err) {
-        this.errors.push({ key, errors })
+        this.errors.push({ view, errors })
       } else {
         err.errors = errors
       }
@@ -205,7 +206,6 @@ export default {
     border-radius: 2px;
     background: #fdfdfd;
     border: 1px solid #e9e9e9;
-    border-radius: 2px;
   }
 
   /deep/ .is-bordered {

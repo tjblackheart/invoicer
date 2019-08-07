@@ -171,7 +171,7 @@ export default {
   methods: {
     validate (field) {
       this.$v.value.settings[field].$touch()
-      this.$emit('error', { key: 'company', errors: this.$v.$anyError })
+      this.$emit('error', { view: 'company', errors: this.$v.$anyError })
     },
   },
 
