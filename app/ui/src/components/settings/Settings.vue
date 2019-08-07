@@ -20,7 +20,12 @@
       </div>
       <div class="column is-9">
         <keep-alive>
-          <component :is="activeView" />
+          <form @submit.prevent="submit">
+            <component
+              v-model="user"
+              :is="activeView"
+            />
+          </form>
         </keep-alive>
       </div>
     </div>
@@ -52,6 +57,11 @@ export default {
 
   data () {
     return {
+      user: {
+        username: '',
+        settings: {},
+      },
+
       items: [
         { view: 'user', title: 'User', active: false },
         { view: 'commercial', title: 'Commercial', active: false },
@@ -66,20 +76,42 @@ export default {
     ...mapMutations([ 'setMessage', 'clearMessage', 'setUser' ]),
 
     activeView () {
-      return this.items.find(i => i.active === true).view || this.items[0].view
+      return this.items.find(i => i.active === true).view
     },
   },
 
   created () {
+    this.load()
     this.toggle(this.items[0].view)
   },
 
   methods: {
+    async load () {
+      try {
+        this.user = await http.fetchUser(this.$store.getters.uuid)
+      } catch (error) {
+        this.setMessage({
+          text: error.message,
+          style: 'is-danger',
+        })
+      }
+    },
+
+    async submit () {
+      // TODO
+      console.log('submit', this.user)
+    },
+
     toggle (view) {
       const index = this.items.findIndex(i => i.view === view)
       this.items.forEach(i => i.active = false)
       this.items[index].active = true
     },
+  },
+
+  beforeRouteLeave (to, from, next) {
+    // this.clearMessage()
+    next()
   },
 }
 </script>
