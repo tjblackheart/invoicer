@@ -22,10 +22,7 @@ export default new Vuex.Store({
     token: state => state.token || window.sessionStorage.getItem('token'),
     user: state => state.user,
     username: state => state.user ? state.user.username : window.sessionStorage.getItem('username'),
-    uuid: state => {
-      console.log('get', state.uuid, window.sessionStorage.getItem('uuid'))
-      return state.uuid || window.sessionStorage.getItem('uuid')
-    },
+    uuid: state => state.uuid || window.sessionStorage.getItem('uuid'),
     message: state => state.message,
   },
 
@@ -35,7 +32,6 @@ export default new Vuex.Store({
     },
 
     setUser (state, user) {
-      console.log('setUser', user)
       state.user = user
       window.sessionStorage.setItem('username', user.username)
     },
@@ -43,9 +39,8 @@ export default new Vuex.Store({
     login (state, payload) {
       state.token = payload.token
       state.user = payload.user
+      state.uuid = payload.user.uuid
       state.username = payload.user.username
-
-      console.log('login', payload)
 
       window.sessionStorage.setItem('token', state.token)
       window.sessionStorage.setItem('uuid', state.user.uuid)

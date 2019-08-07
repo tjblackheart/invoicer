@@ -108,7 +108,6 @@ export default {
   },
 
   created () {
-    this.clearMessage()
     this.load()
     this.toggle(this.activeView)
   },
@@ -117,10 +116,7 @@ export default {
     ...mapMutations([ 'setMessage', 'clearMessage', 'setUser' ]),
 
     async load () {
-      this.clearMessage()
-
       try {
-        console.log(this.$store.getters.uuid)
         this.user = await http.fetchUser(this.$store.getters.uuid)
         this.setDefaults()
       } catch (error) {
@@ -136,7 +132,7 @@ export default {
         this.clearMessage()
         if (this.checkErrors()) {
           this.setMessage({
-            text: 'There are errors in your data.',
+            text: 'There are errors in the submitted data. Please review.',
             style: 'is-danger',
           })
           return
