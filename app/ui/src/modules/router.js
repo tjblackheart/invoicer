@@ -7,7 +7,7 @@ import InvoiceCreate from '@/components/invoice/InvoiceCreate.vue'
 import InvoiceDetails from '@/components/invoice/InvoiceDetails.vue'
 import CustomerList from '@/components/customer/ListCustomers.vue'
 import CustomerCreate from '@/components/customer/CreateCustomer.vue'
-import Settings from '@/components/user/Settings.vue'
+import Settings from '@/components/settings/Settings.vue'
 import Login from '@/components/user/Login.vue'
 import Register from '@/components/user/Register.vue'
 
