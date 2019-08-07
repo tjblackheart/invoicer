@@ -1,13 +1,26 @@
 <template>
   <div>
-    <h1
-      id="top"
-      class="title is-4">
-      Settings
-    </h1>
-    <h2 class="subtitle is-6">
-      Application config
-    </h2>
+    <div class="is-clearfix">
+      <div class="is-pulled-left">
+        <h1
+          id="top"
+          class="title is-4">
+          Settings
+        </h1>
+        <h2 class="subtitle is-6">
+          Application config
+        </h2>
+      </div>
+
+      <div class="is-pulled-right">
+        <button
+          class="button is-primary"
+          :disabled="dirty === false"
+          @click="submit()">
+          Save changes
+        </button>
+      </div>
+    </div>
 
     <message />
     <hr>
@@ -21,9 +34,8 @@
       <div class="column is-9">
         <keep-alive>
           <component
-            v-model="user"
             :is="activeView"
-          />
+            v-model="user" />
         </keep-alive>
       </div>
     </div>
@@ -37,7 +49,7 @@ import Message from '@/components/misc/Message'
 
 import SettingsMenu from './Menu'
 import User from './User'
-import Commercial from './Commercial'
+import Banking from './Banking'
 import Numbers from './Numbers'
 import Company from './Company'
 import Contacts from './Contacts'
@@ -47,7 +59,7 @@ export default {
     Message,
     SettingsMenu,
     User,
-    Commercial,
+    Banking,
     Numbers,
     Company,
     Contacts,
@@ -61,30 +73,35 @@ export default {
       },
 
       items: [
-        { view: 'user', title: 'User', active: false },
-        { view: 'commercial', title: 'Commercial', active: false },
+        { view: 'user', title: 'Profile', active: false },
+        { view: 'banking', title: 'Banking', active: false },
         { view: 'numbers', title: 'Numbers', active: false },
         { view: 'company', title: 'Company', active: false },
         { view: 'contacts', title: 'Contacts', active: false },
       ],
+
+      dirty: false,
     }
   },
 
   computed: {
-    ...mapMutations([ 'setMessage', 'clearMessage', 'setUser' ]),
-
     activeView () {
       return this.items.find(i => i.active === true).view
     },
   },
 
   created () {
+    this.clearMessage()
     this.load()
     this.toggle(this.items[0].view)
   },
 
   methods: {
+    ...mapMutations([ 'setMessage', 'clearMessage', 'setUser' ]),
+
     async load () {
+      this.clearMessage()
+
       try {
         this.user = await http.fetchUser(this.$store.getters.uuid)
       } catch (error) {
@@ -102,14 +119,32 @@ export default {
 
     toggle (view) {
       const index = this.items.findIndex(i => i.view === view)
-      this.items.forEach(i => i.active = false)
+      this.items.forEach(i => {
+        i.active = false
+      })
       this.items[index].active = true
     },
   },
 
   beforeRouteLeave (to, from, next) {
-    // this.clearMessage()
+    this.clearMessage()
     next()
   },
 }
 </script>
+
+<style lang="scss" scoped>
+  /deep/ .fieldset {
+    margin-bottom: 60px;
+    padding: 20px;
+    border-radius: 2px;
+    background: #fdfdfd;
+    border: 1px solid #e9e9e9;
+    border-radius: 2px;
+  }
+
+  /deep/ .is-bordered {
+    border-bottom: 1px solid #f1f1f1;
+    margin-bottom: 20px;
+  }
+</style>

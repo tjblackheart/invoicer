@@ -1,35 +1,42 @@
 <template>
   <div>
-    <h3 class="title is-5">
-      <icon name="envelope" /> Contacts
+    <h3
+      class="title is-5">
+      <icon name="university" /> Bank
     </h3>
 
     <div class="fieldset">
       <div class="field">
         <label class="label">
-          Company email
+          Bank
         </label>
         <div class="control">
-          <div class="control">
-            <input
-              v-model="value.settings.email"
-              type="text"
-              class="input">
-          </div>
+          <input
+            v-model="value.settings.bank"
+            type="text"
+            class="input">
         </div>
       </div>
-
       <div class="field">
         <label class="label">
-          Phone
+          IBAN
         </label>
         <div class="control">
-          <div class="control">
-            <input
-              v-model="value.settings.phone"
-              type="text"
-              class="input">
-          </div>
+          <input
+            v-model="value.settings.iban"
+            type="text"
+            class="input">
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">
+          BIC
+        </label>
+        <div class="control">
+          <input
+            v-model="value.settings.bic"
+            type="text"
+            class="input">
         </div>
       </div>
     </div>
@@ -38,7 +45,7 @@
 
 <script>
 import Icon from 'vue-awesome/components/Icon'
-import 'vue-awesome/icons/envelope'
+import 'vue-awesome/icons/university'
 
 export default {
   components: {

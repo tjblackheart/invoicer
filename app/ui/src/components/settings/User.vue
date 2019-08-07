@@ -4,8 +4,6 @@
       <icon name="user-cog" /> User
     </h3>
 
-    <hr>
-
     <div class="fieldset">
       <div class="field">
         <label class="label">
@@ -15,8 +13,7 @@
           <input
             v-model="value.username"
             type="text"
-            class="input"
-            required>
+            class="input">
         </div>
       </div>
 
@@ -28,8 +25,7 @@
           <input
             v-model="value.email"
             type="email"
-            class="input"
-            required>
+            class="input">
         </div>
       </div>
     </div>
@@ -39,9 +35,12 @@
 <script>
 import Icon from 'vue-awesome/components/Icon'
 import 'vue-awesome/icons/user-cog'
-import 'vue-awesome/icons/envelope'
 
 export default {
+  components: {
+    Icon,
+  },
+
   props: {
     value: {
       type: Object,
@@ -49,15 +48,10 @@ export default {
     },
   },
 
-  components: {
-    Icon,
-  },
-
   watch: {
-    value() {
-      this.$emit('input', this.value);
+    value () {
+      this.$emit('input', this.value)
     },
   },
 }
 </script>
-
