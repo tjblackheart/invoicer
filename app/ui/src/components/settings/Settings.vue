@@ -14,10 +14,9 @@
 
     <div class="columns">
       <div class="column is-3">
-          <settings-menu
-            :items="items"
-            @select="toggle($event)"
-          />
+        <settings-menu
+          :items="items"
+          @select="toggle($event)" />
       </div>
       <div class="column is-9">
         <keep-alive>
@@ -29,6 +28,8 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+import http from '@/modules/http'
 import Message from '@/components/misc/Message'
 
 import SettingsMenu from './Menu'
@@ -52,19 +53,25 @@ export default {
   data () {
     return {
       items: [
-        { view: 'user', title: 'User', active: false, },
-        { view: 'commercial', title: 'Commercial', active: false, },
-        { view: 'numbers', title: 'Numbers', active: false, },
-        { view: 'company', title: 'Company', active: false, },
-        { view: 'contacts', title: 'Contacts', active: false, },
+        { view: 'user', title: 'User', active: false },
+        { view: 'commercial', title: 'Commercial', active: false },
+        { view: 'numbers', title: 'Numbers', active: false },
+        { view: 'company', title: 'Company', active: false },
+        { view: 'contacts', title: 'Contacts', active: false },
       ],
     }
   },
 
   computed: {
+    ...mapMutations([ 'setMessage', 'clearMessage', 'setUser' ]),
+
     activeView () {
-      return this.items.find(i => i.active === true).view || ''
+      return this.items.find(i => i.active === true).view || this.items[0].view
     },
+  },
+
+  created () {
+    this.toggle(this.items[0].view)
   },
 
   methods: {
@@ -74,10 +81,5 @@ export default {
       this.items[index].active = true
     },
   },
-
-  created () {
-    this.toggle(this.items[0].view)
-  }
 }
 </script>
-
