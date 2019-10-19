@@ -1,8 +1,9 @@
-FROM alpine:edge as go
+FROM golang:1.13-alpine as go
 WORKDIR /srv
 COPY app .
-RUN apk add --update go gcc g++ git ca-certificates wget &&\
-    go build -o /srv/bin/invoicer cmd/web/*
+RUN apk update && \
+    apk add gcc g++ && \
+    go build -o bin/invoicer cmd/web/*
 
 ##
 
