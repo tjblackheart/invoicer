@@ -15,6 +15,7 @@ module.exports = {
     'comma-dangle': [ 'error', 'always-multiline' ],
     'vue/component-name-in-template-casing': [ 'error', 'kebab-case', { 'ignores': [] } ],
     'vue/html-closing-bracket-newline': [ 'error', { 'multiline': 'never' } ],
+    'vue/no-v-html': 'off',
   },
   parserOptions: {
     parser: 'babel-eslint',

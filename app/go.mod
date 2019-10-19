@@ -7,6 +7,7 @@ require (
 	github.com/SebastiaanKlippert/go-wkhtmltopdf v1.4.1
 	github.com/denisenkom/go-mssqldb v0.0.0-20190724012636-11b2859924c1 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/gomarkdown/markdown v0.0.0-20190912180731-281270bc6d83
 	github.com/gorilla/mux v1.7.3
 	github.com/jinzhu/gorm v1.9.10
 	github.com/joho/godotenv v1.3.0

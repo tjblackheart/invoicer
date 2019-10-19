@@ -145,7 +145,9 @@
                 :key="i.id">
                 <td> {{ index + 1 }} </td>
                 <td> {{ i.amount }} {{ i.unit }} </td>
-                <td> {{ i.description }} </td>
+                <td
+                  class="content"
+                  v-html="$converter.makeHtml(i.description)" />
                 <td> {{ i.price_per_unit | money(invoice.currency) }} </td>
                 <td class="has-text-right">
                   {{ totalNet(i) | money(invoice.currency) }}

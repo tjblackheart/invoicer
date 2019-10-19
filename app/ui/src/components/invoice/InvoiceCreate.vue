@@ -139,7 +139,9 @@
                     <td> {{ i.amount }}{{ i.unit }} </td>
                     <td> {{ i.price_per_unit|money(invoice.currency) }} </td>
                     <td> {{ i.vat }}% </td>
-                    <td> {{ i.description }} </td>
+                    <td
+                      class="content"
+                      v-html="$converter.makeHtml(i.description)" />
                     <td class="has-text-right">
                       <a @click.prevent="editItem(index)">
                         Edit
@@ -236,7 +238,6 @@ import dayjs from 'dayjs'
 import Modal from '@/components/misc/Modal'
 import ItemForm from '@/components/forms/CreateItem'
 import Message from '@/components/misc/Message'
-
 const { required } = require('vuelidate/lib/validators')
 
 export default {

@@ -95,7 +95,7 @@
           {{ range $index, $item := .Invoice.Items }}
           <tr>
             <td> {{ add $index }} </td>
-            <td> {{ $item.Description }} </td>
+            <td class="content"> {{ markdown $item.Description }} </td>
             <td class="has-text-right"> {{ $item.PricePerUnit.Format }} {{ $cur }} </td>
             <td class="has-text-right"> {{ printf "%.2f" $item.Amount }}{{ .Unit }} </td>
             <td class="has-text-right"> {{ itemNet $item.PricePerUnit $item.Amount }} {{ $cur }} </td>
