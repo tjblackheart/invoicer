@@ -234,10 +234,14 @@
 <script>
 import { mapMutations } from 'vuex'
 import http from '@/modules/http'
-import dayjs from 'dayjs'
 import Modal from '@/components/misc/Modal'
 import ItemForm from '@/components/forms/CreateItem'
 import Message from '@/components/misc/Message'
+
+import dayjs from 'dayjs'
+import dayjsPluginUTC from 'dayjs-plugin-utc'
+dayjs.extend(dayjsPluginUTC)
+
 const { required } = require('vuelidate/lib/validators')
 
 export default {
@@ -280,10 +284,10 @@ export default {
 
     formattedDate: {
       get () {
-        return dayjs(this.invoice.date).format('YYYY-MM-DD')
+        return dayjs.utc(this.invoice.date).format('YYYY-MM-DD')
       },
       set (value) {
-        this.invoice.date = dayjs(value).toJSON()
+        this.invoice.date = dayjs.utc(value).toJSON()
       },
     },
   },
