@@ -1,11 +1,32 @@
-version: "3"
+# development compose
+version: "3.7"
+
 services:
-    invoicer:
-        build: .
-        image: tjblackheart/invoicer:latest
-        ports:
-            - 3000:3000
-        volumes:
-            - ./app/var:/app/var
-        env_file:
-            - ./app/.env
+  backend:
+    build:
+      context: app/backend
+      target: dev
+    container_name: invoicer_backend_dev
+    environment:
+      - "HOME=/go"
+    user: "1000:1000"
+    ports:
+      - 3000:3000
+    env_file: .env.local
+    volumes:
+      - ./app/backend/src:/go/src/app
+
+  frontend:
+    build:
+      context: app/frontend
+      target: dev
+    container_name: invoicer_frontend_dev
+    user: "1000:1000"
+    ports:
+      - 8080:8080
+    environment:
+      - VUE_APP_ENDPOINT=http://localhost:3000
+      - VUE_APP_LOCALE=de-DE
+    volumes:
+      - ./app/frontend/src:/app
+      - /app/node_modules

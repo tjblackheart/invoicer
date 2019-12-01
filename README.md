@@ -1,21 +1,17 @@
 # Invoicer
 
-A simple multi user invoicing application using a RESTful backend written in Go using a vue.js frontend,
+A multi user invoicing application using a RESTful backend written in Go using a vue.js frontend,
 because I did not find any solution that fitted me. SQLITE is used as a database backend.
 
-## Usage
+## Build
 
-### With Docker
+### Development
 
-Copy `app/env.dist` to `app/.env` and add the missing `APP_SECRET`. Check `docker-compose.yml`, edit it to your liking and run `docker-compose up`. By default the frontend is reachable at `http://localhost:3000`.
+You'll need docker >= 18.06 and docker-compose. Copy `.env` to `.env.local` and set `APP_SECRET`. Run `docker-compose up`. This will start both images with hot reload enabled. By default the frontend is reachable at `http://localhost:8080`.
 
-### Without Docker / Development version
+### Production
 
-* Copy `app/env.dist` to `app/.env` and add the missing `APP_SECRET`
-* `cd` into `app/ui/` and run `yarn && yarn serve`
-* `cd` into `app` and run `go run cmd/web/*`
-
-By default the development frontend is reachable at `http://localhost:8080`.
+TODO
 
 ## License
 
