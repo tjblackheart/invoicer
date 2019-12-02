@@ -13,10 +13,10 @@ type (
 	User struct {
 		BaseModel
 		UUID           string   `json:"uuid" gorm:"not_null;unique"`
-		Username       string   `json:"username" gorm:"not null" validate:"required"`
-		Email          string   `json:"email" gorm:"not null;unique" validate:"required,email"`
-		Password       string   `json:"password" gorm:"not null" validate:"required,gte=8,eqfield=RepeatPassword"`
-		RepeatPassword string   `json:"repeat_password,omitempty" gorm:"-"`
+		Username       trimmed  `json:"username" gorm:"not null" validate:"required"`
+		Email          trimmed  `json:"email" gorm:"not null;unique" validate:"required,email"`
+		Password       trimmed  `json:"password" gorm:"not null" validate:"required,gte=8,eqfield=RepeatPassword"`
+		RepeatPassword trimmed  `json:"repeat_password,omitempty" gorm:"-"`
 		Settings       Settings `json:"settings" gorm:"foreignkey:UserID"`
 	}
 
@@ -100,7 +100,7 @@ func (u *User) Create() error {
 		return err
 	}
 
-	u.Password = string(hash)
+	u.Password = trimmed(string(hash))
 
 	if err := db.Create(&u).Error; err != nil {
 		if strings.Contains(err.Error(), "UNIQUE") {
@@ -120,10 +120,6 @@ func (u *User) Update(patch *User) (*User, error) {
 }
 
 func (u *User) validate() error {
-	u.Username = strings.TrimSpace(u.Username)
-	u.Email = strings.TrimSpace(u.Email)
-	u.Password = strings.TrimSpace(u.Password)
-
 	if err := validate.Struct(u); err != nil {
 		for _, v := range err.(validator.ValidationErrors) {
 			r := strings.NewReplacer("{field}", v.Field(), "{param}", v.Param())

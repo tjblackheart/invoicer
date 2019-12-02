@@ -1,42 +1,43 @@
 package models
 
 import (
-	"errors"
 	"strings"
+
+	"github.com/go-playground/validator/v10"
 )
 
 // Customer represents a customer
 type (
 	Customer struct {
 		BaseModel
-		Number    string    `json:"number" gorm:"unique;not null"`
+		Number    trimmed   `json:"number" gorm:"unique;not null" validate:"required"`
 		Remarks   string    `json:"remarks"`
 		TaxNumber string    `json:"tax_number"`
-		Address   Address   `json:"address" gorm:"foreignkey:CustomerID"`
-		Contacts  []Contact `json:"contacts" gorm:"foreignkey:CustomerID"`
+		Address   Address   `json:"address" gorm:"foreignkey:CustomerID" validate:"dive"`
+		Contacts  []Contact `json:"contacts" gorm:"foreignkey:CustomerID" validate:"dive"`
 		UUID      string    `json:"-"`
 	}
 
 	// Address holds an address of a customer
 	Address struct {
 		BaseModel
-		Company    string `json:"company" gorm:"not null"`
-		FirstName  string `json:"first_name" gorm:"not null"`
-		LastName   string `json:"last_name" gorm:"not null"`
-		Street     string `json:"street" gorm:"not null"`
-		Number     string `json:"number" gorm:"not null"`
-		Zip        string `json:"zip" gorm:"not null"`
-		City       string `json:"city" gorm:"not null"`
-		Country    string `json:"country" gorm:"not null"`
-		CustomerID uint   `json:"-"`
+		Company    trimmed `json:"company" gorm:"not null" validate:"required"`
+		FirstName  string  `json:"first_name" gorm:"not null"`
+		LastName   string  `json:"last_name" gorm:"not null"`
+		Street     trimmed `json:"street" gorm:"not null" validate:"required"`
+		Number     trimmed `json:"number" gorm:"not null" validate:"required"`
+		Zip        trimmed `json:"zip" gorm:"not null" validate:"required"`
+		City       trimmed `json:"city" gorm:"not null" validate:"required"`
+		Country    string  `json:"country" gorm:"not null"`
+		CustomerID uint    `json:"-"`
 	}
 
 	// Contact holds a contact value (email, phone ...)
 	Contact struct {
 		BaseModel
-		Value      string `json:"value" gorm:"not null"`
-		Type       string `json:"type" gorm:"not null"`
-		CustomerID uint   `json:"-"`
+		Value      trimmed `json:"value" gorm:"not null" validate:"required"`
+		Type       trimmed `json:"type" gorm:"not null" validate:"required"`
+		CustomerID uint    `json:"-"`
 	}
 )
 
@@ -131,14 +132,16 @@ func (c *Customer) Update(patch *Customer) error {
 	return nil
 }
 
-func (c *Customer) validate() (err error) {
-	if c.Number == "" {
-		err = errors.New("Customer number can not be empty")
+func (c *Customer) validate() error {
+	if err := validate.Struct(c); err != nil {
+		for _, v := range err.(validator.ValidationErrors) {
+			r := strings.NewReplacer("{field}", v.Field(), "{param}", v.Param())
+			e := r.Replace(errList[v.Tag()])
+
+			// return first error found.
+			return ValidationError{e}
+		}
 	}
 
-	if c.Address.Company == "" || c.Address.City == "" || c.Address.Zip == "" || c.Address.Street == "" {
-		err = errors.New("Invalid address")
-	}
-
-	return
+	return nil
 }

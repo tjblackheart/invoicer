@@ -41,7 +41,7 @@
           <div class="field">
             <div class="control">
               <input
-                v-model="customer.address.company"
+                v-model.trim="customer.address.company"
                 class="input"
                 type="text"
                 placeholder="Company">
@@ -53,7 +53,7 @@
               <div class="column">
                 <div class="control">
                   <input
-                    v-model="customer.address.first_name"
+                    v-model.trim="customer.address.first_name"
                     class="input"
                     type="text"
                     placeholder="First name">
@@ -62,7 +62,7 @@
               <div class="column">
                 <div class="control">
                   <input
-                    v-model="customer.address.last_name"
+                    v-model.trim="customer.address.last_name"
                     class="input"
                     type="text"
                     placeholder="Last name">
@@ -76,7 +76,7 @@
               <div class="column is-9">
                 <div class="control">
                   <input
-                    v-model="customer.address.street"
+                    v-model.trim="customer.address.street"
                     class="input"
                     type="text"
                     placeholder="Street">
@@ -85,7 +85,7 @@
               <div class="column is-3">
                 <div class="control">
                   <input
-                    v-model="customer.address.number"
+                    v-model.trim="customer.address.number"
                     class="input"
                     type="text"
                     placeholder="Number">
@@ -97,7 +97,7 @@
           <div class="field">
             <div class="control">
               <input
-                v-model="customer.address.zip"
+                v-model.trim="customer.address.zip"
                 class="input"
                 type="text"
                 placeholder="Zip code">
@@ -107,7 +107,7 @@
           <div class="field">
             <div class="control">
               <input
-                v-model="customer.address.city"
+                v-model.trim="customer.address.city"
                 class="input"
                 type="text"
                 placeholder="City">
@@ -117,7 +117,7 @@
           <div class="field">
             <div class="control">
               <input
-                v-model="customer.address.country"
+                v-model.trim="customer.address.country"
                 class="input"
                 type="text"
                 placeholder="Country">
@@ -133,7 +133,7 @@
           <div class="field">
             <div class="control">
               <input
-                v-model="customer.tax_number"
+                v-model.trim="customer.tax_number"
                 class="input"
                 type="text"
                 placeholder="VAT ID"

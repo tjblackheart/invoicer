@@ -1,8 +1,10 @@
 package models
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/go-playground/validator/v10"
@@ -34,13 +36,26 @@ type (
 	}
 
 	translatableErrors map[string]string
+	trimmed            string
 )
 
 var errList = translatableErrors{
-	"required": "{field} can not be empty.",
+	"required": "Please enter a value for '{field}'.",
 	"email":    "Please enter a valid email.",
 	"eqfield":  "{field} fields should match.",
 	"gte":      "{field} should contain {param} characters or more.",
+	"gt":       "{field} can not be empty.",
+}
+
+func (t *trimmed) UnmarshalJSON(b []byte) error {
+	var s string
+	if err := json.Unmarshal(b, &s); err != nil {
+		return err
+	}
+
+	*t = trimmed(strings.TrimSpace(s))
+
+	return nil
 }
 
 func (e ValidationError) Error() string {

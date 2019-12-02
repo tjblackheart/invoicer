@@ -1,10 +1,11 @@
 package models
 
 import (
-	"errors"
 	"strconv"
+	"strings"
 	"time"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/tjblackheart/Invoicer/backend/pkg/money"
 )
 
@@ -12,17 +13,17 @@ import (
 type (
 	Invoice struct {
 		BaseModel
-		Number      string        `json:"number" gorm:"unique;not null"`
-		Date        time.Time     `json:"date"`
+		Number      trimmed       `json:"number" gorm:"unique;not null" validate:"required"`
+		Date        time.Time     `json:"date" validate:"required"`
 		TotalNet    money.Money   `json:"total_net" gorm:"not null;default:0"`
 		TotalGross  money.Money   `json:"total_gross" gorm:"not null;default:0"`
 		Currency    string        `json:"currency" gorm:"not null;default:'EUR'"`
-		Items       []InvoiceItem `json:"items" gorm:"foreignkey:InvoiceID"`
+		Items       []InvoiceItem `json:"items" gorm:"foreignkey:InvoiceID" validate:"gt=0"`
 		IsCancelled bool          `json:"is_cancelled" gorm:"not null;default:false"`
 		IsPaid      bool          `json:"is_paid" gorm:"not null;default:false"`
 		PaidAt      time.Time     `json:"paid_at"`
-		CustomerID  uint          `json:"customer_id" gorm:"not null"`
-		Customer    Customer      `json:"customer"`
+		CustomerID  uint          `json:"customer_id" gorm:"not null" validate:"required"`
+		Customer    Customer      `json:"customer" validate:"-"`
 		DueDays     int           `json:"due_days" gorm:"default:10"`
 		UUID        string        `json:"-"`
 	}
@@ -134,17 +135,15 @@ func InvoiceSetPaid(uuid string, payload *PaidPayload) error {
 }
 
 func (i *Invoice) validate() (err error) {
-	if i.Number == "" {
-		err = errors.New("Invoice number can not be empty")
+	if err := validate.Struct(i); err != nil {
+		for _, v := range err.(validator.ValidationErrors) {
+			r := strings.NewReplacer("{field}", v.Field(), "{param}", v.Param())
+			e := r.Replace(errList[v.Tag()])
+
+			// return first error found.
+			return ValidationError{e}
+		}
 	}
 
-	if len(i.Items) == 0 {
-		err = errors.New("No items found")
-	}
-
-	if i.CustomerID == 0 {
-		err = errors.New("No customer given")
-	}
-
-	return
+	return nil
 }

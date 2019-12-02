@@ -117,18 +117,18 @@ func TestHtml(t *testing.T) {
 	tests := []struct {
 		needle string
 	}{
-		{mockInvoice.Number},
+		{string(mockInvoice.Number)},
 		{mockInvoice.Date.Format("02.01.2006")},
 		{mockInvoice.TotalNet.Format()},
 		{mockInvoice.TotalGross.Format()},
 		{mockInvoice.Currency},
 		{mockInvoice.Customer.TaxNumber},
-		{mockInvoice.Customer.Address.Company},
+		{string(mockInvoice.Customer.Address.Company)},
 		{mockInvoice.Customer.Address.FirstName},
 		{mockInvoice.Customer.Address.LastName},
-		{mockInvoice.Customer.Address.Street},
-		{mockInvoice.Customer.Address.City},
-		{mockInvoice.Customer.Address.Zip},
+		{string(mockInvoice.Customer.Address.Street)},
+		{string(mockInvoice.Customer.Address.City)},
+		{string(mockInvoice.Customer.Address.Zip)},
 		{mockUser.Settings.Company},
 		{mockUser.Settings.FirstName},
 		{mockUser.Settings.LastName},

@@ -32,7 +32,7 @@ func (g *Generator) Generate() (string, error) {
 		return "", err
 	}
 
-	filename := g.Invoice.Number + ".pdf"
+	filename := string(g.Invoice.Number + ".pdf")
 
 	if err = g.toPDF(html, filename); err != nil {
 		return "", err

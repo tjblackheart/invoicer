@@ -176,6 +176,12 @@ func (app Application) createInvoice(w http.ResponseWriter, r *http.Request) {
 
 	err = invoice.Create(uuid)
 	if err != nil {
+		switch e := err.(type) {
+		case models.ValidationError:
+			app.error(w, e, http.StatusBadRequest)
+			return
+		}
+
 		app.error(w, err, http.StatusInternalServerError)
 		return
 	}
@@ -265,6 +271,12 @@ func (app Application) createCustomer(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if err == models.ErrUnique {
 			app.error(w, errors.New("This customer already exists."), http.StatusBadRequest)
+			return
+		}
+
+		switch e := err.(type) {
+		case models.ValidationError:
+			app.error(w, e, http.StatusBadRequest)
 			return
 		}
 
