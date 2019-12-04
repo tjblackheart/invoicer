@@ -36,7 +36,10 @@ func setup() *app.Config {
 		env = "dev"
 	}
 
+	corsAllowedHost := os.Getenv("APP_CORS_ALLOWED_HOST")
+
 	return &app.Config{
+		AllowedHost: corsAllowedHost,
 		Hostname:    hostname,
 		Environment: env,
 		Secret:      secret,

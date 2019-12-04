@@ -4,7 +4,7 @@ version: "3.7"
 services:
   backend:
     build:
-      context: app/backend
+      context: src/backend
       target: dev
     container_name: invoicer_backend_dev
     environment:
@@ -14,11 +14,11 @@ services:
       - 3000:3000
     env_file: .env.local
     volumes:
-      - ./app/backend/src:/go/src/app
+      - ./src/backend/src:/go/src/app
 
   frontend:
     build:
-      context: app/frontend
+      context: src/frontend
       target: dev
     container_name: invoicer_frontend_dev
     user: "1000:1000"
@@ -28,5 +28,5 @@ services:
       - VUE_APP_ENDPOINT=http://localhost:3000
       - VUE_APP_LOCALE=de-DE
     volumes:
-      - ./app/frontend/src:/app
+      - ./src/frontend/src:/app
       - /app/node_modules

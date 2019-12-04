@@ -1,11 +1,15 @@
-app/backend/src/tmp
-app/backend/src/var/*
-!app/backend/src/var/.gitkeep
-!app/backend/src/var/out/
-app/backend/src/var/out/*
-!app/backend/src/var/out/.gitkeep
+src/backend/src/tmp
+src/backend/src/var/*
+!src/backend/src/var/.gitkeep
+!src/backend/src/var/out/
+src/backend/src/var/out/*
+!src/backend/src/var/out/.gitkeep
 
-app/frontend/src/node_modules
-app/frontend/src/dist
+src/frontend/src/node_modules
+src/frontend/src/dist
 
 .env.local
+.env.production
+
+var
+start-prod.sh

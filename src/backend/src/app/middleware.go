@@ -39,7 +39,7 @@ func (app Application) authMW(next http.Handler) http.Handler {
 
 func (app Application) corsMW(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Access-Control-Allow-Origin", "http://localhost:8080")
+		w.Header().Add("Access-Control-Allow-Origin", app.cfg.AllowedHost)
 		w.Header().Add("Vary", "Origin")
 		w.Header().Add("Vary", "Access-Control-Request-Method")
 		w.Header().Add("Vary", "Access-Control-Request-Headers")

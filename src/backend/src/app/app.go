@@ -13,6 +13,7 @@ import (
 
 type (
 	Config struct {
+		AllowedHost           string
 		Hostname, Environment string
 		DB                    string
 		Secret                string

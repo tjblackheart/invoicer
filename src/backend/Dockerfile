@@ -1,7 +1,7 @@
 # wkhtmltopdf
 FROM aantonw/alpine-wkhtmltopdf-patched-qt:latest as wkhtmltopdf
 
-#dev
+# dev
 FROM golang:1.13-alpine as dev
 WORKDIR /go/src/app
 COPY src .
@@ -12,6 +12,3 @@ RUN apk add --update gcc g++ wkhtmltopdf git && \
 COPY --from=wkhtmltopdf /lib/libwkhtmltox.so.0.12.5 /usr/lib/wkhtmltox.so.0.12.5
 COPY --from=wkhtmltopdf /bin/wkhtmltopdf /bin/wkhtmltoimage /usr/bin/
 CMD [ "fresh", "-c", "/runner.conf" ]
-
-# prod
-# TODO

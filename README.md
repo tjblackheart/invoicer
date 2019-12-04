@@ -11,7 +11,7 @@ You'll need docker >= 18.06 and docker-compose. Copy `.env` to `.env.local` and 
 
 ### Production
 
-TODO
+Copy `.env` to `.env.production`, set all vars and run `docker-compose -f docker-compose.prod.yml up`. Or export all the vars and build the images with `docker build` command.
 
 ## License
 
