@@ -16,5 +16,5 @@ COPY --from=wkhtmltopdf /lib/libwkhtmltox.so.0.12.5 /usr/lib/wkhtmltox.so.0.12.5
 COPY --from=wkhtmltopdf /bin/wkhtmltopdf /bin/wkhtmltoimage /usr/bin/
 COPY --from=build /go/src/app/tpl/ ./tpl
 COPY --from=build /go/src/app/bin/invoicer .
-VOLUME [ "/app/var", "/app/var/out" ]
+VOLUME [ "/app/var" ]
 CMD ["./invoicer"]

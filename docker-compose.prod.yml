@@ -6,6 +6,7 @@ services:
     build:
       context: src/backend
     container_name: invoicer_backend_prod
+    image: tjblackheart/invoicer_be_prod
     ports:
       - 3000:3000
     env_file: .env.production
@@ -16,6 +17,7 @@ services:
     build:
       context: src/frontend
     container_name: invoicer_frontend_prod
+    image: tjblackheart/invoicer_fe_prod
     ports:
       - 8080:8080
     environment:

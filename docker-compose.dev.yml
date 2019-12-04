@@ -7,6 +7,7 @@ services:
       context: src/backend
       dockerfile: Dockerfile.dev
     container_name: invoicer_backend_dev
+    image: tjblackheart/invoicer_be_dev
     environment:
       - "HOME=/go"
     user: "1000:1000"
@@ -22,6 +23,7 @@ services:
       context: src/frontend
       dockerfile: Dockerfile.dev
     container_name: invoicer_frontend_dev
+    image: tjblackheart/invoicer_fe_dev
     user: "1000:1000"
     ports:
       - 8080:8080
