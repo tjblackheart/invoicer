@@ -11,5 +11,5 @@ src/frontend/src/dist
 .env.local
 .env.production
 
-var
-start-prod.sh
+/var
+/start-prod.sh
