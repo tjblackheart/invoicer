@@ -5,19 +5,16 @@ services:
   backend:
     build:
       context: src/backend
-      dockerfile: Dockerfile.prod
     container_name: invoicer_backend_prod
     ports:
       - 3000:3000
     env_file: .env.production
     volumes:
       - ./var:/app/var
-      - ./var/out:/app/var/out
 
   frontend:
     build:
       context: src/frontend
-      dockerfile: Dockerfile.prod
     container_name: invoicer_frontend_prod
     ports:
       - 8080:8080
