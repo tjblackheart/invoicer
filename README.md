@@ -5,9 +5,11 @@ because I did not find any solution that fitted me. SQLITE is used as a database
 
 ## Build
 
+The easy way: `./up [dev|prod] [args]`
+
 ### Development
 
-You'll need docker >= 18.06 and docker-compose. Copy `.env` to `.env.local` and set `APP_SECRET`. Run `docker-compose up`. This will start both images with hot reload enabled. By default the frontend is reachable at `http://localhost:8080`.
+You'll need docker >= 18.06 and docker-compose. Copy `.env` to `.env.local` and set `APP_SECRET`. Run `docker-compose -f docker-compose.dev.yml up`. This will start both images with hot reload enabled. By default the frontend is reachable at `http://localhost:8080`.
 
 ### Production
 
