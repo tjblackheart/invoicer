@@ -43,7 +43,8 @@ func (g *Generator) Generate() (string, error) {
 
 // Base64 converts a file to a Base64 encoded string.
 func (g *Generator) Base64(filename string) (string, error) {
-	file, err := os.Open("var/out/" + filename)
+	path := fmt.Sprintf("var/out/%s/%s", g.User.UUID, filename)
+	file, err := os.Open(path)
 	defer file.Close()
 
 	if err != nil {
@@ -110,8 +111,17 @@ func (g *Generator) toHTML() (string, error) {
 }
 
 func (g *Generator) toPDF(html string, filename string) error {
-	// use file if it's already there
-	if _, err := os.Stat("var/out/" + filename); err == nil {
+	path := fmt.Sprintf("var/out/%s", g.User.UUID)
+
+	_, err := os.Stat(path)
+	if os.IsNotExist(err) {
+		if err = os.MkdirAll(path, 0755); err != nil {
+			return err
+		}
+	}
+
+	path = path + "/" + filename
+	if _, err := os.Stat(path); err == nil {
 		return nil
 	}
 
@@ -137,7 +147,7 @@ func (g *Generator) toPDF(html string, filename string) error {
 		return err
 	}
 
-	if err = gen.WriteFile("var/out/" + filename); err != nil {
+	if err = gen.WriteFile(path); err != nil {
 		return err
 	}
 

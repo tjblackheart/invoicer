@@ -1,6 +1,7 @@
 package pdf
 
 import (
+	"fmt"
 	"os"
 	"path"
 	"regexp"
@@ -45,6 +46,7 @@ var mockInvoice = models.Invoice{
 }
 
 var mockUser = models.User{
+	UUID: "45340e1e-3ab1-4c80-8315-0a32b60472ea",
 	Settings: models.Settings{
 		Company:   "Testcompany",
 		FirstName: "Test",
@@ -81,11 +83,12 @@ func TestGenerate(t *testing.T) {
 		t.Errorf("wrong filename, have: %s (%T), want: T0001.pdf (string)", fname, fname)
 	}
 
-	if _, err := os.Stat("var/out/" + fname); err != nil {
-		t.Errorf("file var/out/%s does not exist", fname)
+	path := fmt.Sprintf("var/out/%s/%s", mockUser.UUID, fname)
+	if _, err := os.Stat(path); err != nil {
+		t.Errorf("file %s does not exist", path)
 	}
 
-	os.Remove("var/out/" + fname)
+	os.Remove(path)
 }
 
 func TestBase64(t *testing.T) {
