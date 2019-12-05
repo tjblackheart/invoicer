@@ -5,7 +5,7 @@ because I did not find any solution that fitted me. SQLITE is used as a database
 
 ## Build
 
-The easy way: `./up [dev|prod] [args]`
+The easy way: `./dc [dev|prod] [args]`
 
 ### Development
 
