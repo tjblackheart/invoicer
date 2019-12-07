@@ -11,8 +11,8 @@ type (
 	Customer struct {
 		BaseModel
 		Number    trimmed   `json:"number" gorm:"unique;not null" validate:"required"`
-		Remarks   string    `json:"remarks"`
-		TaxNumber string    `json:"tax_number"`
+		Remarks   trimmed   `json:"remarks"`
+		TaxNumber trimmed   `json:"tax_number"`
 		Address   Address   `json:"address" gorm:"foreignkey:CustomerID" validate:"dive"`
 		Contacts  []Contact `json:"contacts" gorm:"foreignkey:CustomerID" validate:"dive"`
 		UUID      string    `json:"-"`
@@ -22,13 +22,13 @@ type (
 	Address struct {
 		BaseModel
 		Company    trimmed `json:"company" gorm:"not null" validate:"required"`
-		FirstName  string  `json:"first_name" gorm:"not null"`
-		LastName   string  `json:"last_name" gorm:"not null"`
+		FirstName  trimmed `json:"first_name" gorm:"not null"`
+		LastName   trimmed `json:"last_name" gorm:"not null"`
 		Street     trimmed `json:"street" gorm:"not null" validate:"required"`
 		Number     trimmed `json:"number" gorm:"not null" validate:"required"`
 		Zip        trimmed `json:"zip" gorm:"not null" validate:"required"`
 		City       trimmed `json:"city" gorm:"not null" validate:"required"`
-		Country    string  `json:"country" gorm:"not null"`
+		Country    trimmed `json:"country" gorm:"not null" validate:"required"`
 		CustomerID uint    `json:"-"`
 	}
 

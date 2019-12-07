@@ -17,7 +17,7 @@ type (
 		Date        time.Time     `json:"date" validate:"required"`
 		TotalNet    money.Money   `json:"total_net" gorm:"not null;default:0"`
 		TotalGross  money.Money   `json:"total_gross" gorm:"not null;default:0"`
-		Currency    string        `json:"currency" gorm:"not null;default:'EUR'"`
+		Currency    string        `json:"currency" gorm:"not null;default:'EUR'" validate:"required"`
 		Items       []InvoiceItem `json:"items" gorm:"foreignkey:InvoiceID" validate:"gt=0"`
 		IsCancelled bool          `json:"is_cancelled" gorm:"not null;default:false"`
 		IsPaid      bool          `json:"is_paid" gorm:"not null;default:false"`

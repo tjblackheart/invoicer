@@ -125,19 +125,19 @@ func TestHtml(t *testing.T) {
 		{mockInvoice.TotalNet.Format()},
 		{mockInvoice.TotalGross.Format()},
 		{mockInvoice.Currency},
-		{mockInvoice.Customer.TaxNumber},
+		{string(mockInvoice.Customer.TaxNumber)},
 		{string(mockInvoice.Customer.Address.Company)},
-		{mockInvoice.Customer.Address.FirstName},
-		{mockInvoice.Customer.Address.LastName},
+		{string(mockInvoice.Customer.Address.FirstName)},
+		{string(mockInvoice.Customer.Address.LastName)},
 		{string(mockInvoice.Customer.Address.Street)},
 		{string(mockInvoice.Customer.Address.City)},
 		{string(mockInvoice.Customer.Address.Zip)},
-		{mockUser.Settings.Company},
-		{mockUser.Settings.FirstName},
-		{mockUser.Settings.LastName},
-		{mockUser.Settings.City},
-		{mockUser.Settings.Street},
-		{mockUser.Settings.Zip},
+		{string(mockUser.Settings.Company)},
+		{string(mockUser.Settings.FirstName)},
+		{string(mockUser.Settings.LastName)},
+		{string(mockUser.Settings.City)},
+		{string(mockUser.Settings.Street)},
+		{string(mockUser.Settings.Zip)},
 	}
 
 	for _, tt := range tests {
@@ -154,17 +154,17 @@ func TestFooter(t *testing.T) {
 		haystack string
 		needle   string
 	}{
-		{g.footer.Left, mockUser.Settings.FirstName},
-		{g.footer.Left, mockUser.Settings.LastName},
-		{g.footer.Left, mockUser.Settings.Street},
-		{g.footer.Left, mockUser.Settings.Number},
-		{g.footer.Left, mockUser.Settings.Zip},
-		{g.footer.Center, mockUser.Settings.Bank},
-		{g.footer.Center, mockUser.Settings.IBAN},
-		{g.footer.Center, mockUser.Settings.BIC},
-		{g.footer.Right, mockUser.Settings.TaxNumber},
-		{g.footer.Right, mockUser.Settings.Email},
-		{g.footer.Right, mockUser.Settings.Phone},
+		{g.footer.Left, string(mockUser.Settings.FirstName)},
+		{g.footer.Left, string(mockUser.Settings.LastName)},
+		{g.footer.Left, string(mockUser.Settings.Street)},
+		{g.footer.Left, string(mockUser.Settings.Number)},
+		{g.footer.Left, string(mockUser.Settings.Zip)},
+		{g.footer.Center, string(mockUser.Settings.Bank)},
+		{g.footer.Center, string(mockUser.Settings.IBAN)},
+		{g.footer.Center, string(mockUser.Settings.BIC)},
+		{g.footer.Right, string(mockUser.Settings.TaxNumber)},
+		{g.footer.Right, string(mockUser.Settings.Email)},
+		{g.footer.Right, string(mockUser.Settings.Phone)},
 	}
 
 	for _, tt := range tests {

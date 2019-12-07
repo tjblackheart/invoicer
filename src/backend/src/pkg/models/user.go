@@ -23,31 +23,31 @@ type (
 	// Settings holds the settings per user
 	Settings struct {
 		BaseModel
-		InvoiceNumberPrefix  string `json:"invoice_number_prefix" gorm:"not null"`
-		CustomerNumberPrefix string `json:"customer_number_prefix" gorm:"not null"`
-		NextInvoiceNumber    uint   `json:"next_invoice_number" gorm:"not null"`
-		NextCustomerNumber   uint   `json:"next_customer_number" gorm:"not null"`
-		TaxNumber            string `json:"tax_number" gorm:"not null"`
-		Company              string `json:"company" gorm:"not null"`
-		FirstName            string `json:"first_name" gorm:"not null"`
-		LastName             string `json:"last_name" gorm:"not null"`
-		Street               string `json:"street"`
-		Number               string `json:"number"`
-		Zip                  string `json:"zip"`
-		City                 string `json:"city"`
-		Country              string `json:"country"`
-		Email                string `json:"email"`
-		Phone                string `json:"phone"`
-		Bank                 string `json:"bank"`
-		IBAN                 string `json:"iban"`
-		BIC                  string `json:"bic"`
-		UserID               uint   `json:"user_id"`
+		InvoiceNumberPrefix  trimmed `json:"invoice_number_prefix" gorm:"not null"`
+		CustomerNumberPrefix trimmed `json:"customer_number_prefix" gorm:"not null"`
+		NextInvoiceNumber    uint    `json:"next_invoice_number" gorm:"not null"`
+		NextCustomerNumber   uint    `json:"next_customer_number" gorm:"not null"`
+		TaxNumber            trimmed `json:"tax_number" gorm:"not null"`
+		Company              trimmed `json:"company" gorm:"not null"`
+		FirstName            trimmed `json:"first_name" gorm:"not null"`
+		LastName             trimmed `json:"last_name" gorm:"not null"`
+		Street               trimmed `json:"street"`
+		Number               trimmed `json:"number"`
+		Zip                  trimmed `json:"zip"`
+		City                 trimmed `json:"city"`
+		Country              trimmed `json:"country"`
+		Email                trimmed `json:"email"`
+		Phone                trimmed `json:"phone"`
+		Bank                 trimmed `json:"bank"`
+		IBAN                 trimmed `json:"iban"`
+		BIC                  trimmed `json:"bic"`
+		UserID               uint    `json:"user_id"`
 	}
 
 	// Credentials holds login form data
 	Credentials struct {
-		Email    string `json:"email"`
-		Password string `json:"password"`
+		Email    trimmed `json:"email"`
+		Password trimmed `json:"password"`
 	}
 )
 
