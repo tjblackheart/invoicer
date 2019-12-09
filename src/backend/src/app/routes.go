@@ -21,6 +21,7 @@ func (app Application) routes() *mux.Router {
 	api.HandleFunc("/invoice", app.createInvoice).Methods(http.MethodPost)
 	api.HandleFunc("/invoice/payment", app.setPaid).Methods(http.MethodPost)
 	api.HandleFunc("/invoice/pdf/{id:[0-9]+}", app.printInvoice).Methods(http.MethodGet)
+	api.HandleFunc("/invoice/cancel/{id:[0-9]+}", app.cancelInvoice).Methods(http.MethodPost)
 
 	api.HandleFunc("/customer/{id:[0-9]+}", app.getCustomer).Methods(http.MethodGet)
 	api.HandleFunc("/customer", app.getCustomers).Methods(http.MethodGet)

@@ -217,6 +217,26 @@ func (app Application) setPaid(w http.ResponseWriter, r *http.Request) {
 	app.json(w, invoices)
 }
 
+func (app Application) cancelInvoice(w http.ResponseWriter, r *http.Request) {
+	uuid, err := app.getUUID(r)
+	if err != nil {
+		app.error(w, err, http.StatusInternalServerError)
+		return
+	}
+
+	vars := mux.Vars(r)
+	invoice, err := models.FindInvoice(uuid, vars["id"])
+	if err != nil {
+		app.error(w, err, http.StatusNotFound)
+		return
+	}
+
+	invoice.IsCancelled = true
+	app.db.Save(&invoice)
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
 //
 
 func (app Application) getCustomer(w http.ResponseWriter, r *http.Request) {

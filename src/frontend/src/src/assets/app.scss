@@ -23,6 +23,12 @@ section.body {
   background: #f9f9f9;
 }
 
+tr.is-cancelled {
+  background: #f1f1f1;
+  color: #999 !important;
+  a, strong { color: #999; }
+}
+
 .fade-enter,
 .fade-leave-active {
   opacity: 0;

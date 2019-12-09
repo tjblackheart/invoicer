@@ -45,7 +45,9 @@
         <tbody>
           <tr
             v-for="invoice in invoices"
-            :key="invoice.id">
+            :key="invoice.id"
+            :class="{'is-cancelled': invoice.is_cancelled}"
+          >
             <td> {{ invoice.number }} </td>
             <td> {{ invoice.date|date }} </td>
             <td
@@ -64,20 +66,28 @@
                 {{ invoice.paid_at|date }}
               </span>
               <span v-else>
-                -
+                <span v-if="invoice.is_cancelled">CANCELLED</span>
+                <span v-else>-</span>
               </span>
             </td>
             <td class="has-text-right">
               <router-link :to="{name: 'invoice_details', params: {id:invoice.id}}">
                 View
               </router-link>
-              <span v-if="!invoice.is_paid">
+
+              <span v-if="!invoice.is_cancelled">
+                &middot;
+                <a href @click.prevent="cancel(invoice.id)">Cancel</a>
+              </span>
+
+              <span v-if="!invoice.is_paid && !invoice.is_cancelled">
                 &middot;
                 <a
                   @click.prevent="paymentModal(invoice.id)">
                   Toggle payment
                 </a>
               </span>
+
               &middot;
               <print-link :id="invoice.id" />
             </td>
@@ -187,6 +197,22 @@ export default {
         this.paymentError = e.message
       } finally {
         this.busy = false
+      }
+    },
+
+    async cancel(id) {
+      if (!confirm("Really cancel? This can not be undone.")) {
+        return
+      }
+
+      try {
+        await http.cancelInvoice(id)
+        this.invoices = await http.fetchInvoices()
+      } catch (error) {
+        this.setMessage({
+          text: error.message,
+          style: 'is-danger',
+        })
       }
     },
 

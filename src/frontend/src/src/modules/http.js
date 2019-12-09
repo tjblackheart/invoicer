@@ -88,6 +88,14 @@ export default {
     }
   },
 
+  async cancelInvoice (invoiceId) {
+    try {
+      await instance.post(`/api/invoice/cancel/${invoiceId}`)
+    } catch (err) {
+      this.handleError(err)
+    }
+  },
+
   async fetchCustomers () {
     try {
       const r = await instance.get('/api/customer')
