@@ -9,19 +9,19 @@
     />
 
     <div class="is-clearfix">
-      <p class="is-pulled-left">
+      <div class="is-pulled-left">
         <b-checkbox
           v-if="type === 'invoice'"
           v-model="showCancelled"
           label="Show cancelled invoices"
         />
-      </p>
-      <p
+      </div>
+      <div
         v-if="hasFilters"
         class="is-pulled-right"
       >
         <a href @click.prevent="resetFilters"> Reset all filters </a>
-      </p>
+      </div>
     </div>
   </div>
 </template>

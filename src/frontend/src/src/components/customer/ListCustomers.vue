@@ -103,7 +103,7 @@ export default {
             return c.number.includes(v)
               || c.address.company.toLowerCase().includes(v)
               || c.address.zip.includes(v)
-          }).length > 0
+          }).length
         })
       }
 

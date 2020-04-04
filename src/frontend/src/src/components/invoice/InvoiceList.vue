@@ -186,7 +186,7 @@ export default {
         items = items.filter(i => {
           return this.filters.filter(v => {
             return i.number.includes(v) || i.customer.address.company.toLowerCase().includes(v)
-          }).length > 0
+          }).length
         })
       }
 

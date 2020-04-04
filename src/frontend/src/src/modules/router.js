@@ -8,8 +8,8 @@ import InvoiceDetails from '@/components/invoice/InvoiceDetails.vue'
 import CustomerList from '@/components/customer/ListCustomers.vue'
 import CustomerCreate from '@/components/customer/CreateCustomer.vue'
 import Settings from '@/components/settings/Settings.vue'
-import Login from '@/components/user/Login.vue'
-import Register from '@/components/user/Register.vue'
+import Login from '@/components/auth/Login.vue'
+import Register from '@/components/auth/Register.vue'
 
 Vue.use(Router)
 
