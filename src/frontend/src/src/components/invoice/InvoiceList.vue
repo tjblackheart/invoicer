@@ -23,6 +23,18 @@
 
     <message />
 
+    <div class="field">
+      <div class="control">
+        <input
+          type="text"
+          class="input"
+          v-model="filterValue"
+          placeholder="Search ..."
+          @keydown.escape="resetSearch"
+        >
+      </div>
+    </div>
+
     <div class="table-container">
       <table
         v-if="invoices"
@@ -44,7 +56,7 @@
         </thead>
         <tbody>
           <tr
-            v-for="invoice in invoices"
+            v-for="invoice in filteredItems"
             :key="invoice.id"
             :class="{'is-cancelled': invoice.is_cancelled}"
           >
@@ -92,7 +104,7 @@
               <print-link :id="invoice.id" />
             </td>
           </tr>
-          <tr v-if="invoices.length == 0">
+          <tr v-if="filteredItems.length == 0">
             <td colspan="7">
               No invoices found.
             </td>
@@ -156,11 +168,24 @@ export default {
       activeInvoiceId: null,
       paymentError: null,
       paymentDate: null,
+      filterValue: '',
+      filterValues: [],
+      filteredItems: [],
     }
   },
 
   watch: {
     '$route': 'load',
+
+    filterValue () {
+      if (this.filterValue === '') {
+        this.resetSearch()
+        return
+      }
+
+      this.filterValues = this.filterValue.split(' ').filter(v => v.trim() !== '')
+      this.search()
+    }
   },
 
   created () {
@@ -175,6 +200,7 @@ export default {
     async load () {
       try {
         this.invoices = await http.fetchInvoices()
+        this.filteredItems = this.invoices
       } catch (error) {
         this.setMessage({
           text: error.message,
@@ -230,6 +256,22 @@ export default {
     dueDate (invoice) {
       return dayjs(invoice.date).add(invoice.due_days, 'days').format('DD.MM.YYYY')
     },
+
+    search () {
+      this.filteredItems = this.invoices.filter(i => {
+        return this.filterValues.filter(v => {
+          return i.number.includes(v)
+            || i.customer.address.company.toLowerCase().includes(v)
+            || i.customer.number.includes(v)
+        }).length > 0
+      })
+    },
+
+    resetSearch () {
+      this.filterValue = ''
+      this.filterValues = []
+      this.filteredItems = this.invoices
+    }
   },
 }
 </script>
