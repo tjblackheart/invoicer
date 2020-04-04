@@ -2,12 +2,8 @@
   <div>
     <div class="is-clearfix">
       <div class="is-pulled-left">
-        <h1 class="title is-4">
-          Invoices
-        </h1>
-        <h2 class="subtitle is-6">
-          All invoices
-        </h2>
+        <h1 class="title is-4"> Invoices </h1>
+        <h2 class="subtitle is-6"> All invoices </h2>
       </div>
 
       <div class="is-pulled-right">

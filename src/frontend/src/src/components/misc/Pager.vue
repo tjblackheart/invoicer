@@ -17,7 +17,7 @@
       class="pagination-next"
       @click.prevent="next"
     >
-      Next page
+      Next
     </a>
 
     <ul class="pagination-list">
