@@ -30,7 +30,7 @@
         class="table is-fullwidth">
         <thead>
           <tr>
-            <th>ID</th>
+            <!-- <th>ID</th> -->
             <th>Number</th>
             <th>Date</th>
             <th>Due</th>
@@ -49,7 +49,7 @@
             :key="i"
             :class="{'is-cancelled': invoice.is_cancelled}"
           >
-            <td> {{ invoice.id }} </td>
+            <!-- <td> {{ invoice.id }} </td> -->
             <td> {{ invoice.number }} </td>
             <td> {{ invoice.date|date }} </td>
             <td
@@ -234,6 +234,7 @@ export default {
     async load () {
       try {
         this.invoices = await http.fetchInvoices()
+        this.invoices.sort((a, b) => a.id < b.id ? 1 : -1)
       } catch (error) {
         this.setMessage({
           text: error.message,

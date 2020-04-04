@@ -17,17 +17,17 @@
           <div class="control">
             <button
               :class="['button is-primary', { 'is-loading': busy }]"
-              :disabled="checkErrors || (!checkErrors && dirty === false)"
+              :disabled="hasErrors || (!hasErrors && dirty === false)"
               @click="submit()"
             > Save changes
             </button>
           </div>
-          <p
-            v-if="checkErrors"
+          <!-- <p
+            v-if="hasErrors"
             class="help has-text-danger"
           >
             There are errors in the form.
-          </p>
+          </p> -->
         </div>
       </div>
     </div>
@@ -101,7 +101,7 @@ export default {
       return (item) ? item.view : this.items[0].view
     },
 
-    checkErrors () {
+    hasErrors () {
       return this.errors.some(e => e.errors)
     },
   },
@@ -144,7 +144,7 @@ export default {
     async submit () {
       try {
         this.clearMessage()
-        if (this.checkErrors()) {
+        if (this.hasErrors) {
           this.setMessage({
             text: 'There are errors in the submitted data. Please review.',
             style: 'is-danger',

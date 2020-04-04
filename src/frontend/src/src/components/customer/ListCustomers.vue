@@ -154,6 +154,7 @@ export default {
     async load () {
       try {
         this.customers = await http.fetchCustomers()
+        this.customers.sort((a, b) => a.id < b.id ? 1 : -1)
       } catch (error) {
         this.setMessage({
           text: error.message,

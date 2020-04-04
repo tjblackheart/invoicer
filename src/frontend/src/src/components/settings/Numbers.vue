@@ -16,7 +16,8 @@
       />
 
       <b-input
-        v-model="$v.value.settings.next_invoice_number.$model"
+        v-model.number="$v.value.settings.next_invoice_number.$model"
+        type="number"
         label="Next invoice number"
         id="s.i.next"
         :has-error="$v.value.settings.next_invoice_number.$error"
@@ -34,9 +35,10 @@
       />
 
       <b-input
-        v-model="$v.value.settings.next_customer_number.$model"
+        v-model.number="$v.value.settings.next_customer_number.$model"
         label="Next customer number"
         id="s.c.next"
+        type="number"
         :has-error="$v.value.settings.next_customer_number.$error"
         :helptext="$v.value.settings.next_customer_number.$error ? 'Please enter a number.' : ''"
         @input="validate('next_customer_number')"
