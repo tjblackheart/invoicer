@@ -1,82 +1,64 @@
 <template>
   <form @submit.prevent="submit">
-    <h3 class="title">
-      Register
-    </h3>
-    <p class="subtitle">
-      Create an account
-    </p>
+    <h3 class="title"> Register </h3>
+    <p class="subtitle"> Create an account </p>
 
     <message />
 
     <div
       v-if="!created"
-      class="box">
-      <form>
-        <div class="field">
-          <div class="control">
-            <input
-              v-model.trim="u.username"
-              class="input is-medium"
-              type="email"
-              placeholder="Your name"
-              autofocus>
-          </div>
-        </div>
+      class="box"
+    >
+        <b-input
+          v-model.trim="u.username"
+          id="u.username"
+          placeholder="Username"
+          autofocus
+        />
 
-        <div class="field">
-          <div class="control">
-            <input
-              v-model.trim="u.email"
-              class="input is-medium"
-              type="email"
-              placeholder="Email">
-          </div>
-        </div>
+        <b-input
+          v-model.trim="u.email"
+          id="u.email"
+          placeholder="Email"
+          type="email"
+        />
 
-        <hr>
+        <b-input
+          v-model="u.password"
+          id="u.password"
+          type="password"
+          placeholder="Password"
+        />
 
-        <div class="field">
-          <div class="control">
-            <input
-              v-model.trim="u.password"
-              class="input is-medium"
-              type="password"
-              placeholder="Password">
-          </div>
-        </div>
-
-        <div class="field">
-          <div class="control">
-            <input
-              v-model.trim="u.repeat_password"
-              class="input is-medium"
-              type="password"
-              placeholder="Repeat password">
-          </div>
-        </div>
+        <b-input
+          v-model="u.repeat_password"
+          id="u.repeat_passwd"
+          type="password"
+          placeholder="Repeat password"
+        />
 
         <hr>
 
         <div class="columns">
           <div class="column">
             <button
+              type="submit"
               :class="{'is-loading': busy}"
               :disabled="busy"
-              class="button is-block is-info is-medium is-fullwidth"
-              @click.prevent="submit">
-              Create
+              class="button is-block is-primary is-fullwidth"
+            > Create
             </button>
           </div>
+
           <div class="column">
             <button
-              class="button is-block is-medium is-fullwidth"
-              @click.prevent="$router.go(-1)">
-              Cancel
+              class="button is-block is-fullwidth"
+              @click.prevent="$router.go(-1)"
+            > Cancel
             </button>
           </div>
+
         </div>
-      </form>
     </div>
     <div v-else>
       <router-link to="/login">
@@ -90,10 +72,12 @@
 import { mapMutations } from 'vuex'
 import http from '@/modules/http'
 import Message from '@/components/misc/Message'
+import BInput from '@/components/fields/Input'
 
 export default {
   components: {
     Message,
+    BInput
   },
 
   data () {

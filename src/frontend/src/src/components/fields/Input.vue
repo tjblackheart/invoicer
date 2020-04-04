@@ -68,11 +68,21 @@ export default {
     hasError: {
       type: Boolean,
       default: false,
+    },
+    autofocus: {
+      type: Boolean,
+      default: false,
     }
   },
 
   components: {
     Help
+  },
+
+  mounted () {
+    if (this.autofocus) {
+      document.getElementById(this.id).focus()
+    }
   }
 }
 </script>

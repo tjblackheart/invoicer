@@ -196,11 +196,11 @@
     <hr>
 
     <div class="has-text-right">
-      <router-link
-        :to="{name: 'invoice_list'}"
-        class="button">
-        Back
-      </router-link>
+      <button
+        class="button"
+        @click="$router.push({ name: 'invoice_list' })"
+      > Back
+      </button>
     </div>
   </div>
 </template>

@@ -58,7 +58,11 @@ export default {
     helplink: {
       type: Object,
       default: () => {}
-    }
+    },
+    hasError: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   components: {

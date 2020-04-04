@@ -140,10 +140,9 @@ import { mapMutations } from 'vuex'
 import http from '@/modules/http'
 import dayjs from 'dayjs'
 import Message from '@/components/misc/Message'
-
 import Modal from '@/components/modals/Modal.vue'
+import BInput from '@/components/fields/Input'
 import PrintLink from './PrintLink.vue'
-import BInput from '../fields/Input'
 
 export default {
   components: {

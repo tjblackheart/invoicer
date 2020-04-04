@@ -1,43 +1,35 @@
 <template>
   <form @submit.prevent="submit">
-    <h3 class="title">
-      Login
-    </h3>
-    <p class="subtitle">
-      Please login to proceed.
-    </p>
+
+    <h3 class="title"> Login </h3>
+    <p class="subtitle"> Please login to proceed. </p>
 
     <message />
 
     <div class="box">
-      <form>
-        <div class="field">
-          <div class="control">
-            <input
-              v-model="credentials.email"
-              class="input is-medium"
-              type="email"
-              placeholder="Your Email"
-              autofocus>
-          </div>
-        </div>
-        <div class="field">
-          <div class="control">
-            <input
-              v-model="credentials.password"
-              class="input is-medium"
-              type="password"
-              placeholder="Your Password">
-          </div>
-        </div>
-        <button
-          :class="{'is-loading': busy}"
-          :disabled="busy"
-          class="button is-block is-info is-medium is-fullwidth"
-          @click.prevent="submit">
-          Login
-        </button>
-      </form>
+      <b-input
+        v-model="credentials.email"
+        id="c.email"
+        placeholder="Email"
+        type="email"
+        autofocus
+      />
+
+      <b-input
+        v-model="credentials.password"
+        id="c.passwd"
+        placeholder="Password"
+        type="password"
+      />
+
+      <button
+        type="submit"
+        :class="{'is-loading': busy}"
+        :disabled="busy"
+        class="button is-block is-primary is-fullwidth"
+      >
+        Login
+      </button>
     </div>
 
     <p class="has-text-grey has-text-centered">
@@ -53,10 +45,12 @@
 import { mapMutations } from 'vuex'
 import http from '@/modules/http'
 import Message from '@/components/misc/Message.vue'
+import BInput from '@/components/fields/Input'
 
 export default {
   components: {
     Message,
+    BInput
   },
 
   data () {
