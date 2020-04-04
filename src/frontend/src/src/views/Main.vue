@@ -1,7 +1,7 @@
 <template>
   <div>
     <navigation />
-    <section class="section body">
+    <section class="section">
       <div class="container">
         <transition
           name="fade"

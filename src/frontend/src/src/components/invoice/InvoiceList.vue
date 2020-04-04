@@ -195,7 +195,7 @@ export default {
       if (this.filters.length){
         items = items.filter(i => {
           return this.filters.filter(v => {
-            return i.number.includes(v) || i.customer.address.company.toLowerCase().includes(v)
+            return i.number.toLowerCase().includes(v) || i.customer.address.company.toLowerCase().includes(v)
           }).length
         })
       }

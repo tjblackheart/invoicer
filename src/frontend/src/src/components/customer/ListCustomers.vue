@@ -114,7 +114,7 @@ export default {
       if (this.filters.length) {
         items = this.customers.filter(c => {
           return this.filters.filter(v => {
-            return c.number.includes(v)
+            return c.number.toLowerCase().includes(v)
               || c.address.company.toLowerCase().includes(v)
               || c.address.zip.includes(v)
           }).length

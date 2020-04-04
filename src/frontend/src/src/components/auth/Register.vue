@@ -3,12 +3,12 @@
     <h3 class="title"> Register </h3>
     <p class="subtitle"> Create an account </p>
 
-    <message />
+    <hr>
 
     <div
       v-if="!created"
-      class="box"
     >
+      <div class="content">
         <b-input
           v-model.trim="u.username"
           id="u.username"
@@ -37,29 +37,24 @@
           placeholder="Repeat password"
         />
 
+        <message />
+
         <hr>
 
-        <div class="columns">
-          <div class="column">
-            <button
-              type="submit"
-              :class="{'is-loading': busy}"
-              :disabled="busy"
-              class="button is-block is-primary is-fullwidth"
-            > Create
-            </button>
-          </div>
+        <button
+          type="submit"
+          :class="{'is-loading': busy}"
+          :disabled="busy"
+          class="button is-block is-primary is-fullwidth"
+        > Register
+        </button>
+      </div>
 
-          <div class="column">
-            <button
-              class="button is-block is-fullwidth"
-              @click.prevent="$router.go(-1)"
-            > Cancel
-            </button>
-          </div>
-
-        </div>
+      <p class="has-text-grey has-text-centered">
+        <router-link :to="{ name: 'login' }"> No thanks </router-link>
+      </p>
     </div>
+
     <div v-else>
       <router-link to="/login">
         Back to login

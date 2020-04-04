@@ -4,9 +4,9 @@
     <h3 class="title"> Login </h3>
     <p class="subtitle"> Please login to proceed. </p>
 
-    <message />
+    <hr>
 
-    <div class="box">
+    <div class="content">
       <b-input
         v-model="credentials.email"
         id="c.email"
@@ -21,6 +21,10 @@
         placeholder="Password"
         type="password"
       />
+
+      <message />
+
+      <hr>
 
       <button
         type="submit"
