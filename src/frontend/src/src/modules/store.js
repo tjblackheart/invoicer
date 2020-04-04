@@ -14,6 +14,9 @@ export default new Vuex.Store({
       text: '',
       style: 'is-success',
     },
+    showCancelled: true,
+    filterValue: '',
+    filters: [],
   },
 
   getters: {
@@ -24,6 +27,9 @@ export default new Vuex.Store({
     username: state => state.user ? state.user.username : window.sessionStorage.getItem('username'),
     uuid: state => state.uuid || window.sessionStorage.getItem('uuid'),
     message: state => state.message,
+    showCancelled: state => state.showCancelled,
+    filterValue: state => state.filterValue,
+    filters: state => state.filters,
   },
 
   mutations: {
@@ -73,6 +79,15 @@ export default new Vuex.Store({
         text: '',
         style: 'is-success',
       }
+    },
+
+    showCancelled (state, value) {
+      state.showCancelled = Boolean(value)
+    },
+
+    filterValue (state, value) {
+      state.filterValue = value
+      state.filters = state.filterValue.split(' ').filter(v => v.trim() !== '')
     },
   },
 

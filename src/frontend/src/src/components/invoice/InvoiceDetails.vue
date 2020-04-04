@@ -198,7 +198,7 @@
     <div class="has-text-right">
       <button
         class="button"
-        @click="$router.push({ name: 'invoice_list' })"
+        @click="$router.go(-1)"
       > Back
       </button>
     </div>

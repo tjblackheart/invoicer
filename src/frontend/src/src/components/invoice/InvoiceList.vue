@@ -28,8 +28,23 @@
       id="search"
       v-model="filterValue"
       placeholder="Number, Company ..."
-      @escape="resetSearch"
+      @escape="filterValue = ''"
     />
+
+    <div class="content is-clearfix">
+      <p class="is-pulled-left">
+        <b-checkbox
+          v-model="showCancelled"
+          label="Show cancelled invoices"
+        />
+      </p>
+      <p
+        v-if="hasFilters"
+        class="is-pulled-right"
+      >
+        <a href @click.prevent="resetFilters"> Reset all filters </a>
+      </p>
+    </div>
 
     <div class="table-container">
       <table
@@ -52,8 +67,8 @@
         </thead>
         <tbody>
           <tr
-            v-for="invoice in filteredItems"
-            :key="invoice.id"
+            v-for="(invoice, i) in filteredItems"
+            :key="i"
             :class="{'is-cancelled': invoice.is_cancelled}"
           >
             <td> {{ invoice.number }} </td>
@@ -63,7 +78,10 @@
               {{ dueDate(invoice) }}
             </td>
             <td>
-              <router-link :to="{name: 'customer_details', params: {id:invoice.customer.id}}">
+              <router-link :to="{
+                name: 'customer_details',
+                params: { id:invoice.customer.id }
+              }">
                 {{ invoice.customer.address.company }}
               </router-link>
             </td>
@@ -142,6 +160,7 @@ import dayjs from 'dayjs'
 import Message from '@/components/misc/Message'
 import Modal from '@/components/modals/Modal.vue'
 import BInput from '@/components/fields/Input'
+import BCheckbox from '@/components/fields/Checkbox'
 import PrintLink from './PrintLink.vue'
 
 export default {
@@ -150,6 +169,7 @@ export default {
     Modal,
     PrintLink,
     BInput,
+    BCheckbox
   },
 
   data () {
@@ -161,28 +181,57 @@ export default {
       activeInvoiceId: null,
       paymentError: null,
       paymentDate: null,
-      filterValue: '',
-      filterValues: [],
-      filteredItems: [],
+    }
+  },
+
+  computed: {
+    filteredItems () {
+      let items = this.invoices
+
+      if (!this.showCancelled) {
+        items = items.filter(i => !i.is_cancelled)
+      }
+
+      if (this.filters.length){
+        items = items.filter(i => {
+          return this.filters.filter(v => {
+            return i.number.includes(v) || i.customer.address.company.toLowerCase().includes(v)
+          }).length > 0
+        })
+      }
+
+      return items
+    },
+
+    showCancelled: {
+      get () {
+        return this.$store.getters.showCancelled
+      },
+      set (val) {
+        this.$store.commit('showCancelled', val)
+      }
+    },
+
+    filterValue: {
+      get () {
+        return this.$store.getters.filterValue
+      },
+      set (val) {
+        this.$store.commit('filterValue', val)
+      }
+    },
+
+    filters () {
+      return this.$store.getters.filters
+    },
+
+    hasFilters () {
+      return this.showCancelled === false || this.filters.length
     }
   },
 
   watch: {
     '$route': 'load',
-
-    filterValue () {
-      if (this.filterValue === '') {
-        this.resetSearch()
-        return
-      }
-
-      this.filterValues = this.filterValue.split(' ').filter(v => v.trim() !== '')
-      this.search()
-    },
-
-    invoices () {
-      this.filteredItems = this.invoices
-    }
   },
 
   created () {
@@ -253,18 +302,9 @@ export default {
       return dayjs(invoice.date).add(invoice.due_days, 'days').format('DD.MM.YYYY')
     },
 
-    search () {
-      this.filteredItems = this.invoices.filter(i => {
-        return this.filterValues.filter(v => {
-          return i.number.includes(v) || i.customer.address.company.toLowerCase().includes(v)
-        }).length > 0
-      })
-    },
-
-    resetSearch () {
+    resetFilters () {
+      this.showCancelled = true
       this.filterValue = ''
-      this.filterValues = []
-      this.filteredItems = this.invoices
     }
   },
 }
