@@ -23,12 +23,9 @@
 
     <message />
 
-    <b-input
-      type="text"
-      id="search"
-      v-model="filterValue"
+    <search
       placeholder="Number, Name, Zipcode ..."
-      @escape="resetSearch"
+      type="customers"
     />
 
     <div class="table-container">
@@ -77,40 +74,45 @@
 import { mapMutations } from 'vuex'
 import http from '@/modules/http'
 import Message from '@/components/misc/Message'
-import BInput from '@/components/fields/Input'
+import Search from '@/components/misc/Search'
 
 export default {
   components: {
     Message,
-    BInput,
+    Search,
   },
 
   data () {
     return {
       customers: [],
       busy: false,
-      filterValue: '',
-      filterValues: [],
-      filteredItems: [],
+    }
+  },
+
+  computed: {
+    filters () {
+      return this.$store.getters.filters
+    },
+
+    filteredItems () {
+      let items = this.customers
+
+      if (this.filters.length) {
+        items = this.customers.filter(c => {
+          return this.filters.filter(v => {
+            return c.number.includes(v)
+              || c.address.company.toLowerCase().includes(v)
+              || c.address.zip.includes(v)
+          }).length > 0
+        })
+      }
+
+      return items
     }
   },
 
   watch: {
     '$route': 'load',
-
-    filterValue () {
-      if (this.filterValue === '') {
-        this.resetSearch()
-        return
-      }
-
-      this.filterValues = this.filterValue.split(' ').filter(v => v.trim() !== '')
-      this.search()
-    },
-
-    customers () {
-      this.filteredItems = this.customers
-    }
   },
 
   created () {
@@ -151,22 +153,14 @@ export default {
     close () {
       this.showModal = false
     },
+  },
 
-    search () {
-      this.filteredItems = this.customers.filter(c => {
-        return this.filterValues.filter(v => {
-          return c.number.includes(v)
-            || c.address.company.toLowerCase().includes(v)
-            || c.address.zip.includes(v)
-        }).length > 0
-      })
-    },
-
-    resetSearch () {
-      this.filterValue = ''
-      this.filterValues = []
-      this.filteredItems = this.customers
-    }
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      if (from.name && !from.name.includes('customer')) {
+        vm.$store.commit('filterValue', '')
+      }
+    })
   },
 }
 </script>

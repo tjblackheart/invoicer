@@ -23,28 +23,10 @@
 
     <message />
 
-    <b-input
-      type="text"
-      id="search"
-      v-model="filterValue"
+    <search
       placeholder="Number, Company ..."
-      @escape="filterValue = ''"
+      type="invoice"
     />
-
-    <div class="content is-clearfix">
-      <p class="is-pulled-left">
-        <b-checkbox
-          v-model="showCancelled"
-          label="Show cancelled invoices"
-        />
-      </p>
-      <p
-        v-if="hasFilters"
-        class="is-pulled-right"
-      >
-        <a href @click.prevent="resetFilters"> Reset all filters </a>
-      </p>
-    </div>
 
     <div class="table-container">
       <table
@@ -120,7 +102,7 @@
           </tr>
           <tr v-if="filteredItems.length == 0">
             <td colspan="7">
-              No invoices found.
+              Nothing found.
             </td>
           </tr>
         </tbody>
@@ -160,8 +142,8 @@ import dayjs from 'dayjs'
 import Message from '@/components/misc/Message'
 import Modal from '@/components/modals/Modal.vue'
 import BInput from '@/components/fields/Input'
-import BCheckbox from '@/components/fields/Checkbox'
-import PrintLink from './PrintLink.vue'
+import PrintLink from './PrintLink'
+import Search from '@/components/misc/Search'
 
 export default {
   components: {
@@ -169,7 +151,7 @@ export default {
     Modal,
     PrintLink,
     BInput,
-    BCheckbox
+    Search,
   },
 
   data () {
@@ -185,6 +167,14 @@ export default {
   },
 
   computed: {
+    showCancelled () {
+      return this.$store.getters.showCancelled
+    },
+
+    filters () {
+      return this.$store.getters.filters
+    },
+
     filteredItems () {
       let items = this.invoices
 
@@ -202,32 +192,6 @@ export default {
 
       return items
     },
-
-    showCancelled: {
-      get () {
-        return this.$store.getters.showCancelled
-      },
-      set (val) {
-        this.$store.commit('showCancelled', val)
-      }
-    },
-
-    filterValue: {
-      get () {
-        return this.$store.getters.filterValue
-      },
-      set (val) {
-        this.$store.commit('filterValue', val)
-      }
-    },
-
-    filters () {
-      return this.$store.getters.filters
-    },
-
-    hasFilters () {
-      return this.showCancelled === false || this.filters.length
-    }
   },
 
   watch: {
@@ -301,11 +265,15 @@ export default {
     dueDate (invoice) {
       return dayjs(invoice.date).add(invoice.due_days, 'days').format('DD.MM.YYYY')
     },
+  },
 
-    resetFilters () {
-      this.showCancelled = true
-      this.filterValue = ''
-    }
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      if (from.name && !from.name.includes('invoice')) {
+        vm.$store.commit('filterValue', '')
+        vm.$store.commit('showCancelled', true)
+      }
+    })
   },
 }
 </script>
