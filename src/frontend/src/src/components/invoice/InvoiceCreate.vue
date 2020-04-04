@@ -13,102 +13,55 @@
 
     <form @submit.prevent="submit">
       <div class="columns">
+
         <div class="column">
-          <div class="field">
-            <label class="label">
-              Number:
-            </label>
-            <div class="control">
-              <div class="control">
-                <input
-                  :value="invoice.number"
-                  type="text"
-                  class="input"
-                  disabled>
-                <p class="help">
-                  <router-link :to="{name: 'settings'}">
-                    Edit ...
-                  </router-link>
-                </p>
-              </div>
-            </div>
+            <b-input
+              :value="invoice.number"
+              type="text"
+              label="Number"
+              id="i.number"
+              disabled
+              :helplink="{ to: 'settings', text: 'Edit ... ' }"
+            />
           </div>
+
+        <div class="column">
+          <b-select
+            v-model="invoice.currency"
+            label="Currency"
+            id="i.currency"
+            :options="currencies"
+          />
         </div>
 
         <div class="column">
-          <div class="field">
-            <label class="label">
-              Currency
-            </label>
-            <div class="control">
-              <div class="select is-fullwidth">
-                <select v-model="invoice.currency">
-                  <option value="EUR">
-                    EUR
-                  </option>
-                </select>
-              </div>
-            </div>
-          </div>
+          <b-select
+            v-model.number="invoice.customer_id"
+            label="Customer"
+            id="i.customer"
+            :options="customerSelect"
+            :helplink="{ to: 'customer_create', text: 'Add customer ...' }"
+          />
         </div>
 
         <div class="column">
-          <div class="field">
-            <label class="label">
-              Customer
-            </label>
-            <div class="control">
-              <div
-                v-if="customers.length != 0"
-                class="select is-fullwidth">
-                <select v-model="invoice.customer_id">
-                  <option
-                    v-for="c in customers"
-                    :key="c.id"
-                    :value="c.id">
-                    {{ c.address.company }}
-                  </option>
-                </select>
-              </div>
-              <p v-else>
-                No customers found.
-              </p>
-              <p class="help">
-                <router-link :to="{name: 'customer_create'}">
-                  Add customer ...
-                </router-link>
-              </p>
-            </div>
-          </div>
+          <b-input
+            v-model="formattedDate"
+            type="date"
+            label="Date"
+            id="i.date"
+          />
         </div>
 
         <div class="column">
-          <div class="field">
-            <label class="label">
-              Date
-            </label>
-            <div class="control">
-              <input
-                v-model="formattedDate"
-                type="date"
-                class="input">
-            </div>
-          </div>
+          <b-input
+            v-model.number="invoice.due_days"
+            type="number"
+            label="Due days"
+            id="i.due_days"
+          />
         </div>
 
-        <div class="column">
-          <div class="field">
-            <label class="label">
-              Due days
-            </label>
-            <div class="control">
-              <input
-                v-model.number="invoice.due_days"
-                type="number"
-                class="input">
-            </div>
-          </div>
-        </div>
       </div>
 
       <hr>
@@ -200,11 +153,11 @@
           @click.prevent="submit">
           Create
         </button> &nbsp;
-        <router-link
-          :to="{ name: 'invoice_list' }"
-          class="button">
-          Cancel
-        </router-link>
+        <button
+          class="button"
+          @click="$router.push({ name: 'invoice_list' })"
+        > Cancel
+        </button>
       </div>
     </form>
 
@@ -234,9 +187,12 @@
 <script>
 import { mapMutations } from 'vuex'
 import http from '@/modules/http'
-import Modal from '@/components/misc/Modal'
-import ItemForm from '@/components/forms/CreateItem'
+import Modal from '@/components/modals/Modal'
+import ItemForm from '@/components/modals/Item'
+
 import Message from '@/components/misc/Message'
+import BInput from '@/components/fields/Input'
+import BSelect from '@/components/fields/Select'
 
 import dayjs from 'dayjs'
 import dayjsPluginUTC from 'dayjs-plugin-utc'
@@ -250,6 +206,8 @@ export default {
     Modal,
     ItemForm,
     Message,
+    BInput,
+    BSelect,
   },
 
   data () {
@@ -274,6 +232,9 @@ export default {
       edit: false,
       busy: false,
       itemFormError: '',
+      currencies: [
+        {value: 'EUR', text: 'EUR'},
+      ],
     }
   },
 
@@ -290,6 +251,12 @@ export default {
         this.invoice.date = dayjs.utc(value).toJSON()
       },
     },
+
+    customerSelect () {
+      return this.customers.map(c => {
+        return { value: c.id, text: c.address.company }
+      })
+    }
   },
 
   created () {

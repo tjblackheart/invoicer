@@ -17,129 +17,85 @@
     <hr>
 
     <form @submit.prevent="submit">
-      <div class="field">
-        <div class="control">
-          Number: <b> {{ customer.number }} </b>
-          <p
-            v-if="!edit"
-            class="help">
-            <router-link :to="{name: 'settings'}">
-              Edit ...
-            </router-link>
-          </p>
-        </div>
-      </div>
+      <b-text
+        :text="'Number: <b>' + customer.number + '</b>'"
+        :helplink="{ to: 'settings', text: 'Edit ...' }"
+      />
 
       <hr>
 
       <div class="columns">
         <div class="column">
-          <h3 class="title is-6">
-            Address
-          </h3>
+          <h3 class="title is-6"> Address </h3>
 
-          <div class="field">
-            <div class="control">
-              <input
-                v-model.trim="customer.address.company"
-                class="input"
-                type="text"
-                placeholder="Company">
+          <b-input
+            v-model.trim="customer.address.company"
+            type="text"
+            id="c.company"
+            placeholder="Company"
+          />
+
+          <div class="columns nm">
+            <div class="column">
+              <b-input
+                v-model.trim="customer.address.first_name"
+                id="c.firstname"
+                placeholder="First name"
+              />
+            </div>
+            <div class="column">
+              <b-input
+                v-model.trim="customer.address.last_name"
+                id="c.lastname"
+                placeholder="Last name"
+              />
             </div>
           </div>
 
-          <div class="field">
-            <div class="columns">
-              <div class="column">
-                <div class="control">
-                  <input
-                    v-model.trim="customer.address.first_name"
-                    class="input"
-                    type="text"
-                    placeholder="First name">
-                </div>
-              </div>
-              <div class="column">
-                <div class="control">
-                  <input
-                    v-model.trim="customer.address.last_name"
-                    class="input"
-                    type="text"
-                    placeholder="Last name">
-                </div>
-              </div>
+          <div class="columns nm">
+            <div class="column is-9">
+              <b-input
+                v-model.trim="customer.address.street"
+                id="c.street"
+                placeholder="Street"
+              />
+            </div>
+            <div class="column">
+              <b-input
+                v-model.trim="customer.address.number"
+                id="c.number"
+                placeholder="Number"
+              />
             </div>
           </div>
 
-          <div class="field">
-            <div class="columns">
-              <div class="column is-9">
-                <div class="control">
-                  <input
-                    v-model.trim="customer.address.street"
-                    class="input"
-                    type="text"
-                    placeholder="Street">
-                </div>
-              </div>
-              <div class="column is-3">
-                <div class="control">
-                  <input
-                    v-model.trim="customer.address.number"
-                    class="input"
-                    type="text"
-                    placeholder="Number">
-                </div>
-              </div>
-            </div>
-          </div>
+          <b-input
+            v-model.trim="customer.address.zip"
+            id="c.zip"
+            placeholder="Zipcode"
+          />
 
-          <div class="field">
-            <div class="control">
-              <input
-                v-model.trim="customer.address.zip"
-                class="input"
-                type="text"
-                placeholder="Zip code">
-            </div>
-          </div>
+          <b-input
+            v-model.trim="customer.address.city"
+            id="c.city"
+            placeholder="City"
+          />
 
-          <div class="field">
-            <div class="control">
-              <input
-                v-model.trim="customer.address.city"
-                class="input"
-                type="text"
-                placeholder="City">
-            </div>
-          </div>
-
-          <div class="field">
-            <div class="control">
-              <input
-                v-model.trim="customer.address.country"
-                class="input"
-                type="text"
-                placeholder="Country">
-            </div>
-          </div>
+          <b-input
+            v-model.trim="customer.address.country"
+            id="c.country"
+            placeholder="Country"
+          />
         </div>
 
         <div class="column">
-          <h3 class="title is-6">
-            VAT ID
-          </h3>
+          <h3 class="title is-6"> VAT ID </h3>
 
-          <div class="field">
-            <div class="control">
-              <input
-                v-model.trim="customer.tax_number"
-                class="input"
-                type="text"
-                placeholder="VAT ID"
-                title="VAT ID">
-            </div>
-          </div>
+          <b-input
+            v-model.trim="customer.tax_number"
+            id="c.tax_id"
+            placeholder="VATID"
+          />
 
           <hr>
 
@@ -199,19 +155,16 @@
         <div slot="content">
           <contact-form
             :contact="contact"
-            :edit="editc" />
+            :edit="isEdit" />
         </div>
 
         <button
           slot="action"
           class="button is-primary"
-          @click.prevent="addContact">
-          <span v-if="!editc">
-            Add
-          </span>
-          <span v-else>
-            Edit
-          </span>
+          @click.prevent="addContact"
+        >
+          <span v-if="!isEdit"> Add </span>
+          <span v-else> Edit </span>
         </button>
       </modal>
     </form>
@@ -221,9 +174,12 @@
 <script>
 import { mapMutations } from 'vuex'
 import http from '@/modules/http'
-import Modal from '@/components/misc/Modal.vue'
-import ContactForm from '@/components/forms/CreateContact.vue'
+import Modal from '@/components/modals/Modal.vue'
+import ContactForm from '@/components/modals/Contact.vue'
 import Message from '@/components/misc/Message'
+
+import BText from '@/components/fields/Text'
+import BInput from '@/components/fields/Input'
 
 const { required } = require('vuelidate/lib/validators')
 
@@ -232,6 +188,8 @@ export default {
     Modal,
     ContactForm,
     Message,
+    BText,
+    BInput,
   },
 
   data () {
@@ -251,7 +209,7 @@ export default {
         value: '',
       },
       edit: false,
-      editc: false,
+      isEdit: false,
       busy: false,
       addContactError: '',
     }
@@ -259,7 +217,7 @@ export default {
 
   computed: {
     title () {
-      return !this.editc ? 'Add contact' : 'Edit contact'
+      return !this.isEdit ? 'Add contact' : 'Edit contact'
     },
   },
 
@@ -324,17 +282,17 @@ export default {
       this.addContactError = ''
       this.contact = { type: 'Email', value: '' }
       this.showModal = false
-      this.editc = false
+      this.isEdit = false
     },
 
     addContact () {
       this.$v.$touch()
 
       if (!this.$v.$error) {
-        if (!this.editc) {
+        if (!this.isEdit) {
           this.customer.contacts.push(this.contact)
         } else {
-          this.editc = false
+          this.isEdit = false
         }
 
         this.contact = { type: 'Email', value: '' }
@@ -346,7 +304,7 @@ export default {
 
     editContact (index) {
       this.addContactError = ''
-      this.editc = true
+      this.isEdit = true
       this.contact = this.customer.contacts[index]
       this.showModal = true
     },
@@ -379,3 +337,7 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+  .nm { margin-bottom: 0 !important; }
+</style>

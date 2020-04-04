@@ -6,141 +6,93 @@
     </h3>
 
     <div class="fieldset">
-      <div class="field">
-        <label class="label">
-          Name
-        </label>
-        <div class="control">
-          <div class="control">
-            <input
-              v-model="$v.value.settings.company.$model"
-              type="text"
-              :class="['input', { 'is-danger': $v.value.settings.company.$error }]"
-              @keyup="validate('company')">
-          </div>
-        </div>
-      </div>
+      <b-input
+        v-model="$v.value.settings.company.$model"
+        label="Company"
+        id="s.company"
+        :has-error="$v.value.settings.company.$error"
+        :helptext="$v.value.settings.company.$error ? 'Please enter a company.' : ''"
+        @input="validate('company')"
+      />
 
       <div class="columns">
         <div class="column">
-          <div class="field">
-            <label class="label">
-              First name
-            </label>
-            <div class="control">
-              <div class="control">
-                <input
-                  v-model="$v.value.settings.first_name.$model"
-                  type="text"
-                  :class="['input', { 'is-danger': $v.value.settings.first_name.$error }]"
-                  @keyup="validate('company')">
-              </div>
-            </div>
-          </div>
+          <b-input
+            v-model="$v.value.settings.first_name.$model"
+            label="First name"
+            id="s.first_name"
+            :has-error="$v.value.settings.first_name.$error"
+            :helptext="$v.value.settings.first_name.$error ? 'Please enter a first name.' : ''"
+            @input="validate('first_name')"
+          />
         </div>
         <div class="column">
-          <div class="field">
-            <label class="label">
-              Last name
-            </label>
-            <div class="control">
-              <div class="control">
-                <input
-                  v-model="$v.value.settings.last_name.$model"
-                  type="text"
-                  :class="['input', { 'is-danger': $v.value.settings.last_name.$error }]"
-                  @keyup="validate('last_name')">
-              </div>
-            </div>
-          </div>
+          <b-input
+            v-model="$v.value.settings.last_name.$model"
+            label="Last name"
+            id="s.last_name"
+            :has-error="$v.value.settings.last_name.$error"
+            :helptext="$v.value.settings.last_name.$error ? 'Please enter a last name.' : ''"
+            @input="validate('last_name')"
+          />
         </div>
       </div>
 
-      <div class="columns">
+      <div class="columns nm">
         <div class="column is-9">
-          <div class="field">
-            <label class="label">
-              Street
-            </label>
-            <div class="control">
-              <div class="control">
-                <input
-                  v-model="$v.value.settings.street.$model"
-                  type="text"
-                  :class="['input', { 'is-danger': $v.value.settings.street.$error }]"
-                  @keyup="validate('street')">
-              </div>
-            </div>
-          </div>
+          <b-input
+            v-model="$v.value.settings.street.$model"
+            label="Street"
+            id="s.street"
+            :has-error="$v.value.settings.street.$error"
+            :helptext="$v.value.settings.street.$error ? 'Please enter a street.' : ''"
+            @input="validate('street')"
+          />
         </div>
         <div class="column">
-          <div class="field">
-            <label class="label">
-              Number
-            </label>
-            <div class="control">
-              <div class="control">
-                <input
-                  v-model="$v.value.settings.number.$model"
-                  type="text"
-                  :class="['input', { 'is-danger': $v.value.settings.number.$error }]"
-                  @keyup="validate('number')">
-              </div>
-            </div>
-          </div>
+          <b-input
+            v-model="$v.value.settings.number.$model"
+            label="Number"
+            id="s.number"
+            :has-error="$v.value.settings.number.$error"
+            :helptext="$v.value.settings.number.$error ? 'Please enter a number.' : ''"
+            @input="validate('number')"
+          />
         </div>
       </div>
 
       <div class="columns">
         <div class="column is-3">
-          <div class="field">
-            <label class="label">
-              Zip
-            </label>
-            <div class="control">
-              <div class="control">
-                <input
-                  v-model="$v.value.settings.zip.$model"
-                  type="text"
-                  :class="['input', { 'is-danger': $v.value.settings.zip.$error }]"
-                  @keyup="validate('zip')">
-              </div>
-            </div>
-          </div>
+          <b-input
+            v-model="$v.value.settings.zip.$model"
+            label="Zipcode"
+            id="s.zipcode"
+            :has-error="$v.value.settings.zip.$error"
+            :helptext="$v.value.settings.zip.$error ? 'Please enter a zipcode.' : ''"
+            @input="validate('zip')"
+          />
         </div>
 
         <div class="column is-9">
-          <div class="field">
-            <label class="label">
-              City
-            </label>
-            <div class="control">
-              <div class="control">
-                <input
-                  v-model="$v.value.settings.city.$model"
-                  type="text"
-                  :class="['input', { 'is-danger': $v.value.settings.city.$error }]"
-                  @keyup="validate('city')">
-              </div>
-            </div>
-          </div>
+          <b-input
+            v-model="$v.value.settings.city.$model"
+            label="City"
+            id="s.city"
+            :has-error="$v.value.settings.city.$error"
+            :helptext="$v.value.settings.city.$error ? 'Please enter a city.' : ''"
+            @input="validate('city')"
+          />
         </div>
       </div>
 
-      <div class="field">
-        <label class="label">
-          Country
-        </label>
-        <div class="control">
-          <div class="control">
-            <input
-              v-model="$v.value.settings.country.$model"
-              type="text"
-              :class="['input', { 'is-danger': $v.value.settings.country.$error }]"
-              @keyup="validate('country')">
-          </div>
-        </div>
-      </div>
+      <b-input
+        v-model="$v.value.settings.country.$model"
+        label="Country"
+        id="s.country"
+        :has-error="$v.value.settings.country.$error"
+        :helptext="$v.value.settings.country.$error ? 'Please enter a country.' : ''"
+        @input="validate('country')"
+      />
     </div>
   </div>
 </template>
@@ -149,10 +101,12 @@
 import Icon from 'vue-awesome/components/Icon'
 import 'vue-awesome/icons/address-card'
 const { required } = require('vuelidate/lib/validators')
+import BInput from '@/components/fields/Input'
 
 export default {
   components: {
     Icon,
+    BInput,
   },
 
   props: {

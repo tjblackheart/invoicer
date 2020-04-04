@@ -6,42 +6,32 @@
     </h3>
 
     <div class="fieldset">
-      <div class="field">
-        <label class="label">
-          Bank
-        </label>
-        <div class="control">
-          <input
-            v-model="$v.value.settings.bank.$model"
-            type="text"
-            :class="['input', { 'is-danger': $v.value.settings.bank.$error }]"
-            @keyup="validate('bank')">
-        </div>
-      </div>
-      <div class="field">
-        <label class="label">
-          IBAN
-        </label>
-        <div class="control">
-          <input
-            v-model="$v.value.settings.iban.$model"
-            type="text"
-            :class="['input', { 'is-danger': $v.value.settings.iban.$error }]"
-            @keyup="validate('iban')">
-        </div>
-      </div>
-      <div class="field">
-        <label class="label">
-          BIC
-        </label>
-        <div class="control">
-          <input
-            v-model="$v.value.settings.bic.$model"
-            type="text"
-            :class="['input', { 'is-danger': $v.value.settings.bic.$error }]"
-            @keyup="validate('bic')">
-        </div>
-      </div>
+      <b-input
+        v-model="$v.value.settings.bank.$model"
+        label="Bank"
+        id="s.bank"
+        :has-error="$v.value.settings.bank.$error"
+        :helptext="$v.value.settings.bank.$error ? 'Please enter a name.' : ''"
+        @input="validate('bank')"
+      />
+
+      <b-input
+        v-model="$v.value.settings.iban.$model"
+        label="IBAN"
+        id="s.iban"
+        :has-error="$v.value.settings.iban.$error"
+        :helptext="$v.value.settings.iban.$error ? 'Please enter a valid IBAN.' : ''"
+        @input="validate('iban')"
+      />
+
+      <b-input
+        v-model="$v.value.settings.bic.$model"
+        label="BIC"
+        id="s.bic"
+        :has-error="$v.value.settings.bic.$error"
+        :helptext="$v.value.settings.bic.$error ? 'Please enter a BIC.' : ''"
+        @input="validate('bic')"
+      />
     </div>
   </div>
 </template>
@@ -50,10 +40,12 @@
 import Icon from 'vue-awesome/components/Icon'
 import 'vue-awesome/icons/university'
 const { required } = require('vuelidate/lib/validators')
+import BInput from '@/components/fields/Input'
 
 export default {
   components: {
     Icon,
+    BInput,
   },
 
   props: {

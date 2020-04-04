@@ -23,17 +23,13 @@
 
     <message />
 
-    <div class="field">
-      <div class="control">
-        <input
-          type="text"
-          class="input"
-          v-model="filterValue"
-          placeholder="Search ..."
-          @keydown.escape="resetSearch"
-        >
-      </div>
-    </div>
+    <b-input
+      type="text"
+      id="search"
+      v-model="filterValue"
+      placeholder="Number, Company ..."
+      @escape="resetSearch"
+    />
 
     <div class="table-container">
       <table
@@ -119,17 +115,12 @@
       :error="paymentError"
       @close="close">
       <div slot="content">
-        <div class="field">
-          <label class="label">
-            Payment date
-          </label>
-          <div class="control">
-            <input
-              v-model="paymentDate"
-              class="input"
-              type="date">
-          </div>
-        </div>
+        <b-input
+          v-model="paymentDate"
+          type="date"
+          label="Payment date"
+          id="p.date"
+        />
       </div>
 
       <button
@@ -149,14 +140,17 @@ import { mapMutations } from 'vuex'
 import http from '@/modules/http'
 import dayjs from 'dayjs'
 import Message from '@/components/misc/Message'
-import Modal from '@/components/misc/Modal.vue'
+
+import Modal from '@/components/modals/Modal.vue'
 import PrintLink from './PrintLink.vue'
+import BInput from '../fields/Input'
 
 export default {
   components: {
     Message,
     Modal,
     PrintLink,
+    BInput,
   },
 
   data () {
@@ -185,6 +179,10 @@ export default {
 
       this.filterValues = this.filterValue.split(' ').filter(v => v.trim() !== '')
       this.search()
+    },
+
+    invoices () {
+      this.filteredItems = this.invoices
     }
   },
 
@@ -200,7 +198,6 @@ export default {
     async load () {
       try {
         this.invoices = await http.fetchInvoices()
-        this.filteredItems = this.invoices
       } catch (error) {
         this.setMessage({
           text: error.message,
@@ -260,9 +257,7 @@ export default {
     search () {
       this.filteredItems = this.invoices.filter(i => {
         return this.filterValues.filter(v => {
-          return i.number.includes(v)
-            || i.customer.address.company.toLowerCase().includes(v)
-            || i.customer.number.includes(v)
+          return i.number.includes(v) || i.customer.address.company.toLowerCase().includes(v)
         }).length > 0
       })
     },

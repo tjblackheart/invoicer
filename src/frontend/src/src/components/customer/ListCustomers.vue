@@ -23,9 +23,17 @@
 
     <message />
 
+    <b-input
+      type="text"
+      id="search"
+      v-model="filterValue"
+      placeholder="Number, Name, Zipcode ..."
+      @escape="resetSearch"
+    />
+
     <div class="table-container">
       <table
-        v-if="customers"
+        v-if="filteredItems"
         class="table is-fullwidth">
         <thead>
           <tr>
@@ -39,7 +47,7 @@
         </thead>
         <tbody>
           <tr
-            v-for="customer in customers"
+            v-for="customer in filteredItems"
             :key="customer.id">
             <td> {{ customer.number }} </td>
             <td> {{ customer.address.company }} </td>
@@ -69,21 +77,40 @@
 import { mapMutations } from 'vuex'
 import http from '@/modules/http'
 import Message from '@/components/misc/Message'
+import BInput from '@/components/fields/Input'
 
 export default {
   components: {
     Message,
+    BInput,
   },
 
   data () {
     return {
       customers: [],
       busy: false,
+      filterValue: '',
+      filterValues: [],
+      filteredItems: [],
     }
   },
 
   watch: {
     '$route': 'load',
+
+    filterValue () {
+      if (this.filterValue === '') {
+        this.resetSearch()
+        return
+      }
+
+      this.filterValues = this.filterValue.split(' ').filter(v => v.trim() !== '')
+      this.search()
+    },
+
+    customers () {
+      this.filteredItems = this.customers
+    }
   },
 
   created () {
@@ -124,6 +151,22 @@ export default {
     close () {
       this.showModal = false
     },
+
+    search () {
+      this.filteredItems = this.customers.filter(c => {
+        return this.filterValues.filter(v => {
+          return c.number.includes(v)
+            || c.address.company.toLowerCase().includes(v)
+            || c.address.zip.includes(v)
+        }).length > 0
+      })
+    },
+
+    resetSearch () {
+      this.filterValue = ''
+      this.filterValues = []
+      this.filteredItems = this.customers
+    }
   },
 }
 </script>

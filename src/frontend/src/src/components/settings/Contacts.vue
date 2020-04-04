@@ -5,35 +5,23 @@
     </h3>
 
     <div class="fieldset">
-      <div class="field">
-        <label class="label">
-          Company email
-        </label>
-        <div class="control">
-          <div class="control">
-            <input
-              v-model="$v.value.settings.email.$model"
-              type="text"
-              :class="['input', { 'is-danger': $v.value.settings.email.$error }]"
-              @keyup="validate('email')">
-          </div>
-        </div>
-      </div>
+      <b-input
+        v-model="$v.value.settings.email.$model"
+        label="Email"
+        id="s.email"
+        :has-error="$v.value.settings.email.$error"
+        :helptext="$v.value.settings.email.$error ? 'Please enter a valid email.' : ''"
+        @input="validate('email')"
+      />
 
-      <div class="field">
-        <label class="label">
-          Phone
-        </label>
-        <div class="control">
-          <div class="control">
-            <input
-              v-model="$v.value.settings.phone.$model"
-              type="text"
-              :class="['input', { 'is-danger': $v.value.settings.phone.$error }]"
-              @keyup="validate('phone')">
-          </div>
-        </div>
-      </div>
+      <b-input
+        v-model="$v.value.settings.phone.$model"
+        label="Phone"
+        id="s.phone"
+        :has-error="$v.value.settings.phone.$error"
+        :helptext="$v.value.settings.phone.$error ? 'Please enter a phone.' : ''"
+        @input="validate('phone')"
+      />
     </div>
   </div>
 </template>
@@ -42,10 +30,12 @@
 import Icon from 'vue-awesome/components/Icon'
 import 'vue-awesome/icons/envelope'
 const { required, email } = require('vuelidate/lib/validators')
+import BInput from '@/components/fields/Input'
 
 export default {
   components: {
     Icon,
+    BInput
   },
 
   props: {

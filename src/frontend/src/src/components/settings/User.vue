@@ -5,31 +5,23 @@
     </h3>
 
     <div class="fieldset">
-      <div class="field">
-        <label class="label">
-          Username
-        </label>
-        <div class="control">
-          <input
-            v-model.trim="$v.value.username.$model"
-            type="text"
-            :class="['input', { 'is-danger': $v.value.username.$error }]"
-            @keyup="validate('username')">
-        </div>
-      </div>
+      <b-input
+        v-model="$v.value.username.$model"
+        label="Username"
+        id="s.username"
+        :has-error="$v.value.username.$error"
+        :helptext="$v.value.username.$error ? 'Please enter a valid username.' : ''"
+        @input="validate('username')"
+      />
 
-      <div class="field">
-        <label class="label">
-          Email
-        </label>
-        <div class="control">
-          <input
-            v-model.trim="$v.value.email.$model"
-            type="email"
-            :class="['input', { 'is-danger': $v.value.email.$error }]"
-            @keyup="validate('email')">
-        </div>
-      </div>
+      <b-input
+        v-model="$v.value.email.$model"
+        label="Email"
+        id="s.email"
+        :has-error="$v.value.email.$error"
+        :helptext="$v.value.email.$error ? 'Please enter a valid email.' : ''"
+        @input="validate('email')"
+      />
     </div>
   </div>
 </template>
@@ -37,12 +29,14 @@
 <script>
 import Icon from 'vue-awesome/components/Icon'
 import 'vue-awesome/icons/user-cog'
+import BInput from '@/components/fields/Input'
 
 const { required, minLength, email } = require('vuelidate/lib/validators')
 
 export default {
   components: {
     Icon,
+    BInput
   },
 
   props: {

@@ -13,12 +13,22 @@
       </div>
 
       <div class="is-pulled-right">
-        <button
-          :class="['button is-primary', { 'is-loading': busy }]"
-          :disabled="dirty === false"
-          @click="submit()">
-          Save changes
-        </button>
+        <div class="field">
+          <div class="control">
+            <button
+              :class="['button is-primary', { 'is-loading': busy }]"
+              :disabled="checkErrors || (!checkErrors && dirty === false)"
+              @click="submit()"
+            > Save changes
+            </button>
+          </div>
+          <p
+            v-if="checkErrors"
+            class="help has-text-danger"
+          >
+            There are errors in the form.
+          </p>
+        </div>
       </div>
     </div>
 
@@ -89,6 +99,10 @@ export default {
     activeView () {
       const item = this.items.find(i => i.active === true)
       return (item) ? item.view : this.items[0].view
+    },
+
+    checkErrors () {
+      return this.errors.some(e => e.errors)
     },
   },
 
@@ -175,10 +189,6 @@ export default {
       } else {
         err.errors = errors
       }
-    },
-
-    checkErrors () {
-      return this.errors.some(e => e.errors)
     },
   },
 

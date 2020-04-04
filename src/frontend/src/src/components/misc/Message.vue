@@ -2,8 +2,8 @@
   <div
     v-if="message.text"
     :class="message.style"
-    class="notification">
-    {{ message.text }}
+    class="notification"
+  > {{ message.text }}
   </div>
 </template>
 

@@ -7,9 +7,12 @@
       <li>
         <a
           href
-          :class="{ 'is-active': item.active, 'has-text-danger': hasError(item.view) }"
-          @click.prevent="$emit('select', item.view)">
-          {{ item.title }}
+          :class="{
+            'is-active': item.active,
+            'is-danger': hasError(item.view)
+          }"
+          @click.prevent="$emit('select', item.view)"
+        > {{ item.title }}
         </a>
       </li>
     </ul>
@@ -36,3 +39,10 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.menu-list a.is-danger {
+  background-color: #cc0000;
+  color: #fff;
+}
+</style>
