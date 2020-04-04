@@ -34,7 +34,7 @@
         class="table is-fullwidth">
         <thead>
           <tr>
-            <!--<th>ID</th>-->
+            <th>ID</th>
             <th>Number</th>
             <th>Date</th>
             <th>Due</th>
@@ -49,10 +49,11 @@
         </thead>
         <tbody>
           <tr
-            v-for="(invoice, i) in filteredItems"
+            v-for="(invoice, i) in pagedItems"
             :key="i"
             :class="{'is-cancelled': invoice.is_cancelled}"
           >
+            <td> {{ invoice.id }} </td>
             <td> {{ invoice.number }} </td>
             <td> {{ invoice.date|date }} </td>
             <td
@@ -109,6 +110,15 @@
       </table>
     </div>
 
+    <hr>
+
+    <pager
+      v-if="pages > 1"
+      :current="currentPage"
+      :pages="pages"
+      @paged="currentPage = $event"
+    />
+
     <modal
       v-if="showModal"
       title="Toggle payment"
@@ -144,6 +154,7 @@ import Modal from '@/components/modals/Modal.vue'
 import BInput from '@/components/fields/Input'
 import PrintLink from './PrintLink'
 import Search from '@/components/misc/Search'
+import Pager from '@/components/misc/Pager'
 
 export default {
   components: {
@@ -152,17 +163,20 @@ export default {
     PrintLink,
     BInput,
     Search,
+    Pager
   },
 
   data () {
     return {
       busy: false,
-      invoices: null,
+      invoices: [],
       error: null,
       showModal: false,
       activeInvoiceId: null,
       paymentError: null,
       paymentDate: null,
+      currentPage: 1,
+      perPage: 10,
     }
   },
 
@@ -192,10 +206,24 @@ export default {
 
       return items
     },
+
+    pages () {
+      return Math.ceil(this.filteredItems.length / this.perPage)
+    },
+
+    pagedItems () {
+      const from = (this.currentPage - 1)  * this.perPage
+      const to = this.currentPage * this.perPage
+      return this.filteredItems.slice(from, to)
+    }
   },
 
   watch: {
     '$route': 'load',
+
+    filters () {
+      this.currentPage = 1
+    }
   },
 
   created () {

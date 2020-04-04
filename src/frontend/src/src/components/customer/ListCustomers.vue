@@ -44,7 +44,7 @@
         </thead>
         <tbody>
           <tr
-            v-for="customer in filteredItems"
+            v-for="customer in pagedItems"
             :key="customer.id">
             <td> {{ customer.number }} </td>
             <td> {{ customer.address.company }} </td>
@@ -67,6 +67,16 @@
         </tbody>
       </table>
     </div>
+
+    <hr>
+
+    <pager
+      v-if="pages > 1"
+      :current="currentPage"
+      :pages="pages"
+      @paged="currentPage = $event"
+    />
+
   </div>
 </template>
 
@@ -75,17 +85,21 @@ import { mapMutations } from 'vuex'
 import http from '@/modules/http'
 import Message from '@/components/misc/Message'
 import Search from '@/components/misc/Search'
+import Pager from '@/components/misc/Pager'
 
 export default {
   components: {
     Message,
     Search,
+    Pager,
   },
 
   data () {
     return {
       customers: [],
       busy: false,
+      currentPage: 1,
+      perPage: 10
     }
   },
 
@@ -108,11 +122,25 @@ export default {
       }
 
       return items
+    },
+
+    pages () {
+      return Math.ceil(this.filteredItems.length / this.perPage)
+    },
+
+    pagedItems () {
+      const from = (this.currentPage - 1)  * this.perPage
+      const to = this.currentPage * this.perPage
+      return this.filteredItems.slice(from, to)
     }
   },
 
   watch: {
     '$route': 'load',
+
+    filters () {
+      this.currentPage = 1
+    }
   },
 
   created () {
