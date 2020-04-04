@@ -1,15 +1,9 @@
 <template>
   <div>
-    <h1 class="title is-4">
-      Customers
-    </h1>
+    <h1 class="title is-4"> Customers </h1>
     <h2 class="subtitle is-6">
-      <span v-if="!edit">
-        Create new customer
-      </span>
-      <span v-else>
-        Edit customer
-      </span>
+      <span v-if="!edit"> Create new customer </span>
+      <span v-else> Edit customer </span>
     </h2>
 
     <message />
@@ -99,9 +93,7 @@
 
           <hr>
 
-          <h3 class="title is-6">
-            Contacts
-          </h3>
+          <h3 class="title is-6"> Contacts </h3>
 
           <table class="table is-fullwidth">
             <tbody>
@@ -111,12 +103,8 @@
                 <td>{{ c.type }}</td>
                 <td>{{ c.value }}</td>
                 <td class="has-text-right">
-                  <a @click.prevent="editContact(index)">
-                    Edit
-                  </a> &middot;
-                  <a @click.prevent="removeContact(index)">
-                    Remove
-                  </a>
+                  <a @click.prevent="editContact(index)"> Edit </a> &middot;
+                  <a @click.prevent="removeContact(index)"> Remove </a>
                 </td>
               </tr>
             </tbody>
@@ -124,8 +112,8 @@
 
           <button
             class="button is-small"
-            @click.prevent="showModal = true">
-            Add contact
+            @click.prevent="showModal = true"
+          > Add contact
           </button>
         </div>
       </div>
@@ -137,13 +125,13 @@
           :class="{'is-loading': busy}"
           :disabled="busy"
           class="button is-primary"
-          @click.prevent="submit">
-          Save
+          @click.prevent="submit"
+        > Save
         </button> &nbsp;
         <button
           class="button"
-          @click.prevent="$router.go(-1)">
-          Cancel
+          @click.prevent="$router.go(-1)"
+        > Cancel
         </button>
       </div>
 
@@ -151,11 +139,13 @@
         v-if="showModal"
         :title="title"
         :error="addContactError"
-        @close="close">
+        @close="close"
+      >
         <div slot="content">
           <contact-form
             :contact="contact"
-            :edit="isEdit" />
+            :edit="contactEdit"
+          />
         </div>
 
         <button
@@ -163,7 +153,7 @@
           class="button is-primary"
           @click.prevent="addContact"
         >
-          <span v-if="!isEdit"> Add </span>
+          <span v-if="!contactEdit"> Add </span>
           <span v-else> Edit </span>
         </button>
       </modal>
@@ -177,7 +167,6 @@ import http from '@/modules/http'
 import Modal from '@/components/modals/Modal.vue'
 import ContactForm from '@/components/modals/Contact.vue'
 import Message from '@/components/misc/Message'
-
 import BText from '@/components/fields/Text'
 import BInput from '@/components/fields/Input'
 
@@ -209,7 +198,7 @@ export default {
         value: '',
       },
       edit: false,
-      isEdit: false,
+      contactEdit: false,
       busy: false,
       addContactError: '',
     }
@@ -217,7 +206,7 @@ export default {
 
   computed: {
     title () {
-      return !this.isEdit ? 'Add contact' : 'Edit contact'
+      return !this.contactEdit ? 'Add contact' : 'Edit contact'
     },
   },
 
@@ -282,17 +271,17 @@ export default {
       this.addContactError = ''
       this.contact = { type: 'Email', value: '' }
       this.showModal = false
-      this.isEdit = false
+      this.contactEdit = false
     },
 
     addContact () {
       this.$v.$touch()
 
       if (!this.$v.$error) {
-        if (!this.isEdit) {
+        if (!this.contactEdit) {
           this.customer.contacts.push(this.contact)
         } else {
-          this.isEdit = false
+          this.contactEdit = false
         }
 
         this.contact = { type: 'Email', value: '' }
@@ -304,7 +293,7 @@ export default {
 
     editContact (index) {
       this.addContactError = ''
-      this.isEdit = true
+      this.contactEdit = true
       this.contact = this.customer.contacts[index]
       this.showModal = true
     },
