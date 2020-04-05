@@ -1,9 +1,6 @@
 <template>
   <div class="table-container">
-    <table
-      v-if="filteredItems"
-      class="table is-fullwidth"
-    >
+    <table class="table is-fullwidth">
       <thead>
         <tr>
           <th>Number</th>
@@ -33,7 +30,7 @@
             </a> -->
           </td>
         </tr>
-        <tr v-if="filteredItems.length == 0">
+        <tr v-if="!filteredItems.length">
           <td colspan="5">
             Nothing found.
           </td>
