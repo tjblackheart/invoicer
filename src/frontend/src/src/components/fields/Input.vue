@@ -16,6 +16,7 @@
         :type="type"
         :placeholder="placeholder"
         :disabled="disabled"
+        :required="required"
         @input="$emit('input', $event.target.value)"
         @keydown.escape="$emit('escape')"
       >
@@ -74,6 +75,10 @@ export default {
       default: false,
     },
     autofocus: {
+      type: Boolean,
+      default: false,
+    },
+    required: {
       type: Boolean,
       default: false,
     }

@@ -29,47 +29,11 @@
       type="customers"
     />
 
-    <div class="table-container">
-      <table
-        v-if="filteredItems"
-        class="table is-fullwidth"
-      >
-        <thead>
-          <tr>
-            <th>Number</th>
-            <th>Company</th>
-            <th>City</th>
-            <th class="has-text-right">
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="customer in pagedItems"
-            :key="customer.id"
-          >
-            <td> {{ customer.number }} </td>
-            <td> {{ customer.address.company }} </td>
-            <td> {{ customer.address.city }}, {{ customer.address.zip }} </td>
-            <td class="has-text-right">
-              <router-link :to="{ name: 'customer_details', params: {id:customer.id} }">
-                Edit
-              </router-link>
-              <!-- &middot;
-              <a @click.prevent="remove(customer.id)">
-                Remove
-              </a> -->
-            </td>
-          </tr>
-          <tr v-if="customers.length == 0">
-            <td colspan="5">
-              No customers found.
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <customer-table
+      :paged-items="pagedItems"
+      :filtered-items="filteredItems"
+      @remove="remove($event)"
+    />
 
     <hr>
 
@@ -88,12 +52,14 @@ import http from '@/modules/http'
 import Message from '@/components/misc/Message'
 import Search from '@/components/misc/Search'
 import Pager from '@/components/misc/Pager'
+import CustomerTable from '@/components/customer/CustomerTable'
 
 export default {
   components: {
     Message,
     Search,
     Pager,
+    CustomerTable,
   },
 
   data () {
@@ -101,7 +67,7 @@ export default {
       customers: [],
       busy: false,
       currentPage: 1,
-      perPage: 10
+      perPage: 10,
     }
   },
 
@@ -180,16 +146,13 @@ export default {
         })
       }
     },
-
-    close () {
-      this.showModal = false
-    },
   },
 
   beforeRouteEnter (to, from, next) {
     next(vm => {
       if (from.name && !from.name.includes('customer')) {
         vm.$store.commit('filterValue', '')
+        vm.$store.commit('showCancelled', true)
       }
     })
   },

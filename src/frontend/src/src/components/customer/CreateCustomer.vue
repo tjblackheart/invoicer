@@ -165,7 +165,7 @@
           @click.prevent="addContact"
         >
           <span v-if="!contactEdit"> Add </span>
-          <span v-else> Edit </span>
+          <span v-else> Save </span>
         </button>
       </modal>
     </form>

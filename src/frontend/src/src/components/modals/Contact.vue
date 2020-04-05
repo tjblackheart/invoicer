@@ -12,7 +12,9 @@
     <b-input
       id="c.value"
       v-model.trim="contact.value"
-      label="Value"
+      :type="contact.type === 'Email' ? 'email' : 'text'"
+      :label="contact.type === 'Email' ? 'Email' : 'Value'"
+      required
     />
   </div>
 </template>
