@@ -10,8 +10,8 @@
 
     <div class="control">
       <input
-        :class="['input', {'is-danger': hasError}]"
         :id="id"
+        :class="['input', {'is-danger': hasError}]"
         :value="value"
         :type="type"
         :placeholder="placeholder"
@@ -32,6 +32,10 @@
 import Help from './Help'
 
 export default {
+  components: {
+    Help
+  },
+
   props: {
     value: {
       type: [Number, String],
@@ -73,10 +77,6 @@ export default {
       type: Boolean,
       default: false,
     }
-  },
-
-  components: {
-    Help
   },
 
   mounted () {

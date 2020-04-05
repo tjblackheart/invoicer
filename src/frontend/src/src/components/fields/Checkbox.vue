@@ -5,7 +5,7 @@
       :checked="value"
       @change="$emit('input', $event.target.checked)"
     > {{ label }}
-    </label>
+  </label>
 </template>
 
 <script>

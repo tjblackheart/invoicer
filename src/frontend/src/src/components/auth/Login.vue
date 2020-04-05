@@ -1,23 +1,26 @@
 <template>
   <form @submit.prevent="submit">
-
-    <h3 class="title"> Login </h3>
-    <p class="subtitle"> Please login to proceed. </p>
+    <h3 class="title">
+      Login
+    </h3>
+    <p class="subtitle">
+      Please login to proceed.
+    </p>
 
     <hr>
 
     <div class="content">
       <b-input
-        v-model="credentials.email"
         id="c.email"
+        v-model="credentials.email"
         placeholder="Email"
         type="email"
         autofocus
       />
 
       <b-input
-        v-model="credentials.password"
         id="c.passwd"
+        v-model="credentials.password"
         placeholder="Password"
         type="password"
       />

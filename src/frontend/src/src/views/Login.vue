@@ -6,7 +6,8 @@
           <div class="column is-mobile is-half is-one-quarter-desktop">
             <transition
               name="fade"
-              mode="out-in">
+              mode="out-in"
+            >
               <router-view />
             </transition>
           </div>

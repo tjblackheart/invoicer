@@ -29,7 +29,7 @@
           :class="['pagination-link', { 'is-current': current === p }]"
           :aria-label="`Page ${p}`"
           @click.prevent="$emit('paged', p)"
-        > {{p}}
+        > {{ p }}
         </a>
       </li>
     </ul>

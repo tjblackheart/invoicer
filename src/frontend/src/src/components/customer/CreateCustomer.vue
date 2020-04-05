@@ -1,6 +1,8 @@
 <template>
   <div>
-    <h1 class="title is-4"> Customers </h1>
+    <h1 class="title is-4">
+      Customers
+    </h1>
     <h2 class="subtitle is-6">
       <span v-if="!edit"> Create new customer </span>
       <span v-else> Edit customer </span>
@@ -11,36 +13,37 @@
     <hr>
 
     <form @submit.prevent="submit">
-      <b-text
-        :text="'Number: <b>' + customer.number + '</b>'"
-        :helplink="{ to: 'settings', text: 'Edit ...' }"
-      />
+      <b-text :helplink="{ to: 'settings', text: 'Edit ...' }">
+        Number: <strong> {{ customer.number }} </strong>
+      </b-text>
 
       <hr>
 
       <div class="columns">
         <div class="column">
-          <h3 class="title is-6"> Address </h3>
+          <h3 class="title is-6">
+            Address
+          </h3>
 
           <b-input
+            id="c.company"
             v-model.trim="customer.address.company"
             type="text"
-            id="c.company"
             placeholder="Company"
           />
 
           <div class="columns nm">
             <div class="column">
               <b-input
-                v-model.trim="customer.address.first_name"
                 id="c.firstname"
+                v-model.trim="customer.address.first_name"
                 placeholder="First name"
               />
             </div>
             <div class="column">
               <b-input
-                v-model.trim="customer.address.last_name"
                 id="c.lastname"
+                v-model.trim="customer.address.last_name"
                 placeholder="Last name"
               />
             </div>
@@ -49,57 +52,62 @@
           <div class="columns nm">
             <div class="column is-9">
               <b-input
-                v-model.trim="customer.address.street"
                 id="c.street"
+                v-model.trim="customer.address.street"
                 placeholder="Street"
               />
             </div>
             <div class="column">
               <b-input
-                v-model.trim="customer.address.number"
                 id="c.number"
+                v-model.trim="customer.address.number"
                 placeholder="Number"
               />
             </div>
           </div>
 
           <b-input
-            v-model.trim="customer.address.zip"
             id="c.zip"
+            v-model.trim="customer.address.zip"
             placeholder="Zipcode"
           />
 
           <b-input
-            v-model.trim="customer.address.city"
             id="c.city"
+            v-model.trim="customer.address.city"
             placeholder="City"
           />
 
           <b-input
-            v-model.trim="customer.address.country"
             id="c.country"
+            v-model.trim="customer.address.country"
             placeholder="Country"
           />
         </div>
 
         <div class="column">
-          <h3 class="title is-6"> VAT ID </h3>
+          <h3 class="title is-6">
+            VAT ID
+          </h3>
 
           <b-input
-            v-model.trim="customer.tax_number"
             id="c.tax_id"
+            v-model.trim="customer.tax_number"
             placeholder="VATID"
           />
 
           <hr>
 
-          <h3 class="title is-6"> Contacts </h3>
+          <h3 class="title is-6">
+            Contacts
+          </h3>
 
           <table class="table is-fullwidth">
             <tbody>
               <tr
                 v-for="(c, index) in customer.contacts"
-                :key="index">
+                :key="index"
+              >
                 <td>{{ c.type }}</td>
                 <td>{{ c.value }}</td>
                 <td class="has-text-right">
@@ -113,7 +121,8 @@
           <button
             class="button is-small"
             @click.prevent="showModal = true"
-          > Add contact
+          >
+            Add contact
           </button>
         </div>
       </div>
@@ -126,12 +135,14 @@
           :disabled="busy"
           class="button is-primary"
           @click.prevent="submit"
-        > Save
+        >
+          Save
         </button> &nbsp;
         <button
           class="button"
           @click.prevent="$router.go(-1)"
-        > Cancel
+        >
+          Cancel
         </button>
       </div>
 

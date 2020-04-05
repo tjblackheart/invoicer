@@ -13,7 +13,8 @@
         <print-link
           :id="invoice.id"
           :button="true"
-          text="Print to PDF" />
+          text="Print to PDF"
+        />
       </div>
     </div>
 
@@ -142,12 +143,13 @@
             <tbody>
               <tr
                 v-for="(i, index) in invoice.items"
-                :key="i.id">
+                :key="i.id"
+              >
                 <td> {{ index + 1 }} </td>
                 <td> {{ i.amount }} {{ i.unit }} </td>
-                <td
-                  class="content"
-                  v-html="$converter.makeHtml(i.description)" />
+                <td class="content">
+                  <markdown :md="i.description" />
+                </td>
                 <td> {{ i.price_per_unit | money(invoice.currency) }} </td>
                 <td class="has-text-right">
                   {{ totalNet(i) | money(invoice.currency) }}
@@ -198,8 +200,9 @@
     <div class="has-text-right">
       <button
         class="button"
-        @click="$router.go(-1)"
-      > Back
+        @click.prevent="$router.go(-1)"
+      >
+        Back
       </button>
     </div>
   </div>
@@ -210,11 +213,13 @@ import { mapMutations } from 'vuex'
 import http from '@/modules/http'
 import Message from '@/components/misc/Message'
 import PrintLink from './PrintLink'
+import Markdown from '@/components/misc/MarkdownText'
 
 export default {
   components: {
     Message,
     PrintLink,
+    Markdown,
   },
 
   data () {

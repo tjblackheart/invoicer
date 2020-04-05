@@ -13,32 +13,31 @@
 
     <form @submit.prevent="submit">
       <div class="columns">
-
         <div class="column">
-            <b-input
-              :value="invoice.number"
-              type="text"
-              label="Number"
-              id="i.number"
-              disabled
-              :helplink="{ to: 'settings', text: 'Edit ... ' }"
-            />
-          </div>
+          <b-input
+            id="i.number"
+            :value="invoice.number"
+            type="text"
+            label="Number"
+            disabled
+            :helplink="{ to: 'settings', text: 'Edit ... ' }"
+          />
+        </div>
 
         <div class="column">
           <b-select
+            id="i.currency"
             v-model="invoice.currency"
             label="Currency"
-            id="i.currency"
             :options="currencies"
           />
         </div>
 
         <div class="column">
           <b-select
+            id="i.customer"
             v-model.number="invoice.customer_id"
             label="Customer"
-            id="i.customer"
             :options="customerSelect"
             :helplink="{ to: 'customer_create', text: 'Add customer ...' }"
           />
@@ -46,22 +45,21 @@
 
         <div class="column">
           <b-input
+            id="i.date"
             v-model="formattedDate"
             type="date"
             label="Date"
-            id="i.date"
           />
         </div>
 
         <div class="column">
           <b-input
+            id="i.due_days"
             v-model.number="invoice.due_days"
             type="number"
             label="Due days"
-            id="i.due_days"
           />
         </div>
-
       </div>
 
       <hr>
@@ -75,7 +73,8 @@
             <div class="control">
               <table
                 v-if="invoice.items.length != 0"
-                class="table is-fullwidth">
+                class="table is-fullwidth"
+              >
                 <thead>
                   <tr>
                     <th>Amount</th>
@@ -88,13 +87,14 @@
                 <tbody>
                   <tr
                     v-for="(i, index) in invoice.items"
-                    :key="index">
+                    :key="index"
+                  >
                     <td> {{ i.amount }}{{ i.unit }} </td>
                     <td> {{ i.price_per_unit|money(invoice.currency) }} </td>
                     <td> {{ i.vat }}% </td>
-                    <td
-                      class="content"
-                      v-html="$converter.makeHtml(i.description)" />
+                    <td class="content">
+                      <markdown :md="i.description" />
+                    </td>
                     <td class="has-text-right">
                       <a @click.prevent="editItem(index)">
                         Edit
@@ -113,7 +113,8 @@
           </div>
           <button
             class="button is-small"
-            @click.prevent="addItemModal">
+            @click.prevent="addItemModal"
+          >
             Add item ...
           </button>
         </div>
@@ -150,13 +151,15 @@
           :class="{'is-loading': busy}"
           :disabled="busy"
           class="button is-primary"
-          @click.prevent="submit">
+          @click.prevent="submit"
+        >
           Create
         </button> &nbsp;
         <button
           class="button"
-          @click="$router.push({ name: 'invoice_list' })"
-        > Cancel
+          @click.prevent="$router.go(-1)"
+        >
+          Cancel
         </button>
       </div>
     </form>
@@ -165,14 +168,16 @@
       v-if="showItemModal"
       :title="title"
       :error="itemFormError"
-      @close="close">
+      @close="close"
+    >
       <div slot="content">
         <item-form :item="item" />
       </div>
       <button
         slot="action"
         class="button is-primary"
-        @click.prevent="addItem">
+        @click.prevent="addItem"
+      >
         <span v-if="edit">
           Edit item
         </span>
@@ -189,6 +194,7 @@ import { mapMutations } from 'vuex'
 import http from '@/modules/http'
 import Modal from '@/components/modals/Modal'
 import ItemForm from '@/components/modals/Item'
+import Markdown from '@/components/misc/MarkdownText'
 
 import Message from '@/components/misc/Message'
 import BInput from '@/components/fields/Input'
@@ -208,6 +214,7 @@ export default {
     Message,
     BInput,
     BSelect,
+    Markdown,
   },
 
   data () {

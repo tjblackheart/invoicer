@@ -1,9 +1,9 @@
 <template>
   <div class="content">
     <b-input
-      type="text"
       id="search"
       v-model="filterValue"
+      type="text"
       :placeholder="placeholder"
       @escape="filterValue = ''"
     />
@@ -20,7 +20,10 @@
         v-if="hasFilters"
         class="is-pulled-right"
       >
-        <a href @click.prevent="resetFilters"> Reset all filters </a>
+        <a
+          href
+          @click.prevent="resetFilters"
+        > Reset all filters </a>
       </div>
     </div>
   </div>
@@ -31,6 +34,11 @@ import BInput from '@/components/fields/Input'
 import BCheckbox from '@/components/fields/Checkbox'
 
 export default {
+
+  components: {
+    BInput,
+    BCheckbox,
+  },
   props: {
     placeholder: {
       type: String,
@@ -40,11 +48,6 @@ export default {
       type: String,
       required: true,
     }
-  },
-
-  components: {
-    BInput,
-    BCheckbox,
   },
 
   computed: {

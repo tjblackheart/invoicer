@@ -4,7 +4,8 @@
       v-if="label"
       class="label"
       :for="id"
-    > {{ label }}
+    >
+      {{ label }}
     </label>
 
     <div class="control">
@@ -30,6 +31,10 @@
 import Help from './Help'
 
 export default {
+  components: {
+    Help
+  },
+
   props: {
     value: {
       type: String,
@@ -63,10 +68,6 @@ export default {
       type: Boolean,
       default: false,
     },
-  },
-
-  components: {
-    Help
   }
 }
 </script>

@@ -13,7 +13,8 @@
       <div class="is-pulled-right">
         <router-link
           :to="{name: 'customer_create'}"
-          class="button is-primary">
+          class="button is-primary"
+        >
           Create
         </router-link>
       </div>
@@ -31,7 +32,8 @@
     <div class="table-container">
       <table
         v-if="filteredItems"
-        class="table is-fullwidth">
+        class="table is-fullwidth"
+      >
         <thead>
           <tr>
             <th>Number</th>
@@ -45,7 +47,8 @@
         <tbody>
           <tr
             v-for="customer in pagedItems"
-            :key="customer.id">
+            :key="customer.id"
+          >
             <td> {{ customer.number }} </td>
             <td> {{ customer.address.company }} </td>
             <td> {{ customer.address.city }}, {{ customer.address.zip }} </td>
@@ -76,7 +79,6 @@
       :pages="pages"
       @paged="currentPage = $event"
     />
-
   </div>
 </template>
 

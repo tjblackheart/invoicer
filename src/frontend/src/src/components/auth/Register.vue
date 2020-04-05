@@ -1,7 +1,11 @@
 <template>
   <form @submit.prevent="submit">
-    <h3 class="title"> Register </h3>
-    <p class="subtitle"> Create an account </p>
+    <h3 class="title">
+      Register
+    </h3>
+    <p class="subtitle">
+      Create an account
+    </p>
 
     <hr>
 
@@ -10,29 +14,29 @@
     >
       <div class="content">
         <b-input
-          v-model.trim="u.username"
           id="u.username"
+          v-model.trim="u.username"
           placeholder="Username"
           autofocus
         />
 
         <b-input
-          v-model.trim="u.email"
           id="u.email"
+          v-model.trim="u.email"
           placeholder="Email"
           type="email"
         />
 
         <b-input
-          v-model="u.password"
           id="u.password"
+          v-model="u.password"
           type="password"
           placeholder="Password"
         />
 
         <b-input
-          v-model="u.repeat_password"
           id="u.repeat_passwd"
+          v-model="u.repeat_password"
           type="password"
           placeholder="Repeat password"
         />
@@ -46,17 +50,20 @@
           :class="{'is-loading': busy}"
           :disabled="busy"
           class="button is-block is-primary is-fullwidth"
-        > Register
+        >
+          Register
         </button>
       </div>
 
       <p class="has-text-grey has-text-centered">
-        <router-link :to="{ name: 'login' }"> No thanks </router-link>
+        <router-link :to="{ name: 'login' }">
+          No thanks
+        </router-link>
       </p>
     </div>
 
     <div v-else>
-      <router-link to="/login">
+      <router-link :to="{ name: 'login' }">
         Back to login
       </router-link>
     </div>

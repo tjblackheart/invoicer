@@ -3,37 +3,37 @@
     <message />
 
     <b-input
+      id="i.amount"
       v-model.number="item.amount"
       type="number"
       label="Amount"
-      id="i.amount"
     />
 
     <b-select
+      id="i.unit"
       v-model="item.unit"
       label="Unit"
-      id="i.unit"
       :options="units"
     />
 
     <b-input
+      id="i.ppu"
       v-model.number="item.price_per_unit"
       type="number"
       label="Price per unit"
-      id="i.ppu"
     />
 
     <b-input
+      id="i.vat"
       v-model.number="item.vat"
       type="number"
       label="VAT in %"
-      id="i.vat"
     />
 
     <b-textarea
+      id="i.desc"
       v-model.trim="item.description"
       label="Description"
-      id="i.desc"
     />
   </div>
 </template>

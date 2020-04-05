@@ -4,7 +4,8 @@
       <div class="is-pulled-left">
         <h1
           id="top"
-          class="title is-4">
+          class="title is-4"
+        >
           Settings
         </h1>
         <h2 class="subtitle is-6">
@@ -19,7 +20,8 @@
               :class="['button is-primary', { 'is-loading': busy }]"
               :disabled="hasErrors || (!hasErrors && dirty === false)"
               @click="submit()"
-            > Save changes
+            >
+              Save changes
             </button>
           </div>
           <!-- <p
@@ -41,14 +43,16 @@
         <settings-menu
           :items="items"
           :errors="errors"
-          @select="toggle($event)" />
+          @select="toggle($event)"
+        />
       </div>
       <div class="column is-9">
         <keep-alive>
           <component
             :is="activeView"
             v-model="user"
-            @error="handleError($event)" />
+            @error="handleError($event)"
+          />
         </keep-alive>
       </div>
     </div>

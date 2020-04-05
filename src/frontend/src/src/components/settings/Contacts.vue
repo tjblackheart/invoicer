@@ -6,18 +6,18 @@
 
     <div class="fieldset">
       <b-input
+        id="s.email"
         v-model="$v.value.settings.email.$model"
         label="Email"
-        id="s.email"
         :has-error="$v.value.settings.email.$error"
         :helptext="$v.value.settings.email.$error ? 'Please enter a valid email.' : ''"
         @input="validate('email')"
       />
 
       <b-input
+        id="s.phone"
         v-model="$v.value.settings.phone.$model"
         label="Phone"
-        id="s.phone"
         :has-error="$v.value.settings.phone.$error"
         :helptext="$v.value.settings.phone.$error ? 'Please enter a phone.' : ''"
         @input="validate('phone')"

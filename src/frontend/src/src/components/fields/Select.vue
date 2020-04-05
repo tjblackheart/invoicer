@@ -11,8 +11,8 @@
     <div class="control">
       <div class="select is-fullwidth">
         <select
-          :value="value"
           :id="id"
+          :value="value"
           @change="$emit('input', $event.target.value)"
         >
           <option
@@ -38,6 +38,10 @@
 import Help from './Help'
 
 export default {
+  components: {
+    Help
+  },
+
   props: {
     value: {
       type: [Number, String],
@@ -67,10 +71,6 @@ export default {
       type: Boolean,
       default: false
     }
-  },
-
-  components: {
-    Help
   }
 }
 </script>

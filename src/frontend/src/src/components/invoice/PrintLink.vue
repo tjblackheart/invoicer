@@ -5,13 +5,15 @@
       href
       :class="{ 'button is-primary': button, 'is-loading': busy }"
       :disabled="busy"
-      @click.prevent="printInvoice">
+      @click.prevent="printInvoice"
+    >
       {{ text }}
     </a>
     <icon
       v-if="busy && !button"
       name="circle-notch"
-      spin />
+      spin
+    />
   </span>
 </template>
 

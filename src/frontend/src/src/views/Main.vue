@@ -5,7 +5,8 @@
       <div class="container">
         <transition
           name="fade"
-          mode="out-in">
+          mode="out-in"
+        >
           <router-view />
         </transition>
       </div>

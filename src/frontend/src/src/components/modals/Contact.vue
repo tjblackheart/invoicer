@@ -3,18 +3,17 @@
     <message />
 
     <b-select
+      id="c.type"
       v-model="contact.type"
       label="Type"
-      id="c.type"
       :options="types"
     />
 
     <b-input
+      id="c.value"
       v-model.trim="contact.value"
       label="Value"
-      id="c.value"
     />
-
   </div>
 </template>
 

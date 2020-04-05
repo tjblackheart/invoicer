@@ -1,7 +1,7 @@
 <template>
   <div class="field">
     <div class="control">
-      <span v-html="text" />
+      <slot />
       <help
         :class="{'is-danger': hasError}"
         :text="helptext"
@@ -15,11 +15,11 @@
 import Help from './Help'
 
 export default {
+  components: {
+    Help
+  },
+
   props: {
-    text: {
-      type: String,
-      default: '',
-    },
     helptext: {
       type: String,
       default: '',
@@ -32,10 +32,6 @@ export default {
       type: Boolean,
       default: false,
     },
-  },
-
-  components: {
-    Help
   }
 }
 </script>

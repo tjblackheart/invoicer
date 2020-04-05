@@ -2,14 +2,19 @@
   <div>
     <div class="is-clearfix">
       <div class="is-pulled-left">
-        <h1 class="title is-4"> Invoices </h1>
-        <h2 class="subtitle is-6"> All invoices </h2>
+        <h1 class="title is-4">
+          Invoices
+        </h1>
+        <h2 class="subtitle is-6">
+          All invoices
+        </h2>
       </div>
 
       <div class="is-pulled-right">
         <router-link
           :to="{name: 'invoice_create'}"
-          class="button is-primary">
+          class="button is-primary"
+        >
           Create
         </router-link>
       </div>
@@ -27,7 +32,8 @@
     <div class="table-container">
       <table
         v-if="invoices"
-        class="table is-fullwidth">
+        class="table is-fullwidth"
+      >
         <thead>
           <tr>
             <!-- <th>ID</th> -->
@@ -53,14 +59,17 @@
             <td> {{ invoice.number }} </td>
             <td> {{ invoice.date|date }} </td>
             <td
-              :title="`${invoice.due_days} days`">
+              :title="`${invoice.due_days} days`"
+            >
               {{ dueDate(invoice) }}
             </td>
             <td>
-              <router-link :to="{
-                name: 'customer_details',
-                params: { id:invoice.customer.id }
-              }">
+              <router-link
+                :to="{
+                  name: 'customer_details',
+                  params: { id:invoice.customer.id }
+                }"
+              >
                 {{ invoice.customer.address.company }}
               </router-link>
             </td>
@@ -82,13 +91,17 @@
 
               <span v-if="!invoice.is_cancelled">
                 &middot;
-                <a href @click.prevent="cancel(invoice.id)">Cancel</a>
+                <a
+                  href
+                  @click.prevent="cancel(invoice.id)"
+                >Cancel</a>
               </span>
 
               <span v-if="!invoice.is_paid && !invoice.is_cancelled">
                 &middot;
                 <a
-                  @click.prevent="paymentModal(invoice.id)">
+                  @click.prevent="paymentModal(invoice.id)"
+                >
                   Toggle payment
                 </a>
               </span>
@@ -119,13 +132,14 @@
       v-if="showModal"
       title="Toggle payment"
       :error="paymentError"
-      @close="close">
+      @close="close"
+    >
       <div slot="content">
         <b-input
+          id="p.date"
           v-model="paymentDate"
           type="date"
           label="Payment date"
-          id="p.date"
         />
       </div>
 
@@ -134,7 +148,8 @@
         class="button is-primary"
         :class="{'is-loading': busy}"
         :disabled="busy"
-        @click.prevent="togglePayment">
+        @click.prevent="togglePayment"
+      >
         Toggle
       </button>
     </modal>

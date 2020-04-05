@@ -7,14 +7,16 @@
         <div class="box">
           <h1
             v-if="title"
-            class="title is-5">
+            class="title is-5"
+          >
             {{ title }}
           </h1>
           <hr v-if="title">
 
           <div
             v-if="error"
-            class="notification is-danger">
+            class="notification is-danger"
+          >
             {{ error }}
           </div>
 
@@ -25,7 +27,8 @@
             <slot name="action" /> &nbsp;
             <button
               class="button"
-              @click.prevent="$emit('close')">
+              @click.prevent="$emit('close')"
+            >
               Cancel
             </button>
           </div>
@@ -35,7 +38,8 @@
       <button
         class="modal-close is-large"
         aria-label="close"
-        @click.prevent="$emit('close')" />
+        @click.prevent="$emit('close')"
+      />
     </div>
   </transition>
 </template>
