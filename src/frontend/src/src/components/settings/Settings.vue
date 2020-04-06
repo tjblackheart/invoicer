@@ -185,13 +185,14 @@ export default {
     },
 
     handleError (event) {
-      const { view, errors } = { ...event }
+      const { view, errors, count } = { ...event }
       const err = this.errors.find(e => e.view === view)
 
       if (!err) {
-        this.errors.push({ view, errors })
+        this.errors.push({ view, errors, count })
       } else {
         err.errors = errors
+        err.count = count
       }
     },
   },

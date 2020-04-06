@@ -123,8 +123,19 @@ export default {
 
   methods: {
     validate (field) {
+      let count = 0
+      Object.keys(this.$v.value.settings).forEach(k => {
+        if (this.$v.value.settings[k].$error) {
+          count++
+        }
+      })
+
       this.$v.value.settings[field].$touch()
-      this.$emit('error', { view: 'company', errors: this.$v.$anyError })
+      this.$emit('error', {
+        view: 'company',
+        errors: this.$v.$anyError,
+        count,
+      })
     },
   },
 

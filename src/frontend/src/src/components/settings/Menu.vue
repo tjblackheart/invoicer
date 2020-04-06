@@ -2,18 +2,24 @@
   <aside class="menu">
     <ul
       v-for="(item, index) in items"
-      :key="`${item.view}-${index}`"
+      :key="index"
       class="menu-list"
     >
       <li>
         <a
           href
-          :class="{
-            'is-active': item.active,
-            'is-danger': hasError(item.view)
-          }"
+          :class="['is-clearfix', { 'is-active': item.active }]"
           @click.prevent="$emit('select', item.view)"
-        > {{ item.title }}
+        >
+          <span class="is-pulled-left">
+            {{ item.title }}
+          </span>
+          <span
+            v-if="errorCount(item.view) > 0"
+            class="tag is-pulled-right is-danger"
+          >
+            {{ errorCount(item.view) }}
+          </span>
         </a>
       </li>
     </ul>
@@ -37,13 +43,15 @@ export default {
     hasError (view) {
       return this.errors.some(e => e.view === view && e.errors)
     },
+
+    errorCount (view) {
+      const errors = this.errors.find(e => e.view === view)
+      if (errors) {
+        return errors.count
+      }
+
+      return 0
+    }
   },
 }
 </script>
-
-<style lang="scss" scoped>
-.menu-list a.is-danger {
-  background-color: #cc0000;
-  color: #fff;
-}
-</style>
