@@ -19,7 +19,8 @@
         :required="required"
         @input="$emit('input', $event.target.value)"
         @keydown.escape="$emit('escape')"
-        @blur="$emit('blur')"
+        @blur="$emit('blur', $event.target.value)"
+        @focus="$emit('focus', $event.target.value)"
       >
       <help
         :class="{'is-danger': hasError}"

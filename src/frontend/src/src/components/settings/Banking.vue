@@ -16,7 +16,7 @@
 
       <b-input
         id="s.iban"
-        v-model="$v.value.settings.iban.$model"
+        v-model="formattedIBAN"
         label="IBAN"
         :has-error="$v.value.settings.iban.$error"
         :helptext="$v.value.settings.iban.$error ? 'Please enter a valid IBAN.' : ''"
@@ -36,10 +36,18 @@
 </template>
 
 <script>
-import Icon from 'vue-awesome/components/Icon'
 import 'vue-awesome/icons/university'
-const { required } = require('vuelidate/lib/validators')
+import Icon from 'vue-awesome/components/Icon'
 import BInput from '@/components/fields/Input'
+
+const {
+  required,
+  helpers,
+  minLength,
+  maxLength
+} = require('vuelidate/lib/validators')
+
+const iban = helpers.regex('iban', /^[A-Z]{2}[0-9\s]+$/)
 
 export default {
   components: {
@@ -54,10 +62,32 @@ export default {
     },
   },
 
+  data () {
+    return {
+      formattedIBAN: '',
+    }
+  },
+
   watch: {
     value () {
       this.$emit('input', this.value)
     },
+
+    formattedIBAN (val) {
+      const parts = val
+        .toUpperCase()
+        .split('')
+        .map(v => v.trim())
+        .join('')
+        .match(/.{1,4}/g) || []
+
+      this.formattedIBAN = parts.join(' ')
+      this.value.settings.iban = this.formattedIBAN
+    }
+  },
+
+  created () {
+    this.formattedIBAN = this.value.settings.iban
   },
 
   methods: {
@@ -81,9 +111,20 @@ export default {
   validations: {
     value: {
       settings: {
-        bank: { required },
-        iban: { required },
-        bic: { required },
+        bank: {
+          required
+        },
+        iban: {
+          required,
+          iban,
+          // keep it simple here.
+          // see https://en.wikipedia.org/wiki/International_Bank_Account_Number#IBAN_formats_by_country
+          minLength: minLength(15),
+          maxLength: maxLength(32)
+        },
+        bic: {
+          required
+        },
       },
     },
   },
