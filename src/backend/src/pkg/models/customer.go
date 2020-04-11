@@ -70,7 +70,7 @@ func CustomerGet(uuid string, id string) (*Customer, error) {
 		Where("uuid = ? AND id = ?", uuid, id).
 		First(&customer).
 		RecordNotFound() {
-		return nil, ErrCustomerNotFound
+		return nil, ErrNotFound{Message: "Customer not found."}
 	}
 
 	return &customer, nil
@@ -91,7 +91,7 @@ func CustomerCreate(uuid string, c *Customer) (*Customer, error) {
 
 	if err := db.Create(&c).Error; err != nil {
 		if strings.Contains(err.Error(), "UNIQUE") && strings.Contains(err.Error(), "number") {
-			return nil, ErrUnique
+			return nil, ErrUnique{Message: "This customer already exists."}
 		}
 
 		return nil, err
@@ -111,7 +111,7 @@ func CustomerDelete(uuid string, id string) error {
 		Where("uuid = ? AND id = ?", uuid, id).
 		First(&c).
 		RecordNotFound() {
-		return ErrCustomerNotFound
+		return ErrNotFound{Message: "Customer not found"}
 	}
 
 	db.Delete(&c)
@@ -120,26 +120,27 @@ func CustomerDelete(uuid string, id string) error {
 }
 
 // Update patches an existing customer
-func (c *Customer) Update(patch *Customer) error {
+func (c Customer) Update(patch *Customer) error {
 	if err := patch.validate(); err != nil {
 		return err
 	}
 
-	db.Model(c).Updates(patch)
+	db.Model(&c).Updates(patch)
+
 	// this seems to be needed to update the contact list.
-	db.Model(c).Association("Contacts").Replace(patch.Contacts)
+	db.Model(&c).Association("Contacts").Replace(patch.Contacts)
 
 	return nil
 }
 
-func (c *Customer) validate() error {
+func (c Customer) validate() error {
 	if err := validate.Struct(c); err != nil {
 		for _, v := range err.(validator.ValidationErrors) {
 			r := strings.NewReplacer("{field}", v.Field(), "{param}", v.Param())
 			e := r.Replace(errList[v.Tag()])
 
 			// return first error found.
-			return ValidationError{e}
+			return ErrValidation{Message: e}
 		}
 	}
 

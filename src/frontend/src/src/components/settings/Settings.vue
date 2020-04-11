@@ -66,6 +66,7 @@ import Message from '@/components/misc/Message'
 
 import SettingsMenu from './Menu'
 import User from './User'
+import Password from './Password'
 import Banking from './Banking'
 import Numbers from './Numbers'
 import Company from './Company'
@@ -76,6 +77,7 @@ export default {
     Message,
     SettingsMenu,
     User,
+    Password,
     Banking,
     Numbers,
     Company,
@@ -88,6 +90,7 @@ export default {
       defaults: {}, // clone of 'user'
       items: [
         { view: 'user', title: 'Profile', active: false },
+        { view: 'password', title: 'Password', active: false },
         { view: 'banking', title: 'Banking', active: false },
         { view: 'numbers', title: 'Numbers', active: false },
         { view: 'company', title: 'Company', active: false },

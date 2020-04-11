@@ -2,8 +2,6 @@ package models
 
 import (
 	"encoding/json"
-	"errors"
-	"fmt"
 	"strings"
 	"time"
 
@@ -12,12 +10,6 @@ import (
 )
 
 var (
-	ErrUnique             = errors.New("models: unique key already exists")
-	ErrInvalidCredentials = errors.New("models: invalid credentials")
-	ErrUserNotFound       = errors.New("models: no such user")
-	ErrCustomerNotFound   = errors.New("models: no such customer")
-	ErrInvoiceNotFound    = errors.New("models: no such invoice")
-
 	validate = validator.New()
 	db       *gorm.DB
 )
@@ -29,10 +21,6 @@ type (
 		CreatedAt time.Time  `json:"created_at"`
 		UpdatedAt time.Time  `json:"updated_at"`
 		DeletedAt *time.Time `json:"-"`
-	}
-
-	ValidationError struct {
-		Message string
 	}
 
 	translatableErrors map[string]string
@@ -56,10 +44,6 @@ func (t *trimmed) UnmarshalJSON(b []byte) error {
 	*t = trimmed(strings.TrimSpace(s))
 
 	return nil
-}
-
-func (e ValidationError) Error() string {
-	return fmt.Sprintf(e.Message)
 }
 
 // Init initialises the db connection and migrates the tables.

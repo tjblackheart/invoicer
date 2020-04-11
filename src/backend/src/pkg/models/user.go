@@ -49,6 +49,13 @@ type (
 		Email    trimmed `json:"email"`
 		Password trimmed `json:"password"`
 	}
+
+	// PasswordChangeRequest holds data for a password change
+	PasswordChangeRequest struct {
+		Current trimmed `json:"current" validate:"required"`
+		New     trimmed `json:"new" validate:"required,gte=8"`
+		Confirm trimmed `json:"confirm" validate:"required,eqfield=Confirm"`
+	}
 )
 
 // FindUser finds a user by UUID
@@ -56,7 +63,7 @@ func FindUser(uuid string) (*User, error) {
 	var u User
 
 	if db.Preload("Settings").Where("uuid = ?", uuid).First(&u).RecordNotFound() {
-		return nil, ErrUserNotFound
+		return nil, ErrNotFound{Message: "User not found."}
 	}
 
 	return &u, nil
@@ -67,11 +74,11 @@ func Authenticate(c *Credentials) (*User, error) {
 	user := &User{}
 
 	if db.Preload("Settings").Where("email = ?", c.Email).First(&user).RecordNotFound() {
-		return nil, ErrInvalidCredentials
+		return nil, ErrInvalidCredentials{Message: "Invalid credentials."}
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(c.Password)); err != nil {
-		return nil, ErrInvalidCredentials
+		return nil, ErrInvalidCredentials{Message: "Invalid credentials."}
 	}
 
 	return user, nil
@@ -90,7 +97,7 @@ func (u *User) BeforeCreate() error {
 }
 
 // Create creates a user
-func (u *User) Create() error {
+func (u User) Create() error {
 	if err := u.validate(); err != nil {
 		return err
 	}
@@ -104,7 +111,7 @@ func (u *User) Create() error {
 
 	if err := db.Create(&u).Error; err != nil {
 		if strings.Contains(err.Error(), "UNIQUE") {
-			return ErrUnique
+			return ErrUnique{Message: "This email is already in use."}
 		}
 		return err
 	}
@@ -119,14 +126,49 @@ func (u *User) Update(patch *User) (*User, error) {
 	return u, nil
 }
 
-func (u *User) validate() error {
+// UpdatePassword updates a password after validation
+func (u User) UpdatePassword(pwReq *PasswordChangeRequest) error {
+	if err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(pwReq.Current)); err != nil {
+		return ErrInvalidCredentials{Message: "Your old password is invalid."}
+	}
+
+	if err := pwReq.validate(); err != nil {
+		return err
+	}
+
+	hash, err := bcrypt.GenerateFromPassword([]byte(pwReq.New), 10)
+	if err != nil {
+		return err
+	}
+
+	u.Password = trimmed(string(hash))
+	db.Model(&u).Updates(u)
+
+	return nil
+}
+
+func (u User) validate() error {
 	if err := validate.Struct(u); err != nil {
 		for _, v := range err.(validator.ValidationErrors) {
 			r := strings.NewReplacer("{field}", v.Field(), "{param}", v.Param())
 			e := r.Replace(errList[v.Tag()])
 
 			// return first error found.
-			return ValidationError{e}
+			return ErrValidation{Message: e}
+		}
+	}
+
+	return nil
+}
+
+func (p PasswordChangeRequest) validate() error {
+	if err := validate.Struct(p); err != nil {
+		for _, v := range err.(validator.ValidationErrors) {
+			r := strings.NewReplacer("{field}", v.Field(), "{param}", v.Param())
+			e := r.Replace(errList[v.Tag()])
+
+			// return first error found.
+			return ErrValidation{Message: e}
 		}
 	}
 

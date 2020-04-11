@@ -56,7 +56,7 @@ func FindInvoice(uuid string, id string) (*Invoice, error) {
 		Preload("Customer.Address").
 		Where("uuid = ? AND id = ?", uuid, id).
 		First(&invoice).RecordNotFound() {
-		return nil, ErrInvoiceNotFound
+		return nil, ErrNotFound{Message: "Invoice not found"}
 	}
 
 	return &invoice, nil
@@ -134,14 +134,14 @@ func InvoiceSetPaid(uuid string, payload *PaidPayload) error {
 	return nil
 }
 
-func (i *Invoice) validate() (err error) {
+func (i Invoice) validate() (err error) {
 	if err := validate.Struct(i); err != nil {
 		for _, v := range err.(validator.ValidationErrors) {
 			r := strings.NewReplacer("{field}", v.Field(), "{param}", v.Param())
 			e := r.Replace(errList[v.Tag()])
 
 			// return first error found.
-			return ValidationError{e}
+			return ErrValidation{Message: e}
 		}
 	}
 

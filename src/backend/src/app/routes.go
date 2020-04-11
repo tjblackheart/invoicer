@@ -31,6 +31,7 @@ func (app Application) routes() *mux.Router {
 
 	api.HandleFunc("/user/{uuid:[a-z0-9-]{36}}", app.getUser).Methods(http.MethodGet)
 	api.HandleFunc("/user/{uuid:[a-z0-9-]{36}}", app.updateUser).Methods(http.MethodPut)
+	api.HandleFunc("/user/{uuid:[a-z0-9-]{36}}/password", app.updatePassword).Methods(http.MethodPost)
 
 	if app.cfg.AllowedHost != "" {
 		r.Methods(http.MethodOptions).HandlerFunc(app.cors)

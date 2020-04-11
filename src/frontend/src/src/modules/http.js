@@ -168,6 +168,14 @@ export default {
     }
   },
 
+  async updatePassword (uuid, payload) {
+    try {
+      await instance.post(`/api/user/${uuid}/password`, payload)
+    } catch (e) {
+      this.handleError(e)
+    }
+  },
+
   handleError (error) {
     let msg = 'unspecified'
 

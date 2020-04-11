@@ -2,7 +2,6 @@ package app
 
 import (
 	"encoding/json"
-	"errors"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -32,8 +31,9 @@ func (app Application) login(w http.ResponseWriter, r *http.Request) {
 
 	u, err := models.Authenticate(c)
 	if err != nil {
-		if err == models.ErrInvalidCredentials {
-			app.error(w, errors.New("Invalid credentials"), http.StatusForbidden)
+		switch err.(type) {
+		case models.ErrInvalidCredentials:
+			app.error(w, err, http.StatusForbidden)
 			return
 		}
 
@@ -58,14 +58,9 @@ func (app Application) createUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := u.Create(); err != nil {
-		if err == models.ErrUnique {
-			app.error(w, errors.New("This email is already in use."), http.StatusBadRequest)
-			return
-		}
-
-		switch e := err.(type) {
-		case models.ValidationError:
-			app.error(w, e, http.StatusBadRequest)
+		switch err.(type) {
+		case models.ErrUnique, models.ErrValidation:
+			app.error(w, err, http.StatusBadRequest)
 			return
 		}
 
@@ -83,8 +78,9 @@ func (app Application) getUser(w http.ResponseWriter, r *http.Request) {
 
 	u, err := models.FindUser(vars["uuid"])
 	if err != nil {
-		if err == models.ErrUserNotFound {
-			app.error(w, errors.New("No such user."), http.StatusNotFound)
+		switch err.(type) {
+		case models.ErrNotFound:
+			app.error(w, err, http.StatusNotFound)
 			return
 		}
 
@@ -100,8 +96,9 @@ func (app Application) updateUser(w http.ResponseWriter, r *http.Request) {
 
 	u, err := models.FindUser(vars["uuid"])
 	if err != nil {
-		if err == models.ErrUserNotFound {
-			app.error(w, errors.New("No such user."), http.StatusNotFound)
+		switch err.(type) {
+		case models.ErrNotFound:
+			app.error(w, err, http.StatusNotFound)
 			return
 		}
 
@@ -122,6 +119,41 @@ func (app Application) updateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	app.json(w, u)
+}
+
+func (app Application) updatePassword(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	u, err := models.FindUser(vars["uuid"])
+	if err != nil {
+		switch err.(type) {
+		case models.ErrNotFound:
+			app.error(w, err, http.StatusNotFound)
+			return
+		}
+
+		app.error(w, err, http.StatusInternalServerError)
+		return
+	}
+
+	var pwReq models.PasswordChangeRequest
+	if err = json.NewDecoder(r.Body).Decode(&pwReq); err != nil {
+		app.error(w, err, http.StatusInternalServerError)
+		return
+	}
+
+	if err := u.UpdatePassword(&pwReq); err != nil {
+		switch err.(type) {
+		case models.ErrValidation, models.ErrInvalidCredentials:
+			app.error(w, err, http.StatusBadRequest)
+			return
+		}
+
+		app.error(w, err, http.StatusInternalServerError)
+		return
+	}
+
+	app.json(w, Map{})
 }
 
 //
@@ -151,7 +183,6 @@ func (app Application) getInvoices(w http.ResponseWriter, r *http.Request) {
 	}
 
 	invoices, err := models.InvoiceGetAll(uuid)
-
 	if err != nil {
 		app.error(w, err, http.StatusInternalServerError)
 		return
@@ -176,9 +207,9 @@ func (app Application) createInvoice(w http.ResponseWriter, r *http.Request) {
 
 	err = invoice.Create(uuid)
 	if err != nil {
-		switch e := err.(type) {
-		case models.ValidationError:
-			app.error(w, e, http.StatusBadRequest)
+		switch err.(type) {
+		case models.ErrValidation:
+			app.error(w, err, http.StatusBadRequest)
 			return
 		}
 
@@ -196,8 +227,7 @@ func (app Application) setPaid(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	payload := models.PaidPayload{}
-
+	var payload models.PaidPayload
 	if err = json.NewDecoder(r.Body).Decode(&payload); err != nil {
 		app.error(w, err, http.StatusInternalServerError)
 		return
@@ -250,7 +280,7 @@ func (app Application) getCustomer(w http.ResponseWriter, r *http.Request) {
 
 	customer, err := models.CustomerGet(uuid, vars["id"])
 	if err != nil {
-		app.error(w, errors.New("No such customer."), http.StatusNotFound)
+		app.error(w, err, http.StatusNotFound)
 		return
 	}
 
@@ -275,7 +305,6 @@ func (app Application) getCustomers(w http.ResponseWriter, r *http.Request) {
 
 func (app Application) createCustomer(w http.ResponseWriter, r *http.Request) {
 	customer := &models.Customer{}
-
 	if err := json.NewDecoder(r.Body).Decode(&customer); err != nil {
 		app.error(w, err, http.StatusInternalServerError)
 		return
@@ -289,14 +318,9 @@ func (app Application) createCustomer(w http.ResponseWriter, r *http.Request) {
 
 	customer, err = models.CustomerCreate(uuid, customer)
 	if err != nil {
-		if err == models.ErrUnique {
-			app.error(w, errors.New("This customer already exists."), http.StatusBadRequest)
-			return
-		}
-
-		switch e := err.(type) {
-		case models.ValidationError:
-			app.error(w, e, http.StatusBadRequest)
+		switch err.(type) {
+		case models.ErrUnique, models.ErrValidation:
+			app.error(w, err, http.StatusBadRequest)
 			return
 		}
 
@@ -375,8 +399,9 @@ func (app Application) printInvoice(w http.ResponseWriter, r *http.Request) {
 
 	u, err := models.FindUser(uuid)
 	if err != nil {
-		if err == models.ErrUserNotFound {
-			app.error(w, errors.New("No such user."), http.StatusNotFound)
+		switch err.(type) {
+		case models.ErrNotFound:
+			app.error(w, err, http.StatusNotFound)
 			return
 		}
 
@@ -393,7 +418,6 @@ func (app Application) printInvoice(w http.ResponseWriter, r *http.Request) {
 	}
 
 	b64, err := g.Base64(filename)
-
 	if err != nil {
 		app.error(w, err, http.StatusInternalServerError)
 		return
