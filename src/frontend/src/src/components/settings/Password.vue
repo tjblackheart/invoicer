@@ -136,7 +136,9 @@ export default {
   },
 
   validations: {
-    oldPassword: { required },
+    oldPassword: {
+      required
+    },
     newPassword: {
       required,
       minLength: minLength(8),

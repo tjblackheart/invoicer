@@ -47,7 +47,6 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
 import http from '@/modules/http'
 import Message from '@/components/misc/Message'
 import Search from '@/components/misc/Search'
@@ -112,19 +111,17 @@ export default {
   },
 
   created () {
-    this.clearMessage()
+    this.$store.commit('clearMessage')
     this.load()
   },
 
   methods: {
-    ...mapMutations([ 'setMessage', 'clearMessage' ]),
-
     async load () {
       try {
         this.customers = await http.fetchCustomers()
         this.customers.sort((a, b) => a.id < b.id ? 1 : -1)
       } catch (error) {
-        this.setMessage({
+        this.$store.commit('setMessage', {
           text: error.message,
           style: 'is-danger',
         })
@@ -140,7 +137,7 @@ export default {
         await http.removeCustomer(id)
         this.load()
       } catch (error) {
-        this.setMessage({
+        this.$store.commit('setMessage', {
           text: error.message,
           style: 'is-danger',
         })

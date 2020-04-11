@@ -70,11 +70,12 @@ const router = new Router({
     },
     {
       name: 'settings',
-      path: '/settings',
+      path: '/settings/:view*',
       component: Settings,
       meta: {
         requiresAuth: true,
       },
+      props: true,
     },
     {
       name: 'login',

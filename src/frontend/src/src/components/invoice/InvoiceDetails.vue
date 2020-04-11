@@ -209,7 +209,6 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
 import http from '@/modules/http'
 import Message from '@/components/misc/Message'
 import PrintLink from './PrintLink'
@@ -255,16 +254,14 @@ export default {
   },
 
   created () {
-    this.clearMessage()
+    this.$store.commit('clearMessage')
     this.load()
   },
 
   methods: {
-    ...mapMutations([ 'setMessage', 'clearMessage' ]),
-
     async load () {
       this.busy = true
-      this.clearMessage()
+      this.$store.commit('clearMessage')
 
       try {
         this.invoice = await http.fetchInvoice(this.$route.params.id)
@@ -272,7 +269,7 @@ export default {
         this.address = this.invoice.customer.address
         this.calculateTotals()
       } catch (err) {
-        this.setMessage({
+        this.$store.commit('setMessage', {
           text: err,
           style: 'is-danger',
         })
@@ -308,7 +305,7 @@ export default {
 
     async printInvoice (id) {
       this.busy = true
-      this.clearMessage()
+      this.$store.commit('clearMessage')
 
       try {
         const r = await http.printInvoice(id)
@@ -319,7 +316,7 @@ export default {
         a.download = r.filename
         a.click()
       } catch (err) {
-        this.setMessage({
+        this.$store.commit('setMessage', {
           text: err,
           style: 'is-danger',
         })

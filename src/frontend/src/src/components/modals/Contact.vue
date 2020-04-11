@@ -13,7 +13,7 @@
       id="c.value"
       v-model.trim="contact.value"
       :type="contact.type === 'Email' ? 'email' : 'text'"
-      :label="contact.type === 'Email' ? 'Email' : 'Value'"
+      :label="label"
       required
     />
   </div>
@@ -53,5 +53,15 @@ export default {
       error: null,
     }
   },
+
+  computed: {
+    label () {
+      if (this.contact.type !== 'Other') {
+        return this.contact.type
+      }
+
+      return 'Value'
+    }
+  }
 }
 </script>

@@ -86,8 +86,8 @@ export default {
     }
   },
 
-  created () {
-    this.formattedIBAN = this.value.settings.iban
+  mounted () {
+    this.formattedIBAN = this.value.settings && this.value.settings.iban || ''
   },
 
   methods: {

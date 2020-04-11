@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
 import http from '@/modules/http'
 
 import Icon from 'vue-awesome/components/Icon'
@@ -51,10 +50,8 @@ export default {
   },
 
   methods: {
-    ...mapMutations([ 'setMessage', 'clearMessage' ]),
-
     async printInvoice () {
-      this.clearMessage()
+      this.$store.commit('clearMessage')
       this.busy = true
 
       try {
@@ -65,7 +62,10 @@ export default {
         a.download = r.filename
         a.click()
       } catch (err) {
-        this.setMessage({ text: err, style: 'is-danger' })
+        this.$store.commit('setMessage', {
+          text: err,
+          style: 'is-danger'
+        })
       } finally {
         this.busy = false
       }

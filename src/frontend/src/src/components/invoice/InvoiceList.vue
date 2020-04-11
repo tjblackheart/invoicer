@@ -74,7 +74,6 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
 import http from '@/modules/http'
 import dayjs from 'dayjs'
 import Message from '@/components/misc/Message'
@@ -151,24 +150,26 @@ export default {
 
     filters () {
       this.currentPage = 1
-    }
+    },
+
+    showCancelled () {
+      this.currentPage = 1
+    },
   },
 
   created () {
-    this.clearMessage()
+    this.$store.commit('clearMessage')
     this.load()
     this.paymentDate = dayjs().format('YYYY-MM-DD')
   },
 
   methods: {
-    ...mapMutations([ 'setMessage', 'clearMessage' ]),
-
     async load () {
       try {
         this.invoices = await http.fetchInvoices()
         this.invoices.sort((a, b) => a.id < b.id ? 1 : -1)
       } catch (error) {
-        this.setMessage({
+        this.$store.commit('setMessage', {
           text: error.message,
           style: 'is-danger',
         })
@@ -201,7 +202,7 @@ export default {
         await http.cancelInvoice(id)
         this.invoices = await http.fetchInvoices()
       } catch (error) {
-        this.setMessage({
+        this.$store.commit('setMessage', {
           text: error.message,
           style: 'is-danger',
         })

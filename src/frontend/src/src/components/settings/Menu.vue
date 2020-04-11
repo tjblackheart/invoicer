@@ -8,8 +8,8 @@
       <li>
         <a
           href
-          :class="['is-clearfix', { 'is-active': item.active }]"
-          @click.prevent="$emit('select', item.view)"
+          :class="['is-clearfix', { 'is-active': active === item.view }]"
+          @click.prevent="goTo(item.view)"
         >
           <span class="is-pulled-left">
             {{ item.title }}
@@ -37,6 +37,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    active: {
+      type: String,
+      default: '',
+    },
   },
 
   methods: {
@@ -51,6 +55,12 @@ export default {
       }
 
       return 0
+    },
+
+    goTo (view) {
+      if (view !== this.active) {
+        this.$router.push(`/settings/${view}`)
+      }
     }
   },
 }

@@ -82,7 +82,6 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
 import http from '@/modules/http'
 import Message from '@/components/misc/Message'
 import BInput from '@/components/fields/Input'
@@ -109,14 +108,12 @@ export default {
   },
 
   created () {
-    this.clearMessage()
+    this.$store.commit('clearMessage')
   },
 
   methods: {
-    ...mapMutations([ 'setMessage', 'clearMessage' ]),
-
     async submit () {
-      this.clearMessage()
+      this.$store.commit('clearMessage')
 
       if (this.hasErrors) {
         return
@@ -125,12 +122,12 @@ export default {
       try {
         this.busy = true
         await http.createUser(this.u)
-        this.setMessage({
+        this.$store.commit('setMessage', {
           text: 'Account successfully created.',
         })
         this.created = true
       } catch (error) {
-        this.setMessage({
+        this.$store.commit('setMessage', {
           text: error.message,
           style: 'is-danger',
         })
@@ -145,7 +142,7 @@ export default {
   },
 
   beforeRouteLeave (to, from, next) {
-    this.clearMessage()
+    this.$store.commit('clearMessage')
     next()
   },
 

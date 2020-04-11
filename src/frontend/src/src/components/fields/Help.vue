@@ -6,7 +6,7 @@
     <span v-if="text"> {{ text }} </span>
     <router-link
       v-if="link"
-      :to="{ name: link.to }"
+      :to="link.to"
     >
       {{ link.text }}
     </router-link>

@@ -13,7 +13,7 @@
     <hr>
 
     <form @submit.prevent="submit">
-      <b-text :helplink="{ to: 'settings', text: 'Edit ...' }">
+      <b-text :helplink="{ to: '/settings/numbers', text: 'Edit ...' }">
         Number: <strong> {{ customer.number }} </strong>
       </b-text>
 
@@ -173,7 +173,6 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
 import http from '@/modules/http'
 import Modal from '@/components/modals/Modal.vue'
 import ContactForm from '@/components/modals/Contact.vue'
@@ -222,29 +221,27 @@ export default {
   },
 
   created () {
-    this.clearMessage()
+    this.$store.commit('clearMessage')
     this.load()
   },
 
   methods: {
-    ...mapMutations([ 'setMessage', 'clearMessage' ]),
-
     async load () {
       try {
         this.user = await http.fetchUser(this.$store.getters.uuid)
 
         if (this.user.settings.user_id === 0) {
-          this.setMessage({
+          this.$store.commit('setMessage', {
             text: 'Please review your application settings.',
             style: 'is-warning',
           })
-          this.$router.push('/settings')
+          this.$router.push('/settings/banking')
         }
 
         this.setCustomerNumber()
         this.$store.commit('setUser', this.user)
       } catch (error) {
-        this.setMessage({
+        this.$store.commit('setMessage', {
           text: error.message,
           style: 'is-danger',
         })
@@ -269,7 +266,7 @@ export default {
         }
         this.$router.go(-1)
       } catch (error) {
-        this.setMessage({
+        this.$store.commit('setMessage', {
           text: error.message,
           style: 'is-danger',
         })
@@ -321,7 +318,7 @@ export default {
           vm.edit = true
           vm.customer = await http.fetchCustomer(to.params.id)
         } catch (error) {
-          vm.setMessage({
+          vm.$store.commit('setMessage', {
             text: error.message,
             style: 'is-danger',
           })

@@ -20,7 +20,7 @@
             type="text"
             label="Number"
             disabled
-            :helplink="{ to: 'settings', text: 'Edit ... ' }"
+            :helplink="{ to: '/settings/numbers', text: 'Edit ... ' }"
           />
         </div>
 
@@ -39,7 +39,7 @@
             v-model.number="invoice.customer_id"
             label="Customer"
             :options="customerSelect"
-            :helplink="{ to: 'customer_create', text: 'Add customer ...' }"
+            :helplink="{ to: '/customers/create', text: 'Add customer ...' }"
           />
         </div>
 
@@ -190,7 +190,6 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
 import http from '@/modules/http'
 import Modal from '@/components/modals/Modal'
 import ItemForm from '@/components/modals/Item'
@@ -267,24 +266,22 @@ export default {
   },
 
   created () {
-    this.clearMessage()
+    this.$store.commit('clearMessage')
     this.load()
     this.initItem()
   },
 
   methods: {
-    ...mapMutations([ 'setMessage', 'clearMessage' ]),
-
     async load () {
       try {
         this.user = await http.fetchUser(this.$store.getters.uuid)
 
         if (this.user.settings.user_id === 0) {
-          this.setMessage({
+          this.$store.commit('setMessage', {
             text: 'Please review your application settings.',
             style: 'is-warning',
           })
-          this.$router.push('/settings')
+          this.$router.push('/settings/banking')
         }
 
         this.setInvoiceNumber()
@@ -296,7 +293,7 @@ export default {
           this.invoice.customer_id = this.customer.id
         }
       } catch (error) {
-        this.setMessage({ text: error.message, style: 'is-danger' })
+        this.$store.commit('setMessage', { text: error.message, style: 'is-danger' })
       }
     },
 
@@ -360,11 +357,11 @@ export default {
     },
 
     async submit () {
-      this.clearMessage()
+      this.$store.commit('clearMessage')
       this.busy = true
 
       if (!this.invoice.items.length) {
-        this.setMessage({
+        this.$store.commit('setMessage', {
           text: 'Please add some items first.',
           style: 'is-warning',
         })
@@ -376,7 +373,7 @@ export default {
         await http.postInvoice(this.invoice)
         this.$router.push('/invoices')
       } catch (error) {
-        this.setMessage({
+        this.$store.commit('setMessage', {
           text: error.message,
           style: 'is-danger',
         })

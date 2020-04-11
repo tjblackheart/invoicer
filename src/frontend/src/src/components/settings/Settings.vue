@@ -43,13 +43,15 @@
         <settings-menu
           :items="items"
           :errors="errors"
+          :active="view"
           @select="toggle($event)"
         />
       </div>
       <div class="column is-9">
         <keep-alive>
           <component
-            :is="activeView"
+            :is="view"
+            v-if="inItems(view)"
             v-model="user"
             @error="handleError($event)"
           />
@@ -60,7 +62,6 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
 import http from '@/modules/http'
 import Message from '@/components/misc/Message'
 
@@ -84,17 +85,24 @@ export default {
     Contacts,
   },
 
+  props: {
+    view: {
+      type: String,
+      default: 'user',
+    },
+  },
+
   data () {
     return {
       user: {},
       defaults: {}, // clone of 'user'
       items: [
-        { view: 'user', title: 'Profile', active: false },
-        { view: 'password', title: 'Password', active: false },
-        { view: 'banking', title: 'Banking', active: false },
-        { view: 'numbers', title: 'Numbers', active: false },
-        { view: 'company', title: 'Company', active: false },
-        { view: 'contacts', title: 'Contacts', active: false },
+        { view: 'user', title: 'Profile' },
+        { view: 'password', title: 'Password' },
+        { view: 'banking', title: 'Banking' },
+        { view: 'numbers', title: 'Numbers' },
+        { view: 'company', title: 'Company' },
+        { view: 'contacts', title: 'Contacts' },
       ],
       dirty: false,
       busy: false,
@@ -103,11 +111,6 @@ export default {
   },
 
   computed: {
-    activeView () {
-      const item = this.items.find(i => i.active === true)
-      return (item) ? item.view : this.items[0].view
-    },
-
     hasErrors () {
       return this.errors.some(e => e.errors)
     },
@@ -123,25 +126,26 @@ export default {
       deep: true,
     },
 
-    activeView () {
-      this.clearMessage()
+    view () {
+      this.$store.commit('clearMessage')
     },
   },
 
   created () {
     this.load()
-    this.toggle(this.activeView)
   },
 
   methods: {
-    ...mapMutations([ 'setMessage', 'clearMessage', 'setUser' ]),
+    inItems (view) {
+      return this.items.some(i => i.view === view)
+    },
 
     async load () {
       try {
         this.user = await http.fetchUser(this.$store.getters.uuid)
         this.setDefaults()
       } catch (error) {
-        this.setMessage({
+        this.$store.commit('setMessage', {
           text: error.message,
           style: 'is-danger',
         })
@@ -150,9 +154,9 @@ export default {
 
     async submit () {
       try {
-        this.clearMessage()
+        this.$store.commit('clearMessage')
         if (this.hasErrors) {
-          this.setMessage({
+          this.$store.commit('setMessage', {
             text: 'There are errors in the submitted data. Please review.',
             style: 'is-danger',
           })
@@ -162,25 +166,19 @@ export default {
         this.busy = true
 
         const user = await http.putUser(this.user)
-        this.setUser(user)
-        this.setMessage({ text: 'Settings saved.' })
+        this.$store.commit('setUser', user)
+        this.$store.commit('setMessage', { text: 'Settings saved.' })
 
         this.dirty = false
         this.setDefaults()
       } catch (error) {
-        this.setMessage({
+        this.$store.commit('setMessage', {
           text: error.message,
           style: 'is-danger',
         })
       } finally {
         this.busy = false
       }
-    },
-
-    toggle (view) {
-      this.items.map(item => {
-        item.active = item.view === view || false
-      })
     },
 
     setDefaults () {
@@ -200,6 +198,22 @@ export default {
     },
   },
 
+  beforeRouteEnter (to, from, next) {
+    next (vm => {
+      const target = to.params.view
+      if (!vm.items.some(i => i.view === target)) {
+        vm.$router.push(`/settings/${vm.items[0].view}`)
+      }
+    })
+  },
+
+  beforeRouteUpdate (to, from, next) {
+    if (!this.items.some(i => i.view === to.params.view)) {
+      to.params.view = this.items[0].view
+    }
+    next()
+  },
+
   beforeRouteLeave (to, from, next) {
     if (this.dirty) {
       if (!confirm('There are unsaved changes. Really leave?')) {
@@ -207,7 +221,7 @@ export default {
       }
     }
 
-    this.clearMessage()
+    this.$store.commit('clearMessage')
     next()
   },
 }

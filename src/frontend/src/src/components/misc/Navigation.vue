@@ -43,7 +43,7 @@
             Customers
           </router-link>
           <router-link
-            :to="{name: 'settings'}"
+            to="/settings/user"
             class="navbar-item"
             @click.native="toggleMenu"
           >

@@ -49,7 +49,6 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
 import http from '@/modules/http'
 import Message from '@/components/misc/Message.vue'
 import BInput from '@/components/fields/Input'
@@ -73,28 +72,26 @@ export default {
   },
 
   methods: {
-    ...mapMutations([ 'setMessage', 'clearMessage' ]),
-
     async submit () {
       try {
         this.busy = true
-        this.clearMessage()
+        this.$store.commit('clearMessage')
 
         const r = await http.login(this.credentials)
         this.$store.commit('login', { token: r.token, user: r.user })
 
         if (r.user.settings.user_id === 0) {
-          this.setMessage({
+          this.$store.commit('setMessage', {
             text: 'Please review your application settings.',
             style: 'is-warning',
           })
-          this.$router.push('/settings')
+          this.$router.push('/settings/banking')
         } else {
           this.$router.push('/')
         }
       } catch (err) {
         this.credentials.password = null
-        this.setMessage({
+        this.$store.commit('setMessage', {
           text: err.message,
           style: 'is-warning',
         })
