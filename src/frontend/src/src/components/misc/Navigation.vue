@@ -29,22 +29,28 @@
       >
         <div class="navbar-start">
           <router-link
-            :to="{name: 'invoice_list'}"
-            class="navbar-item"
+            to="/invoices"
+            :class="['navbar-item', {
+              'is-active': currentPath.includes('/invoice')
+            }]"
             @click.native="toggleMenu"
           >
             Invoices
           </router-link>
           <router-link
-            :to="{name: 'customer_list'}"
-            class="navbar-item"
+            to="/customers"
+            :class="['navbar-item', {
+              'is-active': currentPath.includes('/customers')
+            }]"
             @click.native="toggleMenu"
           >
             Customers
           </router-link>
           <router-link
             to="/settings/user"
-            class="navbar-item"
+            :class="['navbar-item', {
+              'is-active': currentPath.includes('/settings')
+            }]"
             @click.native="toggleMenu"
           >
             Settings
@@ -84,6 +90,10 @@ export default {
   computed: {
     username () {
       return this.$store.getters.username
+    },
+
+    currentPath () {
+      return this.$route.path
     },
   },
 
