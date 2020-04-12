@@ -7,7 +7,9 @@
     <div class="container is-fluid">
       <div class="navbar-brand">
         <div class="navbar-item">
-          <b>Invoicer</b>
+          <router-link to="/">
+            <b>Invoicer</b>
+          </router-link>
         </div>
         <a
           id="burger"
@@ -56,8 +58,9 @@
             Settings
           </router-link>
         </div>
+
         <div class="navbar-end">
-          <div class="navbar-item is-visible-desktop">
+          <div class="navbar-item is-hidden-touch">
             <p v-if="username">
               Welcome back, <b>{{ username }}! </b>
             </p>
@@ -65,6 +68,7 @@
               Welcome back!
             </p>
           </div>
+
           <div class="navbar-item">
             <a
               class="button is-small is-primary"
@@ -112,3 +116,35 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.navbar-brand {
+  .navbar-item {
+    a {
+      color: #363636;
+      font-size: 20px;
+    }
+  }
+}
+
+@media screen and (max-width: 1023px) {
+  .container {
+    &.is-fluid {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+  }
+
+  .navbar-menu {
+    box-shadow: none !important;
+    border-top: 1px solid #f9f9f9;
+  }
+
+  .navbar-end {
+    div.navbar-item:last-child {
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+  }
+}
+</style>
