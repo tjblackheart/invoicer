@@ -10,8 +10,9 @@
 
     <div class="is-clearfix">
       <div class="is-pulled-left">
-        <b-checkbox
+        <b-switch
           v-if="type === 'invoice'"
+          id="show_cancelled"
           v-model="showCancelled"
           label="Show cancelled invoices"
         />
@@ -23,7 +24,9 @@
         <a
           href
           @click.prevent="resetFilters"
-        > Reset all filters </a>
+        >
+          Reset all filters
+        </a>
       </div>
     </div>
   </div>
@@ -31,13 +34,13 @@
 
 <script>
 import BInput from '@/components/fields/Input'
-import BCheckbox from '@/components/fields/Checkbox'
+import BSwitch from '@/components/fields/Switch'
 
 export default {
 
   components: {
     BInput,
-    BCheckbox,
+    BSwitch,
   },
   props: {
     placeholder: {
@@ -87,6 +90,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+a {
+  font-size: 14px;
+}
 </style>
