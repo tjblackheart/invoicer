@@ -44,3 +44,51 @@ tr.is-cancelled {
 .fade-leave-active {
   transition: all .1s ease
 }
+
+@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px)  {
+  table, thead, tbody, th, td, tr {
+		display: block;
+    background: transparent !important;
+    font-size: 14px;
+	}
+
+	/* Hide table headers (but not display: none;, for accessibility) */
+	thead tr {
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+
+	tr {
+    background: #fff !important;
+    border: 1px solid #f9f9f9;
+    margin-bottom: 10px;
+  }
+
+	td {
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #f1f1f1 !important;
+		position: relative;
+		padding-left: 50% !important;
+	}
+
+	td:before {
+		content: attr(data-label);
+		position: absolute;
+		top: 7px;
+		left: 10px;
+		width: 45%;
+		padding-right: 10px;
+		white-space: nowrap;
+    color: #464646 !important;
+	}
+
+  td.has-text-right {
+    text-align: left !important;
+  }
+
+  tr:last-child td {
+    border-bottom-width: 1px !important;
+  }
+}

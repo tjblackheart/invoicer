@@ -23,23 +23,36 @@
           :class="{'is-cancelled': invoice.is_cancelled}"
         >
           <!-- <td> {{ invoice.id }} </td> -->
-          <td> {{ invoice.number }} </td>
-          <td> {{ invoice.date|date }} </td>
+          <td data-label="Number">
+            {{ invoice.number }}
+          </td>
 
-          <td :title="`${invoice.due_days} days`">
+          <td data-label="Date">
+            {{ invoice.date|date }}
+          </td>
+
+          <td
+            :title="`${invoice.due_days} days`"
+            data-label="Due date"
+          >
             {{ dueDate(invoice) }}
           </td>
 
-          <td>
+          <td data-label="Customer">
             <router-link :to="{ name: 'customer_details', params: { id:invoice.customer.id }}">
               {{ invoice.customer.address.company }}
             </router-link>
           </td>
 
-          <td> {{ invoice.items.length }} </td>
-          <td> <strong>{{ invoice.total_net | money(invoice.currency) }} </strong> </td>
+          <td data-label="Items">
+            {{ invoice.items.length }}
+          </td>
 
-          <td>
+          <td data-label="Total (Net)">
+            <strong>{{ invoice.total_net | money(invoice.currency) }} </strong>
+          </td>
+
+          <td data-label="Paid">
             <span v-if="invoice.is_paid">
               {{ invoice.paid_at|date }}
             </span>
@@ -49,7 +62,10 @@
             </span>
           </td>
 
-          <td class="has-text-right">
+          <td
+            class="has-text-right"
+            data-label="Actions"
+          >
             <router-link :to="{name: 'invoice_details', params: {id:invoice.id}}">
               View
             </router-link>
@@ -115,7 +131,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>
