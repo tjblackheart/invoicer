@@ -28,6 +28,10 @@ hr {
   background-color: #e9e9e9;
 }
 
+th {
+  text-transform: uppercase;
+}
+
 tr.is-cancelled {
   background: #f1f1f1;
   color: #999 !important;
@@ -95,13 +99,15 @@ tr.is-cancelled {
         &:before {
           content: attr(data-label);
           position: absolute;
-          top: 7px;
+          top: 9px;
           left: 10px;
           width: 40%;
           padding-right: 10px;
           white-space: nowrap;
           color: #464646;
+          font-size: 12px;
           font-weight: normal;
+          text-transform: uppercase;
         }
       }
 
