@@ -66,7 +66,7 @@
           </div>
         </div>
 
-        <nav class="level is-mobile has-background-white-ter">
+        <nav class="level has-background-white-ter">
           <div class="level-item has-text-centered">
             <div>
               <p class="heading">
@@ -145,19 +145,37 @@
                 v-for="(i, index) in invoice.items"
                 :key="i.id"
               >
-                <td> {{ index + 1 }} </td>
-                <td> {{ i.amount }} {{ i.unit }} </td>
-                <td class="content">
+                <td data-label="Pos">
+                  {{ index + 1 }}
+                </td>
+                <td data-label="Qty">
+                  {{ i.amount }} {{ i.unit }}
+                </td>
+                <td
+                  data-label="Desc"
+                  class="content"
+                >
                   <markdown :md="i.description" />
                 </td>
-                <td> {{ i.price_per_unit | money(invoice.currency) }} </td>
-                <td class="has-text-right">
+                <td data-label="Price/Unit">
+                  {{ i.price_per_unit | money(invoice.currency) }}
+                </td>
+                <td
+                  data-label="Total (Net)"
+                  class="has-text-right"
+                >
                   {{ totalNet(i) | money(invoice.currency) }}
                 </td>
-                <td class="has-text-right">
+                <td
+                  data-label="VAT"
+                  class="has-text-right"
+                >
                   {{ i.vat }}%
                 </td>
-                <td class="has-text-right">
+                <td
+                  data-label="Total (Gross)"
+                  class="has-text-right"
+                >
                   {{ totalGross(i) | money(invoice.currency) }}
                 </td>
               </tr>

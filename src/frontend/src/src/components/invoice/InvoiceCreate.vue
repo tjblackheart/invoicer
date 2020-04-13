@@ -89,13 +89,25 @@
                     v-for="(i, index) in invoice.items"
                     :key="index"
                   >
-                    <td> {{ i.amount }}{{ i.unit }} </td>
-                    <td> {{ i.price_per_unit|money(invoice.currency) }} </td>
-                    <td> {{ i.vat }}% </td>
-                    <td class="content">
+                    <td data-label="Amount">
+                      {{ i.amount }}{{ i.unit }}
+                    </td>
+                    <td data-label="Price/Unit">
+                      {{ i.price_per_unit|money(invoice.currency) }}
+                    </td>
+                    <td data-label="VAT">
+                      {{ i.vat }}%
+                    </td>
+                    <td
+                      data-label="Description"
+                      class="content"
+                    >
                       <markdown :md="i.description" />
                     </td>
-                    <td class="has-text-right">
+                    <td
+                      data-label="Actions"
+                      class="has-text-right"
+                    >
                       <a @click.prevent="editItem(index)">
                         Edit
                       </a> &middot;

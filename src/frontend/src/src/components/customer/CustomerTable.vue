@@ -16,11 +16,22 @@
           v-for="customer in pagedItems"
           :key="customer.id"
         >
-          <td> {{ customer.number }} </td>
-          <td> {{ customer.address.company }} </td>
-          <td> {{ customer.address.city }}, {{ customer.address.zip }} </td>
+          <td data-label="Number">
+            {{ customer.number }}
+          </td>
 
-          <td class="has-text-right">
+          <td data-label="Company">
+            {{ customer.address.company }}
+          </td>
+
+          <td data-label="City">
+            {{ customer.address.city }}, {{ customer.address.zip }}
+          </td>
+
+          <td
+            data-label="Actions"
+            class="has-text-right"
+          >
             <router-link :to="{ name: 'customer_details', params: {id:customer.id} }">
               Edit
             </router-link>

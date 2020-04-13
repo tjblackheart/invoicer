@@ -108,9 +108,16 @@
                 v-for="(c, index) in customer.contacts"
                 :key="index"
               >
-                <td>{{ c.type }}</td>
-                <td>{{ c.value }}</td>
-                <td class="has-text-right">
+                <td data-label="Type">
+                  {{ c.type }}
+                </td>
+                <td data-label="Value">
+                  {{ c.value }}
+                </td>
+                <td
+                  data-label="Actions"
+                  class="has-text-right"
+                >
                   <a @click.prevent="editContact(index)"> Edit </a> &middot;
                   <a @click.prevent="removeContact(index)"> Remove </a>
                 </td>

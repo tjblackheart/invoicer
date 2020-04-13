@@ -16,6 +16,10 @@ Vue.prototype.$md = new Showdown.Converter({
   openLinksInNewWindow: true,
 })
 
+Vue.prototype.$isMobile = () => {
+  return typeof window.orientation !== "undefined" || navigator.userAgent.indexOf('IEMobile') !== -1
+}
+
 new Vue({
   router,
   store,

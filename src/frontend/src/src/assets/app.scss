@@ -31,7 +31,14 @@ hr {
 tr.is-cancelled {
   background: #f1f1f1;
   color: #999 !important;
-  a, strong { color: #999; }
+
+  strong {
+    color: #999;
+  }
+
+  a {
+    color: $link !important;
+  }
 }
 
 .fade-enter,
@@ -46,49 +53,73 @@ tr.is-cancelled {
 }
 
 @media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px)  {
+  html {
+    font-size: 14px;
+  }
+
   table, thead, tbody, th, td, tr {
 		display: block;
     background: transparent !important;
-    font-size: 14px;
-	}
-
-	/* Hide table headers (but not display: none;, for accessibility) */
-	thead tr {
-		position: absolute;
-		top: -9999px;
-		left: -9999px;
-	}
-
-	tr {
-    background: #fff !important;
-    border: 1px solid #f9f9f9;
-    margin-bottom: 10px;
   }
 
-	td {
-		/* Behave  like a "row" */
-		border: none;
-		border-bottom: 1px solid #f1f1f1 !important;
-		position: relative;
-		padding-left: 50% !important;
-	}
+  table {
+    thead {
+      tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+      }
+    }
 
-	td:before {
-		content: attr(data-label);
-		position: absolute;
-		top: 7px;
-		left: 10px;
-		width: 45%;
-		padding-right: 10px;
-		white-space: nowrap;
-    color: #464646 !important;
-	}
+    tr {
+      background: #fff !important;
+      border: 1px solid #f9f9f9 !important;
+      margin-bottom: 10px;
 
-  td.has-text-right {
-    text-align: left !important;
-  }
+      td {
+        border: none;
+        border-bottom: 1px solid #f1f1f1 !important;
+        position: relative;
+        padding-left: 45% !important;
+        font-weight: bold;
 
-  tr:last-child td {
-    border-bottom-width: 1px !important;
+        &.has-text-right {
+          text-align: left !important;
+        }
+
+        &.content {
+          font-weight: normal;
+          margin-bottom: 0 !important;
+        }
+
+        &:before {
+          content: attr(data-label);
+          position: absolute;
+          top: 7px;
+          left: 10px;
+          width: 40%;
+          padding-right: 10px;
+          white-space: nowrap;
+          color: #464646;
+          font-weight: normal;
+        }
+      }
+
+      &.is-cancelled {
+        background: #fefefe !important;
+        td {
+          border-bottom: 1px solid #f9f9f9 !important;
+          font-weight: normal;
+
+          &:before {
+            color: #999;
+          }
+        }
+      }
+
+      &:last-child td {
+        border-bottom-width: 1px !important;
+      }
+    }
   }
 }
