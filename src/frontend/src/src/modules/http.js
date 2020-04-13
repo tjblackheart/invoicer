@@ -123,14 +123,14 @@ export default {
     }
   },
 
-  async removeCustomer (id) {
-    try {
-      const r = await instance.delete(`/api/customer/${id}`)
-      return r.data
-    } catch (error) {
-      this.handleError(error)
-    }
-  },
+  // async removeCustomer (id) {
+  //   try {
+  //     const r = await instance.delete(`/api/customer/${id}`)
+  //     return r.data
+  //   } catch (error) {
+  //     this.handleError(error)
+  //   }
+  // },
 
   async postCustomer (customer) {
     try {

@@ -18,7 +18,7 @@
           :helptext="v('username') ? 'Please enter a valid username.' : ''"
           placeholder="Username"
           autofocus
-          @blur="$v.u.username.$touch()"
+          @input="$v.u.username.$touch()"
         />
 
         <b-input
@@ -28,7 +28,7 @@
           :helptext="v('email') ? 'Please enter a valid email address.' : ''"
           placeholder="Email"
           type="email"
-          @blur="$v.u.email.$touch()"
+          @input="$v.u.email.$touch()"
         />
 
         <b-input
@@ -38,7 +38,7 @@
           :helptext="v('password') ? 'The password should be at least 8 characters long.' : ''"
           type="password"
           placeholder="Password"
-          @blur="$v.u.password.$touch()"
+          @input="$v.u.password.$touch()"
         />
 
         <b-input
@@ -48,7 +48,7 @@
           :helptext="v('repeat_password') ? 'The passwords should match.' : ''"
           type="password"
           placeholder="Repeat password"
-          @blur="$v.u.repeat_password.$touch()"
+          @input="$v.u.repeat_password.$touch()"
         />
 
         <message />
@@ -58,14 +58,14 @@
         <button
           type="submit"
           :disabled="busy || hasErrors"
-          :class="['button is-block is-fullwidth', {'is-primary': !hasErrors, 'is-loading': busy}]"
+          :class="['button is-primary is-block is-fullwidth', { 'is-loading': busy }]"
         >
           Register
         </button>
       </div>
 
       <p class="has-text-grey has-text-centered">
-        <router-link :to="{ name: 'login' }">
+        <router-link to="/login">
           No thanks
         </router-link>
       </p>
@@ -74,7 +74,7 @@
     <div v-else>
       <message />
       <hr>
-      <router-link :to="{ name: 'login' }">
+      <router-link to="/login">
         Back to login
       </router-link>
     </div>

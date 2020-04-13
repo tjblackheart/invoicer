@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import dayjs from 'dayjs'
 
-const locale = process.env.VUE_APP_LOCALE || 'de-DE'
+const locale = process.env.VUE_APP_LOCALE || 'en-US'
 
 Vue.filter('money', (val, cur = 'EUR') => {
-  return (val).toLocaleString(locale, {
+  return val.toLocaleString(locale, {
     style: 'currency',
     currency: cur,
   })
@@ -12,5 +12,10 @@ Vue.filter('money', (val, cur = 'EUR') => {
 
 Vue.filter('date', val => {
   const d = dayjs(val)
-  return (locale === 'de-DE') ? d.format('DD.MM.YYYY') : d.format('MM/DD/YYYY')
+
+  if (locale === 'de-DE') {
+    return d.format('DD.MM.YYYY')
+  }
+
+  return d.format('MM/DD/YYYY')
 })

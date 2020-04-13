@@ -31,9 +31,8 @@
 
       <button
         type="submit"
-        :class="{'is-loading': busy}"
-        :disabled="busy"
-        class="button is-block is-primary is-fullwidth"
+        :disabled="busy || !hasValues"
+        :class="['button is-block is-primary is-fullwidth', { 'is-loading': busy }]"
       >
         Login
       </button>
@@ -71,6 +70,12 @@ export default {
     }
   },
 
+  computed: {
+    hasValues () {
+      return this.credentials.email !== '' && this.credentials.password !== ''
+    }
+  },
+
   methods: {
     async submit () {
       try {
@@ -90,7 +95,7 @@ export default {
           this.$router.push('/')
         }
       } catch (err) {
-        this.credentials.password = null
+        this.credentials.password = ''
         this.$store.commit('setMessage', {
           text: err.message,
           style: 'is-warning',
