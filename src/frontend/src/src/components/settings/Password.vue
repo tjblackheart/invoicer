@@ -4,46 +4,44 @@
       <icon name="user-cog" /> Change password
     </h3>
 
-    <div class="fieldset">
-      <b-input
-        id="s.old_password"
-        v-model="$v.oldPassword.$model"
-        label="Your old password"
-        type="password"
-        :has-error="$v.oldPassword.$error"
-        :helptext="$v.oldPassword.$error ? 'Please enter a password.' : ''"
-        @input="validate('oldPassword')"
-      />
+    <b-input
+      id="s.old_password"
+      v-model="$v.oldPassword.$model"
+      label="Your old password"
+      type="password"
+      :has-error="$v.oldPassword.$error"
+      :helptext="$v.oldPassword.$error ? 'Please enter a password.' : ''"
+      @input="validate('oldPassword')"
+    />
 
-      <b-input
-        id="s.new_password"
-        v-model="$v.newPassword.$model"
-        label="New password"
-        type="password"
-        :has-error="$v.newPassword.$error"
-        :helptext="$v.newPassword.$error ? 'The password should be at least 8 characters long.' : ''"
-        @input="validate('newPassword')"
-      />
+    <b-input
+      id="s.new_password"
+      v-model="$v.newPassword.$model"
+      label="New password"
+      type="password"
+      :has-error="$v.newPassword.$error"
+      :helptext="$v.newPassword.$error ? 'The password should be at least 8 characters long.' : ''"
+      @input="validate('newPassword')"
+    />
 
-      <b-input
-        id="s.confirm_password"
-        v-model="$v.confirmPassword.$model"
-        label="Confirm password"
-        type="password"
-        :has-error="$v.confirmPassword.$error"
-        :helptext="$v.confirmPassword.$error ? 'The passwords should match.' : ''"
-        @input="validate('confirmPassword')"
-      />
+    <b-input
+      id="s.confirm_password"
+      v-model="$v.confirmPassword.$model"
+      label="Confirm password"
+      type="password"
+      :has-error="$v.confirmPassword.$error"
+      :helptext="$v.confirmPassword.$error ? 'The passwords should match.' : ''"
+      @input="validate('confirmPassword')"
+    />
 
-      <div class=" content has-text-right">
-        <button
-          :class="['button is-primary', {'is-loading': busy}]"
-          :disabled="disabled"
-          @click.prevent="updatePassword()"
-        >
-          Update password
-        </button>
-      </div>
+    <div class=" content has-text-right">
+      <button
+        :class="['button is-primary', {'is-loading': busy}]"
+        :disabled="disabled"
+        @click.prevent="updatePassword()"
+      >
+        Update password
+      </button>
     </div>
   </div>
 </template>

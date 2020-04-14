@@ -3,7 +3,7 @@
     <ul
       v-for="(item, index) in items"
       :key="index"
-      class="menu-list"
+      class="menu-list is-hidden-mobile"
     >
       <li>
         <a
@@ -23,6 +23,25 @@
         </a>
       </li>
     </ul>
+
+    <div :class="['select is-hidden-tablet is-fullwidth', { 'is-danger': hasErrors }]">
+      <select
+        id="settings_menu"
+        ref="settings_menu"
+        v-model="selected"
+      >
+        <option
+          v-for="(item, index) in items"
+          :key="index"
+          :value="item.view"
+        >
+          {{ item.title }}
+          <span v-if="errorCount(item.view)">
+            (!)
+          </span>
+        </option>
+      </select>
+    </div>
   </aside>
 </template>
 
@@ -41,6 +60,29 @@ export default {
       type: String,
       default: '',
     },
+  },
+
+  data () {
+    return {
+      selected: '',
+    }
+  },
+
+  computed: {
+    hasErrors () {
+      return this.errors.filter(e => e.count > 0).length
+    }
+  },
+
+  watch: {
+    selected () {
+      this.goTo(this.selected)
+      this.$refs.settings_menu.blur()
+    }
+  },
+
+  created () {
+    this.selected = this.active
   },
 
   methods: {

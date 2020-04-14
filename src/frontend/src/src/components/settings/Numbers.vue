@@ -6,54 +6,52 @@
       <icon name="cogs" /> Numbers
     </h3>
 
-    <div class="fieldset">
-      <b-input
-        id="s.i.prefix"
-        v-model="$v.value.settings.invoice_number_prefix.$model"
-        label="Invoice number prefix"
-        :has-error="$v.value.settings.invoice_number_prefix.$error"
-        :helptext="$v.value.settings.invoice_number_prefix.$error ? 'Please enter a prefix.' : ''"
-        @input="validate('invoice_number_prefix')"
-      />
+    <b-input
+      id="s.i.prefix"
+      v-model="$v.value.settings.invoice_number_prefix.$model"
+      label="Invoice number prefix"
+      :has-error="$v.value.settings.invoice_number_prefix.$error"
+      :helptext="$v.value.settings.invoice_number_prefix.$error ? 'Please enter a prefix.' : ''"
+      @input="validate('invoice_number_prefix')"
+    />
 
-      <b-input
-        id="s.i.next"
-        v-model.number="$v.value.settings.next_invoice_number.$model"
-        type="number"
-        label="Next invoice number"
-        :has-error="$v.value.settings.next_invoice_number.$error"
-        :helptext="$v.value.settings.next_invoice_number.$error ? 'Please enter a number.' : ''"
-        @input="validate('next_invoice_number')"
-      />
+    <b-input
+      id="s.i.next"
+      v-model.number="$v.value.settings.next_invoice_number.$model"
+      type="number"
+      label="Next invoice number"
+      :has-error="$v.value.settings.next_invoice_number.$error"
+      :helptext="$v.value.settings.next_invoice_number.$error ? 'Please enter a number.' : ''"
+      @input="validate('next_invoice_number')"
+    />
 
-      <b-input
-        id="s.c.prefix"
-        v-model="$v.value.settings.customer_number_prefix.$model"
-        label="Customer number prefix"
-        :has-error="$v.value.settings.customer_number_prefix.$error"
-        :helptext="$v.value.settings.customer_number_prefix.$error ? 'Please enter a prefix.' : ''"
-        @input="validate('customer_number_prefix')"
-      />
+    <b-input
+      id="s.c.prefix"
+      v-model="$v.value.settings.customer_number_prefix.$model"
+      label="Customer number prefix"
+      :has-error="$v.value.settings.customer_number_prefix.$error"
+      :helptext="$v.value.settings.customer_number_prefix.$error ? 'Please enter a prefix.' : ''"
+      @input="validate('customer_number_prefix')"
+    />
 
-      <b-input
-        id="s.c.next"
-        v-model.number="$v.value.settings.next_customer_number.$model"
-        label="Next customer number"
-        type="number"
-        :has-error="$v.value.settings.next_customer_number.$error"
-        :helptext="$v.value.settings.next_customer_number.$error ? 'Please enter a number.' : ''"
-        @input="validate('next_customer_number')"
-      />
+    <b-input
+      id="s.c.next"
+      v-model.number="$v.value.settings.next_customer_number.$model"
+      label="Next customer number"
+      type="number"
+      :has-error="$v.value.settings.next_customer_number.$error"
+      :helptext="$v.value.settings.next_customer_number.$error ? 'Please enter a number.' : ''"
+      @input="validate('next_customer_number')"
+    />
 
-      <b-input
-        id="s.vat"
-        v-model="$v.value.settings.tax_number.$model"
-        label="VAT ID"
-        :has-error="$v.value.settings.tax_number.$error"
-        :helptext="$v.value.settings.tax_number.$error ? 'Please enter a VAT ID.' : ''"
-        @input="validate('tax_number')"
-      />
-    </div>
+    <b-input
+      id="s.vat"
+      v-model="$v.value.settings.tax_number.$model"
+      label="VAT ID"
+      :has-error="$v.value.settings.tax_number.$error"
+      :helptext="$v.value.settings.tax_number.$error ? 'Please enter a VAT ID.' : ''"
+      @input="validate('tax_number')"
+    />
   </div>
 </template>
 

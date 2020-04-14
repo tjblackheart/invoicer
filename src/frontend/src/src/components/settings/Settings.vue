@@ -44,7 +44,6 @@
           :items="items"
           :errors="errors"
           :active="view"
-          @select="toggle($event)"
         />
       </div>
       <div class="column is-9">
@@ -226,18 +225,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-  /deep/ .fieldset {
-    margin-bottom: 60px;
-    padding: 20px;
-    border-radius: 2px;
-    background: #fdfdfd;
-    border: 1px solid #e9e9e9;
-  }
-
-  /deep/ .is-bordered {
-    border-bottom: 1px solid #f1f1f1;
-    margin-bottom: 20px;
-  }
-</style>

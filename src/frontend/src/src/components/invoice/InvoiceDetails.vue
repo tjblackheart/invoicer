@@ -119,7 +119,7 @@
           </div>
         </nav>
 
-        <hr>
+        <hr class="is-hidden-mobile">
 
         <div class="table-container">
           <table class="table is-fullwidth">
@@ -182,7 +182,7 @@
             </tbody>
           </table>
 
-          <hr>
+          <hr class="is-hidden-mobile">
         </div>
 
         <div class="columns">

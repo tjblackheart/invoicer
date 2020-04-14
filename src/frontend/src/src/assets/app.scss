@@ -77,15 +77,19 @@ tr.is-cancelled {
 
     tr {
       background: #fff !important;
-      border: 1px solid #f9f9f9 !important;
+      border: 1px solid #eee !important;
       margin-bottom: 10px;
 
       td {
         border: none;
-        border-bottom: 1px solid #f1f1f1 !important;
+        border-bottom: 1px solid #eee !important;
         position: relative;
         padding-left: 45% !important;
         font-weight: bold;
+
+        &:last-child {
+          border-bottom: none !important;
+        }
 
         &.has-text-right {
           text-align: left !important;
@@ -94,6 +98,7 @@ tr.is-cancelled {
         &.content {
           font-weight: normal;
           margin-bottom: 0 !important;
+          min-height: 33px;
         }
 
         &:before {
