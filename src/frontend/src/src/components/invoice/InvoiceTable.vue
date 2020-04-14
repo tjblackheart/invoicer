@@ -63,15 +63,16 @@
           </td>
 
           <td
-            class="has-text-right"
+            class="has-text-right action-items"
             data-label="Actions"
           >
-            <router-link :to="{name: 'invoice_details', params: {id:invoice.id}}">
-              View
-            </router-link>
+            <span>
+              <router-link :to="{name: 'invoice_details', params: {id:invoice.id}}">
+                View
+              </router-link>
+            </span>
 
             <span v-if="!invoice.is_cancelled">
-              &middot;
               <a
                 href
                 @click.prevent="$emit('cancel', invoice.id)"
@@ -80,7 +81,7 @@
               </a>
             </span>
 
-            <span v-if="!invoice.is_paid && !invoice.is_cancelled"> &middot;
+            <span v-if="!invoice.is_paid && !invoice.is_cancelled">
               <a
                 href
                 @click.prevent="$emit('payment', invoice.id)"
@@ -88,8 +89,6 @@
                 Toggle payment
               </a>
             </span>
-
-            &middot;
 
             <print-link :id="invoice.id" />
           </td>

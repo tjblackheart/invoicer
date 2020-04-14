@@ -45,6 +45,20 @@ tr.is-cancelled {
   }
 }
 
+td.action-items span {
+  display: inline-block;
+  padding-right: 5px;
+
+  &:after {
+    content: "\00b7";
+  }
+
+  &:last-child:after {
+    content: "";
+    padding-right: 0;
+  }
+}
+
 .fade-enter,
 .fade-leave-active {
   opacity: 0;
@@ -93,6 +107,21 @@ tr.is-cancelled {
 
         &.has-text-right {
           text-align: left !important;
+        }
+
+        &.action-items {
+          span {
+            display: block;
+            padding-bottom: 10px;
+
+            &:after {
+              content: "";
+            }
+
+            &:last-child {
+              padding-bottom: 0;
+            }
+          }
         }
 
         &.content {

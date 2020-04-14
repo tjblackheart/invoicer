@@ -30,11 +30,13 @@
 
           <td
             data-label="Actions"
-            class="has-text-right"
+            class="has-text-right action-items"
           >
-            <router-link :to="{ name: 'customer_details', params: {id:customer.id} }">
-              Edit
-            </router-link>
+            <span>
+              <router-link :to="{ name: 'customer_details', params: {id:customer.id} }">
+                Edit
+              </router-link>
+            </span>
             <!-- &middot;
             <a @click.prevent="$emit('remove', customer.id)">
               Remove
