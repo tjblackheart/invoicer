@@ -29,6 +29,14 @@
       type="customers"
     />
 
+    <pager
+      v-if="pages > 1"
+      :current="currentPage"
+      :pages="pages"
+      class="is-hidden-desktop"
+      @paged="onPaged($event)"
+    />
+
     <customer-table
       :paged-items="pagedItems"
       :filtered-items="filteredItems"
@@ -41,7 +49,7 @@
       v-if="pages > 1"
       :current="currentPage"
       :pages="pages"
-      @paged="currentPage = $event"
+      @paged="onPaged($event)"
     />
   </div>
 </template>
@@ -143,6 +151,14 @@ export default {
         })
       }
     },
+
+    onPaged (page) {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      })
+      this.currentPage = page
+    }
   },
 
   beforeRouteEnter (to, from, next) {

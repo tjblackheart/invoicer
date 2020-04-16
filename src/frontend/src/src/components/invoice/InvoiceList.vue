@@ -29,6 +29,14 @@
       type="invoice"
     />
 
+    <pager
+      v-if="pages > 1"
+      :current="currentPage"
+      :pages="pages"
+      class="is-hidden-desktop"
+      @paged="onPaged($event)"
+    />
+
     <invoice-table
       :paged-items="pagedItems"
       :filtered-items="filteredItems"
@@ -42,7 +50,7 @@
       v-if="pages > 1"
       :current="currentPage"
       :pages="pages"
-      @paged="currentPage = $event"
+      @paged="onPaged($event)"
     />
 
     <modal
@@ -219,6 +227,14 @@ export default {
       this.showModal = false
       this.paymentError = null
     },
+
+    onPaged (page) {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      })
+      this.currentPage = page
+    }
   },
 
   beforeRouteEnter (to, from, next) {

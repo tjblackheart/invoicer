@@ -1,5 +1,8 @@
 <template>
-  <form @submit.prevent="submit">
+  <form
+    class="auth"
+    @submit.prevent="submit"
+  >
     <h3 class="title">
       Login
     </h3>
