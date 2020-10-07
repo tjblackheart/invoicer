@@ -8,7 +8,6 @@ import (
 func (app Application) jsonMW(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-
 		next.ServeHTTP(w, r)
 	})
 }
@@ -20,7 +19,6 @@ func (app Application) authMW(next http.Handler) http.Handler {
 			json, _ := json.Marshal(err.Error)
 			w.WriteHeader(http.StatusBadRequest)
 			w.Write(json)
-
 			return
 		}
 
@@ -29,7 +27,6 @@ func (app Application) authMW(next http.Handler) http.Handler {
 			json, _ := json.Marshal(err.Error())
 			w.WriteHeader(http.StatusUnauthorized)
 			w.Write(json)
-
 			return
 		}
 
@@ -45,7 +42,6 @@ func (app Application) corsMW(next http.Handler) http.Handler {
 		w.Header().Add("Vary", "Access-Control-Request-Headers")
 		w.Header().Add("Access-Control-Allow-Headers", "Content-Type, Origin, Accept, Authorization")
 		w.Header().Add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-
 		next.ServeHTTP(w, r)
 	})
 }

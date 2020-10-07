@@ -70,9 +70,6 @@ func (g *Generator) Base64(filename string) (string, error) {
 }
 
 func (g *Generator) toHTML() (string, error) {
-	extensions := parser.HardLineBreak | parser.Strikethrough
-	parser := parser.NewWithExtensions(extensions)
-
 	funcs := template.FuncMap{
 		"add": func(i int) int {
 			return i + 1
@@ -91,6 +88,8 @@ func (g *Generator) toHTML() (string, error) {
 			return tax.Format()
 		},
 		"markdown": func(s string) template.HTML {
+			extensions := parser.HardLineBreak | parser.Strikethrough
+			parser := parser.NewWithExtensions(extensions)
 			html := markdown.ToHTML([]byte(s), parser, nil)
 			return template.HTML(html)
 		},

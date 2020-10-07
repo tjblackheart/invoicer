@@ -5,10 +5,9 @@ import (
 	"time"
 
 	"github.com/jinzhu/gorm"
-	"github.com/tjblackheart/Invoicer/backend/pkg/models"
-
 	_ "github.com/mattn/go-sqlite3"
 	log "github.com/sirupsen/logrus"
+	"github.com/tjblackheart/Invoicer/backend/pkg/models"
 )
 
 type (
