@@ -218,7 +218,6 @@ dayjs.extend(dayjsPluginUTC)
 const { required } = require('vuelidate/lib/validators')
 
 export default {
-
   components: {
     Modal,
     ItemForm,
@@ -286,6 +285,7 @@ export default {
   methods: {
     async load () {
       try {
+        this.customers = await http.fetchCustomers()
         this.user = await http.fetchUser(this.$store.getters.uuid)
 
         if (this.user.settings.user_id === 0) {
@@ -295,10 +295,14 @@ export default {
           })
           this.$router.push('/settings/banking')
         }
+        this.$store.commit('setUser', this.user)
+
+        if (this.$route.params.id) {
+          await this.loadFrom()
+          return
+        }
 
         this.setInvoiceNumber()
-        this.$store.commit('setUser', this.user)
-        this.customers = await http.fetchCustomers()
 
         if (this.customers[0]) {
           this.customer = this.customers[0]
@@ -307,6 +311,24 @@ export default {
       } catch (error) {
         this.$store.commit('setMessage', { text: error.message, style: 'is-danger' })
       }
+    },
+
+    async loadFrom () {
+      const copy = await http.fetchInvoice(this.$route.params.id)
+      const { customer, items } = {...copy}
+
+      items.forEach(item => {
+        const { amount, description, price_per_unit, unit, vat } = {...item}
+        this.invoice.items.push({ amount, description, price_per_unit, unit, vat })
+      })
+
+      this.customer = customer
+      this.address = customer.address
+      this.invoice.customer_id = customer.id
+      this.invoice.date = dayjs().toJSON()
+
+      this.calculateTotals()
+      this.setInvoiceNumber()
     },
 
     setInvoiceNumber () {

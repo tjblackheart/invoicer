@@ -24,57 +24,49 @@ const router = new Router({
       name: 'invoice_list',
       path: '/invoices',
       component: InvoiceList,
-      meta: {
-        requiresAuth: true,
-      },
+      meta: { requiresAuth: true },
     },
     {
       name: 'invoice_create',
       path: '/invoices/create',
       component: InvoiceCreate,
-      meta: {
-        requiresAuth: true,
-      },
+      meta: { requiresAuth: true },
+    },
+    {
+      name: 'invoice_copy',
+      path: '/invoices/copy/:id',
+      component: InvoiceCreate,
+      meta: { requiresAuth: true },
     },
     {
       name: 'invoice_details',
       path: '/invoices/view/:id',
       component: InvoiceDetails,
-      meta: {
-        requiresAuth: true,
-      },
+      meta: { requiresAuth: true },
     },
     {
       name: 'customer_list',
       path: '/customers',
       component: CustomerList,
-      meta: {
-        requiresAuth: true,
-      },
+      meta: { requiresAuth: true },
     },
     {
       name: 'customer_create',
       path: '/customers/create',
       component: CustomerCreate,
-      meta: {
-        requiresAuth: true,
-      },
+      meta: { requiresAuth: true },
     },
     {
       name: 'customer_details',
       path: '/customers/edit/:id',
       component: CustomerCreate,
-      meta: {
-        requiresAuth: true,
-      },
+      meta: { requiresAuth: true },
     },
     {
       name: 'settings',
       path: '/settings/:view*',
       component: Settings,
-      meta: {
-        requiresAuth: true,
-      },
+      meta: { requiresAuth: true },
       props: true,
     },
     {

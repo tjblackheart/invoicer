@@ -2,7 +2,7 @@
 FROM aantonw/alpine-wkhtmltopdf-patched-qt:latest as wkhtmltopdf
 
 # prod build
-FROM golang:1.13-alpine as build
+FROM golang:alpine as build
 WORKDIR /go/src/app
 COPY src .
 RUN apk add --update gcc g++ && \

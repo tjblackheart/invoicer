@@ -72,6 +72,12 @@
               </router-link>
             </span>
 
+            <span>
+              <router-link :to="{name: 'invoice_copy', params: {id:invoice.id}}">
+                Copy
+              </router-link>
+            </span>
+
             <span v-if="!invoice.is_cancelled">
               <a
                 href

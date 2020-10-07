@@ -2,7 +2,7 @@
 FROM aantonw/alpine-wkhtmltopdf-patched-qt:latest as wkhtmltopdf
 
 # dev
-FROM golang:1.13-alpine as dev
+FROM golang:alpine as dev
 WORKDIR /go/src/app
 COPY src .
 COPY ./conf/runner.conf /runner.conf
